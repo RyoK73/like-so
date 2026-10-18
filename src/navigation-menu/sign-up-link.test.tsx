@@ -14,14 +14,14 @@ it("should have href attribute that has `/signup`", () => {
 
 it("should have `LuUserRoundPlus` icons", () => {
   render(<SignUpLink />);
-  const link = screen.getByRole("link");
+  const link = screen.getByRole("link", { name: "アカウント登録" });
   expect(within(link).getByTestId("LuUserRoundPlus")).toBeInTheDocument();
 });
 
-it("should show tooltip with `サインアップ登録` on the mouse hover", async () => {
+it("should show tooltip with `アカウント登録` on the mouse hover", async () => {
   const event = userEvent.setup();
   render(<SignUpLink />);
-  const link = screen.getByRole("link");
+  const link = screen.getByRole("link", { name: "アカウント登録" });
   await event.hover(link);
-  expect(await screen.findByText("サインアップ登録")).toBeInTheDocument();
+  expect(await screen.findByText("アカウント登録")).toBeInTheDocument();
 });

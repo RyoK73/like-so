@@ -4,8 +4,8 @@ import { LuUserRoundPlus } from "react-icons/lu";
 
 const SignUpLink = () => {
   return (
-    <MyToolTip key="signup" side="right" message="サインアップ登録">
-      <Link href={"/signup"}>
+    <MyToolTip key="signup" side="right" message="アカウント登録">
+      <Link href={"/signup"} aria-label="アカウント登録">
         <LuUserRoundPlus />
       </Link>
     </MyToolTip>
