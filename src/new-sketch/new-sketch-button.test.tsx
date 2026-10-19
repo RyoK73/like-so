@@ -37,4 +37,24 @@ describe("NewSketchButton", () => {
       title: "作成に失敗",
     });
   });
+
+  test("should show a tooltip on hover when the tooltip prop is given", async () => {
+    render(
+      <NewSketchButton tooltip={{ message: "ツールチップ", side: "right" }} />,
+    );
+    await userEvent.hover(
+      screen.getByRole("button", { name: "新規スケッチ作成" }),
+    );
+
+    expect(await screen.findByText("ツールチップ")).toBeInTheDocument();
+  });
+
+  test("should not show a tooltip on hover when the tooltip prop is omitted", async () => {
+    render(<NewSketchButton />);
+    await userEvent.hover(
+      screen.getByRole("button", { name: "新規スケッチ作成" }),
+    );
+
+    expect(screen.queryByText("ツールチップ")).toBeNull();
+  });
 });
