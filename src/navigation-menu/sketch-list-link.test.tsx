@@ -1,9 +1,3 @@
-// TODO:
-// [x] `/sketches`へのhrefを持ったリンクである
-// [x] `LuLibraryBig`アイコンを子として持っている
-// [x] マウスホバー時に`スケッチ一覧へ`と表示される
-// [x] 現在`/sketches`にいる場合、強調表示される
-
 import { render, screen, within } from "@testing-library/react";
 import { SketchListLink } from "@/navigation-menu/sketch-list-link";
 import userEvent from "@testing-library/user-event";
