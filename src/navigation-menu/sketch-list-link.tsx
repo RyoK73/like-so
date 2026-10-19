@@ -3,15 +3,24 @@ import { MyToolTip } from "@/design-system/tool-tip";
 import Link from "next/link";
 import { LuLibraryBig } from "react-icons/lu";
 import { usePathname } from "next/navigation";
+import { cn } from "cn";
 
-const SketchListLink = () => {
+type SketchListLinkProps = {
+  className?: string;
+};
+
+const SketchListLink = ({ className }: SketchListLinkProps) => {
   const pathname = usePathname();
   return (
     <MyToolTip key="SketchListLink" message="スケッチ一覧へ" side="right">
       <Link
         href="/sketches"
         aria-label="スケッチ一覧へ"
-        className={pathname === "/sketches" ? "primary-text-light" : ""}
+        className={cn(
+          className,
+          pathname === "/sketches" &&
+            "bg-ds-primary text-ds-ink hover:bg-ds-primary",
+        )}
       >
         <LuLibraryBig />
       </Link>
