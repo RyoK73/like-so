@@ -12,7 +12,7 @@ type SketchListLinkProps = {
 const SketchListLink = ({ className }: SketchListLinkProps) => {
   const pathname = usePathname();
   return (
-    <MyToolTip key="SketchListLink" message="スケッチ一覧へ" side="right">
+    <MyToolTip message="スケッチ一覧へ" side="right">
       <Link
         href="/sketches"
         aria-label="スケッチ一覧へ"

@@ -8,7 +8,7 @@ type SignUpLinkProps = {
 
 const SignUpLink = ({ className }: SignUpLinkProps) => {
   return (
-    <MyToolTip key="signup" side="right" message="アカウント登録">
+    <MyToolTip side="right" message="アカウント登録">
       <Link href={"/signup"} aria-label="アカウント登録" className={className}>
         <LuUserRoundPlus />
       </Link>
