@@ -10,6 +10,7 @@ const NewSketchIconButton = ({ className }: NewSketchIconButtonProps) => {
     <NewSketchButton
       className={className}
       tooltip={{ message: "新規スケッチ作成", side: "right" }}
+      ariaLabel="新規スケッチ作成"
     >
       <LuSquarePlus />
     </NewSketchButton>

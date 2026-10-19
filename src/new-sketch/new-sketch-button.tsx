@@ -11,6 +11,7 @@ import { MyToolTip } from "@/design-system/tool-tip";
 import { startNewSketch } from "@/new-sketch/start-new-sketch";
 
 type NewSketchButtonProps = {
+  ariaLabel: string;
   className?: string;
   children?: ReactNode;
   tooltip?: Pick<ComponentProps<typeof MyToolTip>, "message" | "side">;
@@ -20,6 +21,7 @@ const NewSketchButton = ({
   className,
   children = "新規作成",
   tooltip,
+  ariaLabel,
 }: NewSketchButtonProps) => {
   const [state, formAction, isPending] = useActionState(startNewSketch, null);
 
@@ -34,7 +36,7 @@ const NewSketchButton = ({
       type="submit"
       className={className}
       disabled={isPending}
-      aria-label="新規スケッチ作成"
+      aria-label={ariaLabel}
     >
       {children}
     </Button>

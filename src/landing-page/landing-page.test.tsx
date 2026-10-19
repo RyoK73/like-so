@@ -10,6 +10,7 @@ vi.mock("@/supabase/auth/getAuthState", () => ({ getAuthState: vi.fn() }));
 vi.mock("@/new-sketch/start-new-sketch", () => ({ startNewSketch: vi.fn() }));
 
 const guestRegisterName = "アカウント登録（他の端末でも使えるようにする）";
+const ARIA_LABEL = "ゲストとして続ける";
 
 const renderLandingPage = async (authState: AuthState) => {
   vi.mocked(getAuthState).mockResolvedValue(authState);
@@ -42,7 +43,7 @@ describe("LandingPage", () => {
     await renderLandingPage("signedOut");
 
     expect(
-      screen.getByRole("button", { name: "新規スケッチ作成" }),
+      screen.getByRole("button", { name: ARIA_LABEL }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "サインアップ" })).toHaveAttribute(
       "href",
@@ -70,7 +71,7 @@ describe("LandingPage", () => {
       screen.getByRole("link", { name: guestRegisterName }),
     ).toHaveAttribute("href", "/signup");
     expect(
-      screen.queryByRole("button", { name: "新規スケッチ作成" }),
+      screen.queryByRole("button", { name: ARIA_LABEL }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "サインイン" }),
@@ -87,7 +88,7 @@ describe("LandingPage", () => {
       screen.queryByRole("link", { name: guestRegisterName }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "新規スケッチ作成" }),
+      screen.queryByRole("button", { name: ARIA_LABEL }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "サインイン" }),
