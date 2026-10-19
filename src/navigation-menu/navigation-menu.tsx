@@ -1,7 +1,7 @@
 import { getAuthState } from "@/supabase/auth/getAuthState";
 import { createSupabaseServerClient } from "@/supabase/utils/serverClient";
 import { SketchListLink } from "@/navigation-menu/sketch-list-link";
-import { NewSketchButton } from "@/new-sketch";
+import { NewSketchIconButton } from "@/navigation-menu/new-sketch-icon-button";
 import { ThemeToggleButton } from "@/navigation-menu/theme-toggle-button";
 import { SignOutButton } from "@/navigation-menu/sign-out-button";
 import { SignUpLink } from "@/navigation-menu/sign-up-link";
@@ -14,7 +14,7 @@ const menuItems = [
   },
   {
     key: "new-sketch",
-    Item: NewSketchButton,
+    Item: NewSketchIconButton,
     visibleFor: ["guest", "registered"],
   },
   {
