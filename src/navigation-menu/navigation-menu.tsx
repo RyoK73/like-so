@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { getAuthState } from "@/supabase/auth/getAuthState";
+import { getAuthState, type AuthState } from "@/supabase/auth/getAuthState";
 import { createSupabaseServerClient } from "@/supabase/utils/serverClient";
 import { SketchListLink } from "@/navigation-menu/sketch-list-link";
 import { NewSketchIconButton } from "@/navigation-menu/new-sketch-icon-button";
@@ -13,7 +13,7 @@ const iconItemClassName =
 type MenuItem = {
   key: string;
   Item: ComponentType<{ className?: string }>;
-  visibleFor: string[];
+  visibleFor: Exclude<AuthState, "signedOut">[];
 };
 
 const menuItems: MenuItem[] = [
