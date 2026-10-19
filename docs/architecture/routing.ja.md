@@ -7,7 +7,7 @@
 | `/`              | ランディングページです。認証状態によってボタンが変わります。                      |
 | `/signin`        | サインインです。`src/auth-form/`の`AuthPage`を表示します。                        |
 | `/signup`        | 新規登録です。ゲストの場合は、メールアドレスの登録になります。                    |
-| `/sketches`      | スケッチ一覧です。新規作成ボタンと`loading.tsx`を持ちます。                       |
+| `/sketches`      | スケッチ一覧です。`loading.tsx`を持ちます。                                       |
 | `/sketches/[id]` | スケッチの個別ページです。一覧の各項目のリンク先です。`not-found.tsx`を持ちます。 |
 
 パスごとのリダイレクトは[認証](./auth.ja.md)を参照してください。
@@ -32,6 +32,9 @@
 
 `src/app/sketches/page.tsx`は、`src/sketch-list/`の`SketchList`を表示します。
 コンポーネントの構成は[概要](./overview.ja.md)を参照してください。
+
+`src/app/sketches/layout.tsx`は、`/sketches`配下のすべてのページ(`/sketches/[id]`を含む)に、`NavigationMenu`を表示します。
+詳細は[ナビゲーションメニュー](./navigation-menu.ja.md)を参照してください。
 
 ### 取得
 
@@ -58,7 +61,8 @@
 
 ### 新規作成
 
-`src/app/sketches/page.tsx`は、`src/new-sketch/`の`NewSketchButton`も表示します。
+新規作成のボタンは、`NavigationMenu`の`NewSketchIconButton`が、`src/new-sketch/`の`NewSketchButton`を使って表示します。
+`src/app/sketches/page.tsx`自体には、ボタンがありません。
 
 - `NewSketchButton`はClient Componentです。
   `useActionState`でServer Action `startNewSketch`を呼びます。

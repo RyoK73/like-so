@@ -9,22 +9,23 @@ Only the README is different: the English one is `README.md` and the Japanese on
 `DESIGN.md` at the repository root is also an exception: it is written in English only because it is intended for LLMs.
 When you implement UI, read `DESIGN.md` and follow its colors, typography, spacing, and components.
 
-| Category     | Path                                  | Contents                                                    |
-| ------------ | ------------------------------------- | ----------------------------------------------------------- |
-| README       | `README.md` / `README.ja.md`          | For users. Purpose, differences from other tools, use cases |
-| Design       | `DESIGN.md`                           | UI design: colors, typography, spacing, components          |
-| Setup        | `docs/setup/prerequisites.*.md`       | Required tools, installing dependencies                     |
-|              | `docs/setup/environment.*.md`         | List and purpose of environment variables                   |
-|              | `docs/setup/database.*.md`            | Local DB, migrations, type generation                       |
-|              | `docs/setup/development.*.md`         | Dev server, scripts, tests                                  |
-| Architecture | `docs/architecture/overview.*.md`     | Tech stack, directory structure, drawing                    |
-|              | `docs/architecture/routing.*.md`      | Routes, sketch list page                                    |
-|              | `docs/architecture/auth.*.md`         | Authentication, anonymous sign-in, auth state               |
-|              | `docs/architecture/database.*.md`     | Tables, RLS, privileges, triggers                           |
-|              | `docs/architecture/save.*.md`         | Flow of saving a sketch                                     |
-| Rules        | `docs/rules/directory-structure.*.md` | Directory structure (Vertical Codebase)                     |
-|              | `docs/rules/naming.*.md`              | Naming                                                      |
-|              | `docs/rules/typescript.*.md`          | TypeScript                                                  |
+| Category     | Path                                     | Contents                                                    |
+| ------------ | ---------------------------------------- | ----------------------------------------------------------- |
+| README       | `README.md` / `README.ja.md`             | For users. Purpose, differences from other tools, use cases |
+| Design       | `DESIGN.md`                              | UI design: colors, typography, spacing, components          |
+| Setup        | `docs/setup/prerequisites.*.md`          | Required tools, installing dependencies                     |
+|              | `docs/setup/environment.*.md`            | List and purpose of environment variables                   |
+|              | `docs/setup/database.*.md`               | Local DB, migrations, type generation                       |
+|              | `docs/setup/development.*.md`            | Dev server, scripts, tests                                  |
+| Architecture | `docs/architecture/overview.*.md`        | Tech stack, directory structure, drawing                    |
+|              | `docs/architecture/routing.*.md`         | Routes, sketch list page                                    |
+|              | `docs/architecture/auth.*.md`            | Authentication, anonymous sign-in, auth state               |
+|              | `docs/architecture/database.*.md`        | Tables, RLS, privileges, triggers                           |
+|              | `docs/architecture/save.*.md`            | Flow of saving a sketch                                     |
+|              | `docs/architecture/navigation-menu.*.md` | Navigation menu, visibility by auth state, tooltip          |
+| Rules        | `docs/rules/directory-structure.*.md`    | Directory structure (Vertical Codebase)                     |
+|              | `docs/rules/naming.*.md`                 | Naming                                                      |
+|              | `docs/rules/typescript.*.md`             | TypeScript                                                  |
 
 ## Documentation update rules
 
