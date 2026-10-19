@@ -2,14 +2,16 @@
 
 ## Tech stack
 
-| Area       | Technology                  |
-| ---------- | --------------------------- |
-| Framework  | Next.js (App Router), React |
-| Drawing    | fabric.js                   |
-| Backend    | Supabase (Postgres, Auth)   |
-| Validation | zod                         |
-| Styling    | Tailwind CSS                |
-| Test       | vitest, Testing Library     |
+| Area               | Technology                  |
+| ------------------ | --------------------------- |
+| Framework          | Next.js (App Router), React |
+| Drawing            | fabric.js                   |
+| Backend            | Supabase (Postgres, Auth)   |
+| Validation         | zod                         |
+| Styling            | Tailwind CSS                |
+| Test               | vitest, Testing Library     |
+| Icons              | react-icons                 |
+| UI parts (tooltip) | @base-ui/react              |
 
 Exact versions are in `package.json`.
 Only fabric.js is pinned to an exact version, without `^`.
@@ -20,20 +22,21 @@ On saving, the version at that time is recorded in the DB as `fabric_version`.
 The codebase is split by what it does (vertical).
 See [Directory structure](../rules/directory-structure.en.md) for the rule.
 
-| Directory            | Role                                                                          |
-| -------------------- | ----------------------------------------------------------------------------- |
-| `src/app/`           | Routing only                                                                  |
-| `src/proxy.ts`       | Next.js proxy. Refreshes the auth session on each request                     |
-| `src/auth-form/`     | The form for sign-in and guest registration                                   |
-| `src/landing-page/`  | Showing the landing page (buttons by auth state)                              |
-| `src/new-sketch/`    | Creating a sketch (button and Server Action)                                  |
-| `src/sketch-detail/` | The sketch page (showing, drawing and saving to the DB)                       |
-| `src/design-system/` | Generic UI parts (button, input, label and toast from shadcn/ui, `LocalTime`) |
-| `src/sketch-list/`   | Showing the sketch list (Server and Client Components)                        |
-| `src/supabase/`      | Supabase clients, auth, CRUD and DB tests                                     |
-| `src/utils/`         | Shared types                                                                  |
-| `src/dev-scripts/`   | Scripts for development                                                       |
-| `src/test/`          | Pure helpers for tests                                                        |
+| Directory              | Role                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/`             | Routing only                                                                                                              |
+| `src/proxy.ts`         | Next.js proxy. Refreshes the auth session on each request                                                                 |
+| `src/auth-form/`       | The form for sign-in and guest registration                                                                               |
+| `src/landing-page/`    | Showing the landing page (buttons by auth state)                                                                          |
+| `src/navigation-menu/` | The navigation menu (items by auth state)                                                                                 |
+| `src/new-sketch/`      | Creating a sketch (button and Server Action)                                                                              |
+| `src/sketch-detail/`   | The sketch page (showing, drawing and saving to the DB)                                                                   |
+| `src/design-system/`   | Generic UI parts (button, input, label and toast from shadcn/ui, `LocalTime`, tooltip (`MyToolTip`, `MyToolTipProvider`)) |
+| `src/sketch-list/`     | Showing the sketch list (Server and Client Components)                                                                    |
+| `src/supabase/`        | Supabase clients, auth, CRUD and DB tests                                                                                 |
+| `src/utils/`           | Shared types                                                                                                              |
+| `src/dev-scripts/`     | Scripts for development                                                                                                   |
+| `src/test/`            | Pure helpers for tests                                                                                                    |
 
 ## Drawing (`src/sketch-detail/draw/`)
 
@@ -74,11 +77,11 @@ It uses `useSyncExternalStore` to avoid a hydration mismatch.
 
 ## Creating a sketch (`src/new-sketch/`)
 
-| File                    | Role                                                                                                |
-| ----------------------- | --------------------------------------------------------------------------------------------------- |
-| `start-new-sketch.ts`   | Server Action. Signs in anonymously if needed, creates an empty sketch and goes to `/sketches/{id}` |
-| `new-sketch-button.tsx` | Client Component. Calls `startNewSketch` and shows a toast on failure                               |
-| `index.ts`              | Exports `NewSketchButton` and `startNewSketch`                                                      |
+| File                    | Role                                                                                                    |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- |
+| `start-new-sketch.ts`   | Server Action. Signs in anonymously if needed, creates an empty sketch and goes to `/sketches/{id}`     |
+| `new-sketch-button.tsx` | Client Component. Calls `startNewSketch` and shows a toast on failure. Passing `tooltip` adds a tooltip |
+| `index.ts`              | Exports `NewSketchButton` and `startNewSketch`                                                          |
 
 ## Landing page (`src/landing-page/`)
 
@@ -125,3 +128,4 @@ Details of `SketchCanvas`:
 - [Authentication](./auth.en.md)
 - [Database](./database.en.md)
 - [Saving sketches](./save.en.md)
+- [Navigation menu](./navigation-menu.en.md)

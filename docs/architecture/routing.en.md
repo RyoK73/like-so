@@ -7,7 +7,7 @@
 | `/`              | The landing page. The buttons change with the auth state                         |
 | `/signin`        | Sign-in. Renders `AuthPage` from `src/auth-form/`                                |
 | `/signup`        | Registration. For a guest, it registers the email address                        |
-| `/sketches`      | The sketch list. Has a new-sketch button and a `loading.tsx`                     |
+| `/sketches`      | The sketch list. Has a `loading.tsx`                                             |
 | `/sketches/[id]` | The sketch page. The link target of each item in the list. Has a `not-found.tsx` |
 
 See [Authentication](./auth.en.md) for the redirects by path.
@@ -32,6 +32,9 @@ It is always shown, whether the user is signed out or signed in.
 
 `src/app/sketches/page.tsx` renders `SketchList` from `src/sketch-list/`.
 See [Overview](./overview.en.md) for the components.
+
+`src/app/sketches/layout.tsx` renders `NavigationMenu` on every page under `/sketches` (including `/sketches/[id]`).
+See [Navigation menu](./navigation-menu.en.md) for details.
 
 ### Fetching
 
@@ -58,7 +61,8 @@ See [Overview](./overview.en.md) for the components.
 
 ### Creating a sketch
 
-`src/app/sketches/page.tsx` also renders `NewSketchButton` from `src/new-sketch/`.
+The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, using `NewSketchButton` from `src/new-sketch/`.
+`src/app/sketches/page.tsx` itself has no button.
 
 - `NewSketchButton` is a Client Component.
   It calls the Server Action `startNewSketch` through `useActionState`.

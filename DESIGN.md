@@ -133,6 +133,18 @@ components:
     textColor: "{colors.on-surface-light}"
     rounded: "{rounded.lg}"
     padding: 16px
+  tooltip:
+    backgroundColor: "{colors.surface-raised-dark}"
+    textColor: "{colors.on-surface-dark}"
+    typography: "{typography.label-md}"
+    rounded: "{rounded.md}"
+    padding: 8px 12px
+  tooltip-light:
+    backgroundColor: "{colors.surface-raised-light}"
+    textColor: "{colors.on-surface-light}"
+    typography: "{typography.label-md}"
+    rounded: "{rounded.md}"
+    padding: 8px 12px
   canvas-frame:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.ink}"
@@ -266,6 +278,11 @@ The light-mode variants carry the `-light` suffix, and the dark-mode ones are th
   In light mode, put `error-light` text on `surface-light`.
 - **input**: inputs such as the frame width and height, the scale, and the grid size.
 - **panel**: a group of toolbar items or settings.
+- **tooltip**: a speech bubble that shows the name of an icon-only control on hover.
+  Put `on-surface` text on a `surface-raised` background, with no border.
+  A small arrow (an 8px square rotated by 45°, in the same color as the background) points to the center of the control.
+  The caller chooses the side it appears on, and it is drawn above the navigation menu.
+  The values are the ones implemented in `src/design-system/tool-tip.tsx`.
 - **canvas-frame**: the drawing surface.
   The export range is shown with a dashed border.
 - **sketch-object**: rectangles, circles, and similar objects placed on the canvas.

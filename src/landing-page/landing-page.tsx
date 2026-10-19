@@ -15,7 +15,9 @@ const LandingPage = async () => {
       <div className="flex flex-col items-center gap-3 sm:flex-row">
         {authState === "signedOut" && (
           <>
-            <NewSketchButton>ゲストとして続ける</NewSketchButton>
+            <NewSketchButton ariaLabel="ゲストとして続ける">
+              ゲストとして続ける
+            </NewSketchButton>
             <Link
               href="/signup"
               className={buttonVariants({ variant: "outline" })}

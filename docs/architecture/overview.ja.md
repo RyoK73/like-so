@@ -2,14 +2,16 @@
 
 ## 技術スタック
 
-| 領域           | 技術                       |
-| -------------- | -------------------------- |
-| フレームワーク | Next.js(App Router)、React |
-| 描画           | fabric.js                  |
-| バックエンド   | Supabase(Postgres、Auth)   |
-| バリデーション | zod                        |
-| スタイリング   | Tailwind CSS               |
-| テスト         | vitest、Testing Library    |
+| 領域            | 技術                       |
+| --------------- | -------------------------- |
+| フレームワーク  | Next.js(App Router)、React |
+| 描画            | fabric.js                  |
+| バックエンド    | Supabase(Postgres、Auth)   |
+| バリデーション  | zod                        |
+| スタイリング    | Tailwind CSS               |
+| テスト          | vitest、Testing Library    |
+| アイコン        | react-icons                |
+| UI部品(tooltip) | @base-ui/react             |
 
 正確なバージョンは`package.json`を参照してください。
 fabric.jsだけは、`^`を付けずにバージョンを固定しています。
@@ -20,20 +22,21 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 コードは「何をするか」で縦に分割しています(vertical)。
 ルールは[ディレクトリ構成](../rules/directory-structure.ja.md)を参照してください。
 
-| ディレクトリ         | 役割                                                                  |
-| -------------------- | --------------------------------------------------------------------- |
-| `src/app/`           | ルーティング専用                                                      |
-| `src/proxy.ts`       | Next.jsのproxy。リクエストごとに認証セッションを更新します。          |
-| `src/auth-form/`     | サインインとゲスト登録のフォーム                                      |
-| `src/landing-page/`  | ランディングページの表示(認証状態ごとのボタン)                        |
-| `src/new-sketch/`    | スケッチの新規作成(ボタンとServer Action)                             |
-| `src/sketch-detail/` | スケッチの個別ページ(表示、描画、DBへの保存)                          |
-| `src/sketch-list/`   | スケッチ一覧の表示(Server ComponentとClient Component)                |
-| `src/design-system/` | 汎用UI部品(shadcn/ui由来のボタン、入力欄、ラベル、toast、`LocalTime`) |
-| `src/supabase/`      | Supabaseのクライアント、認証、CRUD、DBテスト                          |
-| `src/utils/`         | 共通の型                                                              |
-| `src/dev-scripts/`   | 開発用スクリプト                                                      |
-| `src/test/`          | テスト用のヘルパー                                                    |
+| ディレクトリ           | 役割                                                                                                             |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `src/app/`             | ルーティング専用                                                                                                 |
+| `src/proxy.ts`         | Next.jsのproxy。リクエストごとに認証セッションを更新します。                                                     |
+| `src/auth-form/`       | サインインとゲスト登録のフォーム                                                                                 |
+| `src/landing-page/`    | ランディングページの表示(認証状態ごとのボタン)                                                                   |
+| `src/navigation-menu/` | ナビゲーションメニュー(認証状態ごとの項目)                                                                       |
+| `src/new-sketch/`      | スケッチの新規作成(ボタンとServer Action)                                                                        |
+| `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                                                                     |
+| `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)                                                           |
+| `src/design-system/`   | 汎用UI部品(shadcn/ui由来のボタン、入力欄、ラベル、toast、`LocalTime`、tooltip(`MyToolTip`、`MyToolTipProvider`)) |
+| `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                                                                     |
+| `src/utils/`           | 共通の型                                                                                                         |
+| `src/dev-scripts/`     | 開発用スクリプト                                                                                                 |
+| `src/test/`            | テスト用のヘルパー                                                                                               |
 
 ## 描画(`src/sketch-detail/draw/`)
 
@@ -42,7 +45,6 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `useFabricCanvas.ts` | fabricのキャンバスを作成して`canvasJson`を読み込み、アンマウント時に破棄します。 |
 | `useShapes.ts`       | 四角形、円、三角形をキャンバスの中央に追加します。                               |
 | `useHistory.ts`      | `past` / `present` / `future`を保持し、`set`、`undo`、`redo`を提供します。       |
-
 
 `useFabricCanvas`の詳細は、次の通りです。
 
@@ -74,11 +76,11 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 
 ## スケッチの新規作成(`src/new-sketch/`)
 
-| ファイル                | 役割                                                                                          |
-| ----------------------- | --------------------------------------------------------------------------------------------- |
-| `start-new-sketch.ts`   | Server Action。必要なら匿名サインインし、空のスケッチを作成して`/sketches/{id}`へ遷移します。 |
-| `new-sketch-button.tsx` | Client Component。`startNewSketch`を呼び、失敗したらtoastを表示します。                       |
-| `index.ts`              | `NewSketchButton`と`startNewSketch`を公開します。                                             |
+| ファイル                | 役割                                                                                                              |
+| ----------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `start-new-sketch.ts`   | Server Action。必要なら匿名サインインし、空のスケッチを作成して`/sketches/{id}`へ遷移します。                     |
+| `new-sketch-button.tsx` | Client Component。`startNewSketch`を呼び、失敗したらtoastを表示します。`tooltip`を渡すと、tooltip付きになります。 |
+| `index.ts`              | `NewSketchButton`と`startNewSketch`を公開します。                                                                 |
 
 ## ランディングページ(`src/landing-page/`)
 
@@ -125,3 +127,4 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 - [認証](./auth.ja.md)
 - [データベース](./database.ja.md)
 - [スケッチの保存](./save.ja.md)
+- [ナビゲーションメニュー](./navigation-menu.ja.md)

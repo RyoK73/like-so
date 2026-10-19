@@ -5,6 +5,12 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* DESIGN.md tokens. The `ds-` prefix avoids clashing with the shadcn tokens. */
+  --color-ds-surface: var(--ds-surface);
+  --color-ds-surface-raised: var(--ds-surface-raised);
+  --color-ds-on-surface: var(--ds-on-surface);
+  --color-ds-primary: var(--ds-primary);
+  --color-ds-ink: var(--ds-ink);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
@@ -49,6 +55,11 @@
 }
 
 :root {
+  --ds-surface: #eceef2;
+  --ds-surface-raised: #c5ccd6;
+  --ds-on-surface: #171717;
+  --ds-primary: #4aa3df;
+  --ds-ink: #171717;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -84,6 +95,9 @@
 }
 
 .dark {
+  --ds-surface: #444856;
+  --ds-surface-raised: #646b7d;
+  --ds-on-surface: #ededed;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
