@@ -16,7 +16,9 @@ describe("NewSketchButton", () => {
     vi.mocked(startNewSketch).mockResolvedValue(null);
 
     render(<NewSketchButton />);
-    await userEvent.click(screen.getByRole("button", { name: "新規作成" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "新規スケッチ作成" }),
+    );
 
     expect(startNewSketch).toHaveBeenCalledTimes(1);
     expect(toast.add).not.toHaveBeenCalled();
@@ -26,7 +28,9 @@ describe("NewSketchButton", () => {
     vi.mocked(startNewSketch).mockResolvedValue({ error: "作成に失敗" });
 
     render(<NewSketchButton />);
-    await userEvent.click(screen.getByRole("button", { name: "新規作成" }));
+    await userEvent.click(
+      screen.getByRole("button", { name: "新規スケッチ作成" }),
+    );
 
     expect(toast.add).toHaveBeenCalledWith({
       type: "error",

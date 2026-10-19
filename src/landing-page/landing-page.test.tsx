@@ -42,7 +42,7 @@ describe("LandingPage", () => {
     await renderLandingPage("signedOut");
 
     expect(
-      screen.getByRole("button", { name: "ゲストとして続ける" }),
+      screen.getByRole("button", { name: "新規スケッチ作成" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "サインアップ" })).toHaveAttribute(
       "href",
@@ -70,7 +70,7 @@ describe("LandingPage", () => {
       screen.getByRole("link", { name: guestRegisterName }),
     ).toHaveAttribute("href", "/signup");
     expect(
-      screen.queryByRole("button", { name: "ゲストとして続ける" }),
+      screen.queryByRole("button", { name: "新規スケッチ作成" }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "サインイン" }),
@@ -87,7 +87,7 @@ describe("LandingPage", () => {
       screen.queryByRole("link", { name: guestRegisterName }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "ゲストとして続ける" }),
+      screen.queryByRole("button", { name: "新規スケッチ作成" }),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "サインイン" }),

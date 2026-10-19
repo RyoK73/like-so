@@ -23,7 +23,12 @@ const NewSketchButton = ({
 
   return (
     <form action={formAction}>
-      <Button type="submit" className={className} disabled={isPending}>
+      <Button
+        type="submit"
+        className={className}
+        disabled={isPending}
+        aria-label="新規スケッチ作成"
+      >
         {children}
       </Button>
     </form>
