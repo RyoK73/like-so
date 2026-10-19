@@ -1,10 +1,10 @@
 import { Tooltip } from "@base-ui/react";
-import { ReactNode } from "react";
+import { ReactElement } from "react";
 import type { Side } from "@base-ui/react/internals/useAnchorPositioning";
 
 type Props = {
   message: string;
-  children: ReactNode;
+  children: ReactElement;
   side: Side;
   sideOffset?: number;
 };
@@ -12,7 +12,7 @@ type Props = {
 const MyToolTip = ({ message, children, side, sideOffset = 5 }: Props) => {
   return (
     <Tooltip.Root>
-      <Tooltip.Trigger>{children}</Tooltip.Trigger>
+      <Tooltip.Trigger render={children} />
       <Tooltip.Portal>
         <Tooltip.Positioner side={side} sideOffset={sideOffset}>
           <Tooltip.Popup>{message}</Tooltip.Popup>
