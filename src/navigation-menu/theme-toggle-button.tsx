@@ -1,6 +1,6 @@
 "use client";
 import { useTheme } from "next-themes";
-import { LuSun, LuSunMoon } from "react-icons/lu";
+import { LuSun, LuMoonStar } from "react-icons/lu";
 import { MyToolTip } from "@/design-system/tool-tip";
 
 const ThemeToggleButton = ({ className }: { className?: string }) => {
@@ -17,7 +17,7 @@ const ThemeToggleButton = ({ className }: { className?: string }) => {
         }}
       >
         <LuSun className="dark:hidden" />
-        <LuSunMoon className="hidden dark:block" />
+        <LuMoonStar className="hidden dark:block" />
       </button>
     </MyToolTip>
   );
