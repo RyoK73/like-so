@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/design-system/toast";
 import { MyToolTipProvider } from "@/design-system/tool-tip-provider";
+import { ThemeProvider } from "@/design-system/theme-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,11 +26,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
-        <Toaster>
-          <MyToolTipProvider>{children}</MyToolTipProvider>
-        </Toaster>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Toaster>
+            <MyToolTipProvider>{children}</MyToolTipProvider>
+          </Toaster>
+        </ThemeProvider>
       </body>
     </html>
   );
