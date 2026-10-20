@@ -6,6 +6,7 @@ import { NewSketchIconButton } from "@/navigation-menu/new-sketch-icon-button";
 import { ThemeToggleButton } from "@/navigation-menu/theme-toggle-button";
 import { SignOutButton } from "@/navigation-menu/sign-out-button";
 import { SignUpLink } from "@/navigation-menu/sign-up-link";
+import { SignInLink } from "@/navigation-menu/sign-in-link";
 
 const iconItemClassName =
   "inline-flex size-10 items-center justify-center rounded-xl bg-transparent text-ds-on-surface hover:bg-ds-surface-raised [&_svg:not([class*='size-'])]:size-5";
@@ -32,8 +33,9 @@ const menuItems: MenuItem[] = [
     Item: ThemeToggleButton,
     visibleFor: ["guest", "registered"],
   },
-  { key: "sign-out", Item: SignOutButton, visibleFor: ["guest", "registered"] },
   { key: "sign-up", Item: SignUpLink, visibleFor: ["guest"] },
+  { key: "sign-in", Item: SignInLink, visibleFor: ["guest"] },
+  { key: "sign-out", Item: SignOutButton, visibleFor: ["registered"] },
 ];
 
 const NavigationMenu = async () => {
