@@ -17,13 +17,12 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 | ------------ | --------------------- | ------- | ------------ | ----------------------------- |
 | Sketch list  | `SketchListLink`      | Shown   | Shown        | Implemented                   |
 | New sketch   | `NewSketchIconButton` | Shown   | Shown        | Implemented                   |
-| Theme toggle | `ThemeToggleButton`   | Shown   | Shown        | Not implemented (placeholder) |
+| Theme toggle | `ThemeToggleButton`   | Shown   | Shown        | Implemented                   |
 | Sign out     | `SignOutButton`       | Shown   | Shown        | Not implemented (placeholder) |
 | Sign up      | `SignUpLink`          | Shown   | Hidden       | Implemented                   |
 
-- `ThemeToggleButton` is an empty `button` that has only an `aria-label`.
 - `SignOutButton` is an empty `button` that has only an `aria-label`, wrapped in a `form`.
-  Neither has an icon, a tooltip or any behavior.
+  It has no icon, tooltip or behavior.
 
 ## Files
 
@@ -33,7 +32,7 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 | `sketch-list-link.tsx`       | Client Component. A link to `/sketches`                               |
 | `new-sketch-icon-button.tsx` | Passes an icon and a tooltip to `NewSketchButton` (`src/new-sketch/`) |
 | `sign-up-link.tsx`           | A link to `/signup`                                                   |
-| `theme-toggle-button.tsx`    | A placeholder                                                         |
+| `theme-toggle-button.tsx`    | Client Component. Switches between `dark` and `light`                 |
 | `sign-out-button.tsx`        | A placeholder                                                         |
 | `index.ts`                   | Exports `NavigationMenu`                                              |
 
@@ -43,6 +42,11 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
   It does not highlight on `/sketches/[id]`.
 - `NewSketchIconButton` uses the `tooltip` prop of `NewSketchButton`.
   See [Routing](./routing.en.md) for the flow of creating a sketch.
+- `ThemeToggleButton` switches between `dark` and `light` on each click with `useTheme` of `next-themes`.
+  It shows the icon (`LuSun` or `LuMoonStar`) with the CSS `dark:` variant.
+  It shows its tooltip ("テーマ切り替え") on the right side (`side="right"`) with `MyToolTip`.
+  It depends on `ThemeProvider` (`src/design-system/`).
+  See [Overview](./overview.en.md) for the tech stack.
 - `NavigationMenu` passes a common `className` (`iconItemClassName`) to each item.
 
 ## Tooltip
