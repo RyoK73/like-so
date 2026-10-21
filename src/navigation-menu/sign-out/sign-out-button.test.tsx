@@ -52,7 +52,7 @@ it("should show toast when signOutAction returns `{error}`", async () => {
 });
 
 it("should be disabled while isPending is true", async () => {
-  let resolveLoad: (value: any) => void = () => {};
+  let resolveLoad: (value: { error: string } | undefined) => void = () => {};
   vi.mocked(signOutAction).mockReturnValue(
     new Promise((resolve) => {
       resolveLoad = resolve;
