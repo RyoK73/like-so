@@ -26,7 +26,7 @@ afterEach(() => {
 });
 it("should have `LuLogOut` icon", () => {
   const button = renderSignOutButton();
-  expect(within(button).getByTestId("LuLogOut")).toBeInTheDocument;
+  expect(within(button).getByTestId("LuLogOut")).toBeInTheDocument();
 });
 
 it("should call `signOutAction` when the button is clicked", async () => {
