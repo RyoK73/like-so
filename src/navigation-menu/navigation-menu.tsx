@@ -4,7 +4,7 @@ import { createSupabaseServerClient } from "@/supabase/utils/serverClient";
 import { SketchListLink } from "@/navigation-menu/sketch-list-link";
 import { NewSketchIconButton } from "@/navigation-menu/new-sketch-icon-button";
 import { ThemeToggleButton } from "@/navigation-menu/theme-toggle-button";
-import { SignOutButton } from "@/navigation-menu/sign-out-button";
+import { SignOutButton } from "@/navigation-menu/sign-out/sign-out-button";
 import { SignUpLink } from "@/navigation-menu/sign-up-link";
 import { SignInLink } from "@/navigation-menu/sign-in-link";
 
