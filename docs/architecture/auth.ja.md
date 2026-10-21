@@ -45,13 +45,13 @@
 呼び出し側がクライアントを作成して渡します。
 `/signin`と`/signup`のフォームは、ブラウザクライアント(`createSupabaseBrowserClient`)を渡します。
 
-| 関数                                  | 内容                                                         |
-| ------------------------------------- | ------------------------------------------------------------ |
-| `signInWithOTP`                       | メールアドレスにワンタイムパスワードを送信します。           |
-| `verifyOTP`                           | ワンタイムパスワードを検証します。`type`を指定できます。     |
-| `signInAnonymously`                   | 匿名ユーザーとしてサインインします。                         |
-| `convertAnonymousUserToPermanentUser` | 匿名ユーザーにメールアドレスを追加し、永続ユーザーにします。 |
-| `signOut`                             | サインアウトします。                                         |
+| 関数                                  | 内容                                                             |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| `signInWithOTP`                       | メールアドレスにワンタイムパスワードを送信します。               |
+| `verifyOTP`                           | ワンタイムパスワードを検証します。`type`を指定できます。         |
+| `signInAnonymously`                   | 匿名ユーザーとしてサインインします。                             |
+| `convertAnonymousUserToPermanentUser` | 匿名ユーザーにメールアドレスを追加し、永続ユーザーにします。     |
+| `signOut`                             | サインアウトします。`signOutAction`(Server Action)から呼びます。 |
 
 - `verifyOTP`の`type`は、既定値が`email`です。
   `convertAnonymousUserToPermanentUser`が送ったコードは、`email_change`で検証します。

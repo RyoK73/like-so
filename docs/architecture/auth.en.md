@@ -51,7 +51,7 @@ The `/signin` and `/signup` form passes the browser client (`createSupabaseBrows
 | `verifyOTP`                           | Verifies the one-time password. Takes a `type`          |
 | `signInAnonymously`                   | Signs in as an anonymous user                           |
 | `convertAnonymousUserToPermanentUser` | Adds an email to an anonymous user to make it permanent |
-| `signOut`                             | Signs out                                               |
+| `signOut`                             | Signs out. Called from `signOutAction` (Server Action)  |
 
 - The `type` of `verifyOTP` defaults to `email`.
   Verify a code sent by `convertAnonymousUserToPermanentUser` with `email_change`.
