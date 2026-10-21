@@ -9,7 +9,7 @@ vi.mock("@/supabase/utils/serverClient", () => ({
   createSupabaseServerClient: () => {},
 }));
 
-it("should show SketchListLink, NewSketchButton, ThemeToggleButton, SignOutButton, SignUpButton for the guest user", async () => {
+it("should show SketchListLink, NewSketchButton, ThemeToggleButton, SignUpLink, SignInLink for the guest user", async () => {
   vi.mocked(getAuthState).mockResolvedValue("guest");
   render(await NavigationMenu());
   const navigation = screen.getByRole("navigation", {
@@ -27,11 +27,16 @@ it("should show SketchListLink, NewSketchButton, ThemeToggleButton, SignOutButto
     within(items[2]).getByRole("button", { name: "テーマ切り替え" }),
   ).toBeInTheDocument();
   expect(
-    within(items[3]).getByRole("button", { name: "サインアウト" }),
+    within(items[3]).getByRole("link", { name: "アカウント登録" }),
   ).toBeInTheDocument();
   expect(
-    within(items[4]).getByRole("link", { name: "アカウント登録" }),
+    within(items[4]).getByRole("link", { name: "サインイン" }),
   ).toBeInTheDocument();
+});
+it("should not show SignOutButton for the guest user", async () => {
+  vi.mocked(getAuthState).mockResolvedValue("guest");
+  render(await NavigationMenu());
+  expect(screen.queryByRole("button", { name: "サインアウト" })).toBeNull();
 });
 it("should show SketchListLink, NewSketchButton, ThemeToggleButton, SignOutButton for the registered user", async () => {
   vi.mocked(getAuthState).mockResolvedValue("registered");
@@ -53,6 +58,12 @@ it("should show SketchListLink, NewSketchButton, ThemeToggleButton, SignOutButto
   expect(
     within(items[3]).getByRole("button", { name: "サインアウト" }),
   ).toBeInTheDocument();
+});
+it("should not show SignUpLink and SignInLink for the registered user", async () => {
+  vi.mocked(getAuthState).mockResolvedValue("registered");
+  render(await NavigationMenu());
+  expect(screen.queryByRole("link", { name: "アカウント登録" })).toBeNull();
+  expect(screen.queryByRole("link", { name: "サインイン" })).toBeNull();
 });
 it("should show nothing for the signout user", async () => {
   vi.mocked(getAuthState).mockResolvedValue("signedOut");

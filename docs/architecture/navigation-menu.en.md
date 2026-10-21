@@ -18,8 +18,9 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 | Sketch list  | `SketchListLink`      | Shown   | Shown        | Implemented                   |
 | New sketch   | `NewSketchIconButton` | Shown   | Shown        | Implemented                   |
 | Theme toggle | `ThemeToggleButton`   | Shown   | Shown        | Implemented                   |
-| Sign out     | `SignOutButton`       | Shown   | Shown        | Not implemented (placeholder) |
 | Sign up      | `SignUpLink`          | Shown   | Hidden       | Implemented                   |
+| Sign in      | `SignInLink`          | Shown   | Hidden       | Implemented                   |
+| Sign out     | `SignOutButton`       | Hidden  | Shown        | Not implemented (placeholder) |
 
 - `SignOutButton` is an empty `button` that has only an `aria-label`, wrapped in a `form`.
   It has no icon, tooltip or behavior.
@@ -32,6 +33,7 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 | `sketch-list-link.tsx`       | Client Component. A link to `/sketches`                               |
 | `new-sketch-icon-button.tsx` | Passes an icon and a tooltip to `NewSketchButton` (`src/new-sketch/`) |
 | `sign-up-link.tsx`           | A link to `/signup`                                                   |
+| `sign-in-link.tsx`           | A link to `/signin`                                                   |
 | `theme-toggle-button.tsx`    | Client Component. Switches between `dark` and `light`                 |
 | `sign-out-button.tsx`        | A placeholder                                                         |
 | `index.ts`                   | Exports `NavigationMenu`                                              |

@@ -18,8 +18,9 @@
 | スケッチ一覧 | `SketchListLink`      | 表示    | 表示         | 実装済み                 |
 | 新規作成     | `NewSketchIconButton` | 表示    | 表示         | 実装済み                 |
 | テーマ切替   | `ThemeToggleButton`   | 表示    | 表示         | 実装済み                 |
-| サインアウト | `SignOutButton`       | 表示    | 表示         | 未実装(プレースホルダー) |
 | サインアップ | `SignUpLink`          | 表示    | 非表示       | 実装済み                 |
+| サインイン   | `SignInLink`          | 表示    | 非表示       | 実装済み                 |
+| サインアウト | `SignOutButton`       | 非表示  | 表示         | 未実装(プレースホルダー) |
 
 - `SignOutButton`は、`aria-label`だけを持つ空の`button`を、`form`で包んだものです。
   アイコン、tooltip、処理を持ちません。
@@ -32,6 +33,7 @@
 | `sketch-list-link.tsx`       | Client Component。`/sketches`へのリンクです。                         |
 | `new-sketch-icon-button.tsx` | `NewSketchButton`(`src/new-sketch/`)に、アイコンとtooltipを渡します。 |
 | `sign-up-link.tsx`           | `/signup`へのリンクです。                                             |
+| `sign-in-link.tsx`           | `/signin`へのリンクです。                                             |
 | `theme-toggle-button.tsx`    | Client Component。`dark`と`light`を切り替えます。                     |
 | `sign-out-button.tsx`        | プレースホルダーです。                                                |
 | `index.ts`                   | 公開するのは`NavigationMenu`です。                                    |
