@@ -13,7 +13,7 @@ const SignOutButton = ({ className }: { className?: string }) => {
   );
   useEffect(() => {
     if (state?.error) toast.add({ type: "error", title: state?.error });
-  }, [state?.error]);
+  }, [state]);
 
   return (
     <MyToolTip message="サインアウト" side="right">
