@@ -1,8 +1,9 @@
 "use server";
 import { signOut } from "@/supabase/auth/signOut";
-import { SignOutState } from "@/navigation-menu/sign-out/sign-out-button";
 import { createSupabaseActionClient } from "@/supabase/utils/actionClient";
 import { redirect } from "next/navigation";
+
+type SignOutState = { error: string } | undefined;
 
 const signOutAction = async (): Promise<SignOutState> => {
   const supabaseClient = await createSupabaseActionClient();

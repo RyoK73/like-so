@@ -6,8 +6,6 @@ import { MyToolTip } from "@/design-system/tool-tip";
 import { toast } from "@/design-system/toast";
 import { useEffect } from "react";
 
-type SignOutState = { error: string } | undefined;
-
 const SignOutButton = ({ className }: { className?: string }) => {
   const [state, formAction, isPending] = useActionState(
     signOutAction,
@@ -33,4 +31,4 @@ const SignOutButton = ({ className }: { className?: string }) => {
   );
 };
 
-export { SignOutButton, type SignOutState };
+export { SignOutButton };
