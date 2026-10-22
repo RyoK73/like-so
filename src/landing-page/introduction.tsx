@@ -9,12 +9,12 @@ const Dab = ({ className }: { className: string }) => (
 
 const Introduction = ({ children }: { children: ReactNode }) => {
   return (
-    <section className="mx-auto flex w-full flex-col gap-16 px-6 py-16 md:grid md:h-[calc(var(--grid-size)*12)] md:w-[round(down,min(100%,896px),128px)] md:auto-rows-(--grid-size) md:grid-cols-14 md:gap-0 md:p-0">
+    <section className="mx-auto flex w-full flex-col gap-16 px-6 py-16 md:grid md:h-[calc(var(--grid-size)*18)] md:w-[round(down,min(100%,896px),128px)] md:auto-rows-(--grid-size) md:grid-cols-14 md:gap-0 md:p-0">
       <div className="relative flex flex-col justify-center gap-4 brush-a bg-background p-5 text-left md:col-span-10 md:col-start-1 md:row-span-3 md:row-start-3">
         <Dab className="-top-3 -left-3 bg-paint-blue" />
         <Dab className="-right-2 -bottom-3 size-7 bg-paint-yellow" />
         <h1 className="text-4xl font-bold tracking-tight">
-          <span>ひらめき</span>を、描いて、渡す
+          ひらめきを、描いて、渡す
         </h1>
         <div className="max-w text-muted-foreground">
           <p>
@@ -27,8 +27,7 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         <Dab className="-top-2 -right-3 bg-paint-green" />
         <Dab className="-bottom-3 -left-2 size-8 bg-paint-red" />
         <h2 className="text-3xl font-semibold tracking-tight">
-          <span>シンプル</span>で、
-          <span>速い</span>。
+          シンプルで、速い。
         </h2>
         <p className="leading-relaxed">
           Like-soは、軽やかさと速さを最優先
