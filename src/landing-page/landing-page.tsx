@@ -10,9 +10,8 @@ const LandingPage = async () => {
   const authState = await getAuthState(supabaseClient);
 
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-6 bg-background px-4 py-16 text-center text-foreground">
-      <Introduction />
-      <div className="flex flex-col items-center gap-3 sm:flex-row">
+    <main className="flex flex-1 flex-col items-center justify-start gap-6 px-4 pb-16 text-center text-foreground">
+      <Introduction>
         {authState === "signedOut" && (
           <>
             <NewSketchButton ariaLabel="ゲストとして続ける">
@@ -50,7 +49,7 @@ const LandingPage = async () => {
             スケッチ一覧へ
           </Link>
         )}
-      </div>
+      </Introduction>
     </main>
   );
 };

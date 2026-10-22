@@ -5,30 +5,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  /* DESIGN.md tokens. The `ds-` prefix avoids clashing with the shadcn tokens. */
-  --color-ds-surface: var(--ds-surface);
-  --color-ds-surface-raised: var(--ds-surface-raised);
-  --color-ds-on-surface: var(--ds-on-surface);
-  --color-ds-primary: var(--ds-primary);
-  --color-ds-ink: var(--ds-ink);
+  --font-yomogi: var(--font-yomogi);
+  --font-zen-kurenaido: var(--font-zen-kurenaido);
+  --font-heading: var(--font-sans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-heading: var(--font-sans);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
+  --color-canvas: var(--canvas);
+  --color-brand: var(--brand);
+  --color-paint-blue: var(--paint-blue);
+  --color-paint-green: var(--paint-green);
+  --color-paint-yellow: var(--paint-yellow);
+  --color-paint-red: var(--paint-red);
+  --color-canvas-grid: var(--canvas-grid);
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
@@ -52,83 +40,89 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --shadow-float:
+    0 1px 2px oklch(0.2 0.01 70 / 0.06), 0 4px 12px oklch(0.2 0.01 70 / 0.06);
 }
 
+/* Paper and ink. Neutrals lean slightly warm (hue 80) so the page feels like paper. */
 :root {
-  --ds-surface: #eceef2;
-  --ds-surface-raised: #c5ccd6;
-  --ds-on-surface: #171717;
-  --ds-primary: #4aa3df;
-  --ds-ink: #171717;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: oklch(0.975 0.005 85);
+  --foreground: oklch(0.22 0.01 70);
+  --card: oklch(0.992 0.003 85);
+  --card-foreground: oklch(0.22 0.01 70);
+  --popover: oklch(0.992 0.003 85);
+  --popover-foreground: oklch(0.22 0.01 70);
+  --primary: oklch(0.22 0.01 70);
+  --primary-foreground: oklch(0.975 0.005 85);
+  --secondary: oklch(0.945 0.006 85);
+  --secondary-foreground: oklch(0.22 0.01 70);
+  --muted: oklch(0.945 0.006 85);
+  --muted-foreground: oklch(0.5 0.01 75);
+  --accent: oklch(0.935 0.007 85);
+  --accent-foreground: oklch(0.22 0.01 70);
+  --destructive: oklch(0.52 0.19 27);
+  --border: oklch(0.89 0.008 85);
+  --input: oklch(0.86 0.008 85);
+  --ring: oklch(0.6 0.01 75);
+  --canvas: oklch(0.992 0.003 85);
+  --canvas-grid: oklch(0.92 0.006 85);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* Blueprint cobalt. The single accent color besides ink. */
+  --brand: oklch(0.5 0.17 260);
+  /* Paint dabs: accent smudges beside the ink-black lines. */
+  --paint-blue: oklch(0.55 0.17 260);
+  --paint-green: oklch(0.72 0.16 150);
+  --paint-yellow: oklch(0.88 0.16 95);
+  --paint-red: oklch(0.62 0.2 28);
+  --grid-size: 64px;
+  --grid-line: oklch(0.9 0.008 85);
+  --grid-line-faint: oklch(0.94 0.006 85);
 }
 
+/* Soft dark: a lifted charcoal, not black. The canvas stays light. */
 .dark {
-  --ds-surface: #444856;
-  --ds-surface-raised: #646b7d;
-  --ds-on-surface: #ededed;
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: oklch(0.285 0.006 70);
+  --foreground: oklch(0.94 0.006 85);
+  --card: oklch(0.325 0.006 70);
+  --card-foreground: oklch(0.94 0.006 85);
+  --popover: oklch(0.345 0.006 70);
+  --popover-foreground: oklch(0.94 0.006 85);
+  --primary: oklch(0.94 0.006 85);
+  --primary-foreground: oklch(0.25 0.006 70);
+  --secondary: oklch(0.355 0.006 70);
+  --secondary-foreground: oklch(0.94 0.006 85);
+  --muted: oklch(0.355 0.006 70);
+  --muted-foreground: oklch(0.72 0.008 80);
+  --accent: oklch(0.38 0.006 70);
+  --accent-foreground: oklch(0.94 0.006 85);
+  --destructive: oklch(0.74 0.14 25);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.65 0.01 75);
+  --brand: oklch(0.76 0.12 255);
+  --grid-line: oklch(1 0 0 / 8%);
+  --grid-line-faint: oklch(1 0 0 / 4%);
+}
+
+/* Hand-drawn brush frames: wobbly corners, a slight tilt and an ink-black outline. Two mirrored shapes, `brush-a` tilts left and `brush-b` tilts right. */
+@utility brush-a {
+  border: 2px solid var(--foreground);
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  rotate: -1deg;
+}
+@utility brush-b {
+  border: 2px solid var(--foreground);
+  border-radius: 15px 225px 15px 255px / 255px 15px 225px 15px;
+  rotate: 1deg;
+}
+
+/* Drafting-paper background. One line sits on the horizontal center so centered content snaps to the grid. */
+@utility bg-grid-paper {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: calc(50% + var(--grid-size) / 2) 0;
 }
 
 @layer base {
@@ -136,9 +130,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background bg-grid-paper text-foreground;
   }
   html {
-    @apply font-sans;
+    @apply font-zen-kurenaido;
   }
 }
