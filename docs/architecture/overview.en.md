@@ -116,6 +116,8 @@ See [Authentication](./auth.en.md) for details.
 Details of `SketchCanvas`:
 
 - It draws the canvas at actual size (`width` × `height`) and the parent element scrolls.
+- The paper and the grid of the canvas are drawn by CSS on the parent element, so the background of fabric is `transparent`.
+  The interval of the grid is `cell_size` of the sketch.
 - The buttons to add shapes are disabled until `isSketchLoaded` becomes `true`.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.

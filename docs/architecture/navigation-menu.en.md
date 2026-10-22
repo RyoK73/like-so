@@ -37,9 +37,10 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 
 ## Details
 
-- `SketchListLink` highlights itself as the current page (`bg-ds-primary`) only when `usePathname` equals `/sketches`.
+- `SketchListLink` highlights itself as the current page (`bg-primary`) only when `usePathname` equals `/sketches`.
   It does not highlight on `/sketches/[id]`.
 - `NewSketchIconButton` uses the `tooltip` prop of `NewSketchButton`.
+  It passes `variant="icon"` so that the button has no brush frame.
   See [Routing](./routing.en.md) for the flow of creating a sketch.
 - `ThemeToggleButton` switches between `dark` and `light` on each click with `useTheme` of `next-themes`.
   It shows the icon (`LuSun` or `LuMoonStar`) with the CSS `dark:` variant.

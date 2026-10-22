@@ -37,9 +37,10 @@
 
 ## 詳細
 
-- `SketchListLink`は、`usePathname`が`/sketches`と一致するときだけ、現在地として強調します(`bg-ds-primary`)。
+- `SketchListLink`は、`usePathname`が`/sketches`と一致するときだけ、現在地として強調します(`bg-primary`)。
   `/sketches/[id]`では強調しません。
 - `NewSketchIconButton`は、`NewSketchButton`の`tooltip`プロップを使います。
+  手描き風の枠を付けないよう、`variant="icon"`を渡します。
   新規作成の流れは[ルーティング](./routing.ja.md)を参照してください。
 - `ThemeToggleButton`は、`next-themes`の`useTheme`で、クリックするたびに`dark`と`light`を切り替えます。
   アイコン(`LuSun`、`LuMoonStar`)は、CSSの`dark:`で出し分けます。
