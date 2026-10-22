@@ -5,8 +5,8 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
-import { Button } from "@/design-system/button";
 import { toast } from "@/design-system/toast";
+import { Button } from "@/design-system/button";
 import { MyToolTip } from "@/design-system/tool-tip";
 import { startNewSketch } from "@/new-sketch/start-new-sketch";
 
@@ -15,6 +15,7 @@ type NewSketchButtonProps = {
   className?: string;
   children?: ReactNode;
   tooltip?: Pick<ComponentProps<typeof MyToolTip>, "message" | "side">;
+  variant?: ComponentProps<typeof Button>["variant"];
 };
 
 const NewSketchButton = ({
@@ -22,6 +23,7 @@ const NewSketchButton = ({
   children = "新規作成",
   tooltip,
   ariaLabel,
+  variant,
 }: NewSketchButtonProps) => {
   const [state, formAction, isPending] = useActionState(startNewSketch, null);
 
@@ -37,6 +39,7 @@ const NewSketchButton = ({
       className={className}
       disabled={isPending}
       aria-label={ariaLabel}
+      variant={variant}
     >
       {children}
     </Button>

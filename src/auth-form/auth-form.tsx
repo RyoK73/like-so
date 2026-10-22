@@ -85,8 +85,8 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
   const [state, formAction, isPending] = useActionState(submit, initialState);
 
   return (
-    <div className="mx-auto flex w-full max-w-sm flex-col gap-4 p-4">
-      <h1 className="text-2xl font-semibold">
+    <div className="mx-auto my-auto flex w-full max-w-sm flex-col gap-4 rounded-2xl border bg-card p-6 shadow-float">
+      <h1 className="text-2xl font-semibold tracking-tight">
         {mode === "signin"
           ? "サインイン"
           : isGuest
@@ -181,7 +181,7 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
               name="intent"
               value="change"
               formNoValidate
-              variant="ghost"
+              variant="default"
               disabled={isPending}
             >
               メールアドレスを変更

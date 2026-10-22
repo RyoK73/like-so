@@ -4,7 +4,8 @@
 
 `NavigationMenu` (`src/navigation-menu/navigation-menu.tsx`) is a Server Component.
 `src/app/sketches/layout.tsx` renders it, so it appears on both `/sketches` and `/sketches/[id]`.
-It is fixed (`fixed top-1/2 left-4`) on the left side of the screen, and each item is an icon-only button or link.
+`src/app/sketches/layout.tsx` lays it out beside the content with `flex`, and the menu itself is vertically centered in a column as tall as the screen (`sticky top-0 h-screen`).
+Each item is an icon-only button or link.
 `index.ts` exports only `NavigationMenu`.
 
 ## Visibility
@@ -37,9 +38,10 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 
 ## Details
 
-- `SketchListLink` highlights itself as the current page (`bg-ds-primary`) only when `usePathname` equals `/sketches`.
+- `SketchListLink` highlights itself as the current page (`bg-paint-yellow`) only when `usePathname` equals `/sketches`.
   It does not highlight on `/sketches/[id]`.
 - `NewSketchIconButton` uses the `tooltip` prop of `NewSketchButton`.
+  It passes `variant="icon"` so that the button has no brush frame.
   See [Routing](./routing.en.md) for the flow of creating a sketch.
 - `ThemeToggleButton` switches between `dark` and `light` on each click with `useTheme` of `next-themes`.
   It shows the icon (`LuSun` or `LuMoonStar`) with the CSS `dark:` variant.

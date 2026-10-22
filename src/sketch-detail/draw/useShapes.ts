@@ -42,7 +42,7 @@ const useShapes = (fabricCanvasRef: RefObject<Canvas | null>) => {
   const createShape = (
     type: ShapeType,
     fillColor: string = "transparent",
-    strokeColor: string = "#575757",
+    strokeColor: string = "#2b2a28",
     strokeWidth: number = 10,
   ) => {
     const currentFabricCanvasRef = fabricCanvasRef.current;

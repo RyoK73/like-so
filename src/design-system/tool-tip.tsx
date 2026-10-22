@@ -19,8 +19,8 @@ const MyToolTip = ({ message, children, side, sideOffset = 8 }: Props) => {
           sideOffset={sideOffset}
           className="z-20"
         >
-          <Tooltip.Popup className="relative rounded-xl bg-ds-surface-raised px-3 py-2 text-sm leading-[1.2] font-medium text-ds-on-surface">
-            <Tooltip.Arrow className="size-2 rotate-45 bg-ds-surface-raised data-[side=bottom]:-top-1 data-[side=left]:-right-1 data-[side=right]:-left-1 data-[side=top]:-bottom-1" />
+          <Tooltip.Popup className="relative rounded-lg bg-foreground px-3 py-2 text-sm leading-[1.2] font-medium text-background shadow-float">
+            <Tooltip.Arrow className="size-2 rotate-45 bg-foreground data-[side=bottom]:-top-1 data-[side=left]:-right-1 data-[side=right]:-left-1 data-[side=top]:-bottom-1" />
             {message}
           </Tooltip.Popup>
         </Tooltip.Positioner>
