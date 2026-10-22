@@ -10,7 +10,7 @@ const buttonVariants = cva(
         default:
           "brush-a bg-foreground font-bold text-background hover:rotate-1",
         outline: "brush-a bg-background font-bold hover:rotate-1",
-        icon: "",
+        icon: "", // This variant doesn't apply `brush-a` style
       },
       size: {
         default:
