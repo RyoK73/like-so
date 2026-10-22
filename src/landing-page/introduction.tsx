@@ -23,25 +23,6 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         </div>
       </div>
 
-      {/* <div className="flex flex-col gap-4 border-2 p-5"> */}
-      {/*   <h2 className="text-2xl font-semibold tracking-tight"> */}
-      {/*     言葉のほかに、もうひとつの伝え方を */}
-      {/*   </h2> */}
-      {/*   <p className="leading-relaxed"> */}
-      {/*     自然言語は、人とLLMをつなぐ心強い共通言語です。 */}
-      {/*   </p> */}
-      {/*   <p className="leading-relaxed"> */}
-      {/*     そのうえで、イメージや感覚のような主観的なものには、絵のほうがまっすぐ届く場面があります。 */}
-      {/*   </p> */}
-      {/*   <p className="leading-relaxed"> */}
-      {/*     「左にサイドバーがあって、その右にカードが並んでいて……」と書くかわりに、3秒でさっとスケッチする。 */}
-      {/*     そのほうが速くて、イメージにも近づきます。 */}
-      {/*   </p> */}
-      {/*   <p> */}
-      {/*     Like-soは、ひらめきから伝わるまでの時間を、限りなくゼロに近づけます。 */}
-      {/*   </p> */}
-      {/* </div> */}
-
       <div className="relative flex flex-col justify-center gap-4 brush-b bg-background p-5 text-left md:col-span-10 md:col-end-16 md:row-span-3 md:row-start-8">
         <Dab className="-top-2 -right-3 bg-paint-green" />
         <Dab className="-bottom-3 -left-2 size-8 bg-paint-red" />
@@ -58,31 +39,6 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         </p>
       </div>
 
-      {/* <div className="flex flex-col gap-6"> */}
-      {/*   <h2 className="text-2xl font-semibold tracking-tight"> */}
-      {/*     こんな場面で使えます */}
-      {/*   </h2> */}
-      {/*   <ul className="grid divide-y divide-border overflow-hidden rounded-xl border bg-card sm:grid-cols-3 sm:divide-x sm:divide-y-0"> */}
-      {/*     <li className="p-6"> */}
-      {/*       <p className="font-medium">LLMへの指示に</p> */}
-      {/*       <p className="mt-1 text-sm text-muted-foreground"> */}
-      {/*         アプリの画面をさっとスケッチして、そのままLLMに渡せます。 */}
-      {/*       </p> */}
-      {/*     </li> */}
-      {/*     <li className="p-6"> */}
-      {/*       <p className="font-medium">資料や発表に</p> */}
-      {/*       <p className="mt-1 text-sm text-muted-foreground"> */}
-      {/*         描いたモックを画像にして、資料やプレゼンにすぐ載せられます。 */}
-      {/*       </p> */}
-      {/*     </li> */}
-      {/*     <li className="p-6"> */}
-      {/*       <p className="font-medium">イメージの共有に</p> */}
-      {/*       <p className="mt-1 text-sm text-muted-foreground"> */}
-      {/*         頭の中のイメージを、チームや友人にそのまま見せられます。 */}
-      {/*       </p> */}
-      {/*     </li> */}
-      {/*   </ul> */}
-      {/* </div> */}
       <div className="flex flex-col items-start gap-3 sm:flex-row md:col-span-14 md:col-start-1 md:row-start-18">
         {children}
       </div>
