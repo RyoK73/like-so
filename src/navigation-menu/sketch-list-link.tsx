@@ -19,7 +19,7 @@ const SketchListLink = ({ className }: SketchListLinkProps) => {
         className={cn(
           className,
           pathname === "/sketches" &&
-            "bg-ds-primary text-ds-ink hover:bg-ds-primary",
+            "bg-primary text-primary-foreground hover:bg-primary",
         )}
       >
         <LuLibraryBig />

@@ -33,16 +33,16 @@ it("should show tooltip with `スケッチ一覧へ` on the mouse hover", async 
   expect(await screen.findByText("スケッチ一覧へ")).toBeInTheDocument();
 });
 describe("Verify the display staus according to pathname", () => {
-  it("should have `bg-ds-primary` and `text-ds-ink` classnames when the path is `/sketches`", () => {
+  it("should have `bg-primary` and `text-primary-foreground` classnames when the path is `/sketches`", () => {
     vi.mocked(usePathname).mockReturnValue("/sketches");
     const link = renderLink();
-    expect(link).toHaveClass("bg-ds-primary", "text-ds-ink");
+    expect(link).toHaveClass("bg-primary", "text-primary-foreground");
   });
 
-  it("should not have `bg-ds-primary` and `text-ds-ink` classnames when the path is not `/sketches`", () => {
+  it("should not have `bg-primary` and `text-primary-foreground` classnames when the path is not `/sketches`", () => {
     vi.mocked(usePathname).mockReturnValue("/sketches/foo");
     const link = renderLink();
-    expect(link).not.toHaveClass("bg-ds-primary");
-    expect(link).not.toHaveClass("text-ds-ink");
+    expect(link).not.toHaveClass("bg-primary");
+    expect(link).not.toHaveClass("text-primary-foreground");
   });
 });
