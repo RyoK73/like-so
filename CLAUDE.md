@@ -6,7 +6,7 @@ A tool for quickly sketching application UI mockups and sharing them with LLMs a
 
 All documents are managed as pairs of Japanese (`*.ja.md`) and English (`*.en.md`) files.
 Only the README is different: the English one is `README.md` and the Japanese one is `README.ja.md`.
-`DESIGN.md` at the repository root is also an exception: it is written in English only because it is intended for LLMs.
+`DESIGN.md` at the repository root is also an exception: it is written in Japanese only, and there is no English version.
 When you implement UI, read `DESIGN.md` and follow its colors, typography, spacing, and components.
 
 | Category     | Path                                     | Contents                                                    |
