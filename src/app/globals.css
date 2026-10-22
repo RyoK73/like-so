@@ -11,6 +11,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-canvas: var(--canvas);
+  --color-ink: var(--ink);
   --color-brand: var(--brand);
   --color-paint-blue: var(--paint-blue);
   --color-paint-green: var(--paint-green);
@@ -67,6 +68,8 @@
   --canvas: oklch(0.992 0.003 85);
   --canvas-grid: oklch(0.92 0.006 85);
   --radius: 0.625rem;
+  /* Fixed ink for text on the paint colors. It does not flip in dark mode. */
+  --ink: oklch(0.22 0.01 70);
   /* Blueprint cobalt. The single accent color besides ink. */
   --brand: oklch(0.5 0.17 260);
   /* Paint dabs: accent smudges beside the ink-black lines. */

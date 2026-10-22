@@ -4,7 +4,7 @@
 
 `NavigationMenu`(`src/navigation-menu/navigation-menu.tsx`)は、Server Componentです。
 `src/app/sketches/layout.tsx`が表示するので、`/sketches`と`/sketches/[id]`の両方に出ます。
-画面の左側に固定(`fixed top-1/2 left-4`)で表示し、各項目はアイコンだけのボタンかリンクです。
+画面の左側に固定(`fixed top-1/2 left-2`)で表示し、各項目はアイコンだけのボタンかリンクです。
 `index.ts`が公開するのは`NavigationMenu`のみです。
 
 ## 表示条件
@@ -37,7 +37,7 @@
 
 ## 詳細
 
-- `SketchListLink`は、`usePathname`が`/sketches`と一致するときだけ、現在地として強調します(`bg-primary`)。
+- `SketchListLink`は、`usePathname`が`/sketches`と一致するときだけ、現在地として強調します(`bg-paint-yellow`)。
   `/sketches/[id]`では強調しません。
 - `NewSketchIconButton`は、`NewSketchButton`の`tooltip`プロップを使います。
   手描き風の枠を付けないよう、`variant="icon"`を渡します。
