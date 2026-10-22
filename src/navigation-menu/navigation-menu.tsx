@@ -47,9 +47,9 @@ const NavigationMenu = async () => {
   return (
     <nav
       aria-label="ナビゲーションメニュー"
-      className="fixed top-1/2 left-2 z-10 -translate-y-1/2"
+      className="sticky top-0 z-10 flex h-screen shrink-0 items-center pl-4"
     >
-      <ul className="flex flex-col gap-2 bg-card p-2 border-2 border-foreground/60 shadow-float  brush-a rotate-0">
+      <ul className="flex flex-col gap-2 bg-card p-2 border-2 border-foreground/60 shadow-float brush-a rotate-0">
         {menuItems
           .filter(({ visibleFor }) => visibleFor.includes(userState))
           .map(({ key, Item }) => (

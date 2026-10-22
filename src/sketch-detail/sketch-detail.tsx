@@ -27,7 +27,7 @@ const SketchDetail = async ({ id }: { id: string }) => {
   if (!sketch) notFound();
 
   return (
-    <div className="flex flex-1 flex-col gap-3 bg-background bg-grid-paper px-6 py-8 pl-20 [--grid-line:var(--grid-line-faint)]">
+    <div className="flex flex-1 flex-col gap-3 bg-background bg-grid-paper px-6 py-8 [--grid-line:var(--grid-line-faint)]">
       <h1 className="text-xl font-semibold tracking-tight">{sketch.title}</h1>
       {sketch.description && (
         <p className="text-muted-foreground">{sketch.description}</p>

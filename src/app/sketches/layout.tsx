@@ -6,9 +6,9 @@ export default function SketchesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <div className="flex flex-1">
       <NavigationMenu />
       {children}
-    </>
+    </div>
   );
 }
