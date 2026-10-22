@@ -3,13 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/design-system/toast";
 import { MyToolTipProvider } from "@/design-system/tool-tip-provider";
 import { ThemeProvider } from "@/design-system/theme-provider";
-import { Yomogi, Zen_Kurenaido } from "next/font/google";
-
-const yomogi = Yomogi({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-yomogi",
-});
+import { Zen_Kurenaido } from "next/font/google";
 
 const zenKurenaido = Zen_Kurenaido({
   variable: "--font-zen-kurenaido",
@@ -27,7 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="ja"
-      className={`${yomogi.variable} ${zenKurenaido.variable} h-full antialiased`}
+      className={`${zenKurenaido.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

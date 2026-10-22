@@ -5,7 +5,6 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-yomogi: var(--font-yomogi);
   --font-zen-kurenaido: var(--font-zen-kurenaido);
   --font-heading: var(--font-sans);
   --color-background: var(--background);
