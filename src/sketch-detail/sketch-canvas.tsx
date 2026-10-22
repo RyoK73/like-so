@@ -9,8 +9,8 @@ import { useSave } from "@/sketch-detail/save/useSave";
 import type { CanvasFrame } from "@/sketch-detail/save/saveToDb.types";
 import type { GetSketch } from "@/supabase/sketch-crud/getSketch.types";
 
-// DESIGN.md: the drawing canvas stays light in both modes.
-const CANVAS_BACKGROUND = "#F6F7FA";
+// The paper and the grid are drawn by CSS (`bg-canvas`), so fabric stays transparent. The canvas stays light in both modes.
+const CANVAS_BACKGROUND = "transparent";
 const SAVE_ERROR_TOAST_ID = "save-sketch-error";
 
 const SHAPE_BUTTONS: { type: ShapeType; label: string }[] = [
@@ -92,8 +92,13 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
         ))}
       </div>
       {/* fabric wraps the canvas element, so React must own its parent element. */}
-      <div className="overflow-auto rounded-lg">
-        <div>
+      <div className="overflow-auto">
+        <div
+          className="w-fit overflow-hidden rounded-xl border bg-canvas bg-[linear-gradient(var(--canvas-grid)_1px,transparent_1px),linear-gradient(90deg,var(--canvas-grid)_1px,transparent_1px)] shadow-float"
+          style={{
+            backgroundSize: `${sketch.cell_size}px ${sketch.cell_size}px`,
+          }}
+        >
           <canvas ref={canvasElRef} />
         </div>
       </div>
