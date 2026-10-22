@@ -16,10 +16,8 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         <h1 className="text-4xl font-bold tracking-tight">
           ひらめきを、描いて、渡す
         </h1>
-        <div className="max-w text-muted-foreground">
-          <p>
-            思いついたアイデアをその場でスケッチしてそのままLLMに渡せるキャンバス
-          </p>
+        <div className="text-lg text-muted-foreground leading-relaxed">
+          <p>思いついたアイデアを、その場でスケッチして渡す</p>
         </div>
       </div>
 
@@ -29,7 +27,7 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         <h2 className="text-3xl font-semibold tracking-tight">
           シンプルで、速い。
         </h2>
-        <p className="leading-relaxed">
+        <p className="text-lg text-muted-foreground leading-relaxed">
           Like-soは、軽やかさと速さを最優先
           <br />
           ひらめいた瞬間に開いて、描いて、渡す。
