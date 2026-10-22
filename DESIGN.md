@@ -102,6 +102,16 @@ components:
     typography: "{typography.label-md}"
     rounded: "{rounded.lg}"
     padding: 8px 12px
+  toast:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.brush-a}"
+    padding: 16px
+  input:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.brush-a}"
+    height: 64px
   navigation-menu:
     backgroundColor: "{colors.card}"
     textColor: "{colors.foreground}"
@@ -239,6 +249,14 @@ Like-so は、思いついたアイデアをその場でスケッチして、そ
   大きさは、呼び出し側のクラス(ナビゲーションメニューでは 40px)で決めます。
 - **tooltip**: アイコンだけの操作の名前を、hover で見せる吹き出しです。
   `foreground` の塗りに `background` の文字を重ね、小さな矢印を付けます。
+- **toast**: 操作の結果を知らせる通知です。
+  `card` の塗りと `brush-a` の枠で、傾きは消し、`shadow-float` の影を付けます。
+  エラーのときだけ、アイコンを `destructive` にします。
+  閉じるボタンは `button-icon` です。
+- **input**: 入力欄です。
+  `card` の塗りと `brush-a` の枠で、傾きは消します。
+  高さは 64px(方眼の1マス)で、ボタンと揃えます。
+  ラベルは `label-md` を使います。
 - **navigation-menu**: 画面の左側に固定された、縦のメニューです。
   `card` の塗りと `brush-a` の枠で、サインイン状態によって項目が変わります。
 - **canvas-frame**: 描画面です。
