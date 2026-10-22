@@ -21,11 +21,11 @@ const SketchList = async () => {
         <li key={sketch.id}>
           <Link
             href={`/sketches/${sketch.id}`}
-            className="flex flex-col gap-1 rounded border border-zinc-200 p-4 hover:bg-zinc-50 dark:border-zinc-800 dark:hover:bg-zinc-900"
+            className="brush-a rotate-0 flex flex-col gap-1 border bg-background p-4 transition-colors hover:bg-accent"
           >
             <span className="font-semibold">{sketch.title}</span>
             {sketch.description && (
-              <span className="text-zinc-600 dark:text-zinc-400">
+              <span className="text-muted-foreground">
                 {sketch.description}
               </span>
             )}
