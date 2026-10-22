@@ -4,7 +4,8 @@
 
 `NavigationMenu`(`src/navigation-menu/navigation-menu.tsx`)は、Server Componentです。
 `src/app/sketches/layout.tsx`が表示するので、`/sketches`と`/sketches/[id]`の両方に出ます。
-画面の左側に固定(`fixed top-1/2 left-2`)で表示し、各項目はアイコンだけのボタンかリンクです。
+`src/app/sketches/layout.tsx`が`flex`で本文と横に並べ、メニュー自体は画面の高さいっぱいの列(`sticky top-0 h-screen`)の中で縦中央に表示します。
+各項目はアイコンだけのボタンかリンクです。
 `index.ts`が公開するのは`NavigationMenu`のみです。
 
 ## 表示条件

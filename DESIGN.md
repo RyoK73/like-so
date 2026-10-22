@@ -190,8 +190,7 @@ Like-so は、思いついたアイデアをその場でスケッチして、そ
 
 ## Typography
 
-`layout.tsx` で、`next/font/google` から Zen Kurenaido と Yomogi を読み込んでいます。
-`html` に適用されているのは Zen Kurenaido です(Yomogi は読み込み済みですが、現状は使っていません)。
+`layout.tsx` で、`next/font/google` から Zen Kurenaido を読み込み、`html` に適用しています。
 手書きの柔らかい字形で、スケッチの雰囲気に合わせます。
 
 - **headline-lg**: ランディングページの主見出し。
