@@ -112,7 +112,7 @@ export { LoginForm } from "./login-form";
 ## verticalの内部は、責務ごとのサブディレクトリに分けてよい
 
 - 1つのverticalのファイルが増えたら、`src/{vertical名}/`の中を、責務ごとのサブディレクトリに分けてよい。
-- 分ける基準は、技術的な種類(`hooks/`、`components/`など)ではなく、責務(`draw/`、`save/`など)とする。
+- 分ける基準は、技術的な種類(`hooks/`、`components/`など)ではなく、責務(`canvas/`、`save/`など)とする。
 - サブディレクトリの中のファイルは、同じvertical内からのみ使う。
   外部への公開は、vertical直下の`index.ts`だけで行う。
 
@@ -123,9 +123,12 @@ src/
 ├── sketch-detail/          # スケッチの個別ページ
 │   ├── sketch-detail.tsx
 │   ├── sketch-canvas.tsx
-│   ├── draw/               # キャンバスの描画に関するフック
-│   │   ├── useFabricCanvas.ts
+│   ├── canvas/             # fabricキャンバスの生成・破棄・読み込み
+│   │   └── useFabricCanvas.ts
+│   ├── shapes/             # 図形の作成
 │   │   └── useShapes.ts
+│   ├── history/            # undo/redo
+│   │   └── useHistory.ts
 │   ├── save/               # DBへの保存に関するフックと関数
 │   │   ├── useSave.ts
 │   │   └── saveToDb.ts

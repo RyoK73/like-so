@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { CanvasJson, useHistory } from "@/sketch-detail/draw/useHistory";
+import { CanvasJson, useHistory } from "@/sketch-detail/history/useHistory";
 
 const createTestCanvasJson = (id: number): CanvasJson => ({
   version: "0.0.0",

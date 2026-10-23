@@ -39,13 +39,19 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | `src/dev-scripts/`     | Scripts for development                                                                                                                    |
 | `src/test/`            | Pure helpers for tests                                                                                                                     |
 
-## Drawing (`src/sketch-detail/draw/`)
+## Drawing (`canvas/`, `shapes/` and `history/` in `src/sketch-detail/`)
 
-| File                 | Role                                                                      |
-| -------------------- | ------------------------------------------------------------------------- |
-| `useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount    |
-| `useShapes.ts`       | Adds a rect, circle or triangle to the center of the canvas               |
-| `useHistory.ts`      | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo` |
+| Directory  | Responsibility                                     |
+| ---------- | -------------------------------------------------- |
+| `canvas/`  | Creating, disposing and loading the fabric canvas  |
+| `shapes/`  | Creating shapes                                    |
+| `history/` | Undo / redo                                        |
+
+| File                        | Role                                                                      |
+| --------------------------- | ------------------------------------------------------------------------- |
+| `canvas/useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount    |
+| `shapes/useShapes.ts`       | Adds a rect, circle or triangle to the center of the canvas               |
+| `history/useHistory.ts`     | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo` |
 
 Details of `useFabricCanvas`:
 
@@ -109,7 +115,9 @@ See [Authentication](./auth.en.md) for details.
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | `sketch-detail.tsx` | Server Component. Renders the info of one sketch got by `getSketch` and passes it to `SketchCanvas` |
 | `sketch-canvas.tsx` | Client Component. Handles the canvas, the buttons to add shapes and auto-save                       |
-| `draw/`             | Hooks for the fabric canvas (see the section above)                                                 |
+| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                           |
+| `shapes/`           | Creating shapes (see the section above)                                                             |
+| `history/`          | Undo / redo (see the section above)                                                                 |
 | `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                      |
 | `index.ts`          | Exports only `SketchDetail`                                                                         |
 
