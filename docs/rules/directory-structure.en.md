@@ -112,7 +112,7 @@ export { LoginForm } from "./login-form";
 ## A Vertical May Be Divided into Subdirectories by Responsibility
 
 - When a vertical gets many files, you may divide `src/{vertical name}/` into subdirectories by responsibility.
-- Divide by responsibility (such as `draw/` and `save/`), not by technical kind (such as `hooks/` and `components/`).
+- Divide by responsibility (such as `canvas/` and `save/`), not by technical kind (such as `hooks/` and `components/`).
 - Files in a subdirectory are used only from the same vertical.
   Publish them to the outside only through the `index.ts` directly under the vertical.
 
@@ -123,9 +123,12 @@ src/
 ├── sketch-detail/          # The sketch page
 │   ├── sketch-detail.tsx
 │   ├── sketch-canvas.tsx
-│   ├── draw/               # Hooks for drawing on the canvas
-│   │   ├── useFabricCanvas.ts
+│   ├── canvas/             # Creating, disposing and loading the fabric canvas
+│   │   └── useFabricCanvas.ts
+│   ├── shapes/             # Creating shapes
 │   │   └── useShapes.ts
+│   ├── history/            # Undo / redo
+│   │   └── useHistory.ts
 │   ├── save/               # Hooks and functions for saving to the DB
 │   │   ├── useSave.ts
 │   │   └── saveToDb.ts

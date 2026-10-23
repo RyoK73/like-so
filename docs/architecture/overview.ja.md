@@ -39,13 +39,19 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `src/dev-scripts/`     | 開発用スクリプト                                                                                                                  |
 | `src/test/`            | テスト用のヘルパー                                                                                                                |
 
-## 描画(`src/sketch-detail/draw/`)
+## 描画(`src/sketch-detail/`の`canvas/`・`shapes/`・`history/`)
 
-| ファイル             | 役割                                                                             |
-| -------------------- | -------------------------------------------------------------------------------- |
-| `useFabricCanvas.ts` | fabricのキャンバスを作成して`canvasJson`を読み込み、アンマウント時に破棄します。 |
-| `useShapes.ts`       | 四角形、円、三角形をキャンバスの中央に追加します。                               |
-| `useHistory.ts`      | `past` / `present` / `future`を保持し、`set`、`undo`、`redo`を提供します。       |
+| ディレクトリ | 責務                                         |
+| ------------ | -------------------------------------------- |
+| `canvas/`    | fabricのキャンバスの生成・破棄・読み込み     |
+| `shapes/`    | 図形の作成                                   |
+| `history/`   | undo/redo                                    |
+
+| ファイル                     | 役割                                                                             |
+| ---------------------------- | -------------------------------------------------------------------------------- |
+| `canvas/useFabricCanvas.ts`  | fabricのキャンバスを作成して`canvasJson`を読み込み、アンマウント時に破棄します。 |
+| `shapes/useShapes.ts`        | 四角形、円、三角形をキャンバスの中央に追加します。                               |
+| `history/useHistory.ts`      | `past` / `present` / `future`を保持し、`set`、`undo`、`redo`を提供します。       |
 
 `useFabricCanvas`の詳細は、次の通りです。
 
@@ -108,7 +114,9 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | ------------------- | ---------------------------------------------------------------------------------------- |
 | `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件のメタ情報を描画し、`SketchCanvas`に渡します。 |
 | `sketch-canvas.tsx` | Client Component。キャンバス、図形の追加ボタン、自動保存を担当します。                   |
-| `draw/`             | fabricのキャンバスに関するフック(前節を参照)                                             |
+| `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                     |
+| `shapes/`           | 図形の作成(前節を参照)                                                                   |
+| `history/`          | undo/redo(前節を参照)                                                                    |
 | `save/`             | DBへの保存に関するフックと関数([スケッチの保存](./save.ja.md)を参照)                     |
 | `index.ts`          | 公開するのは`SketchDetail`のみです。                                                     |
 
