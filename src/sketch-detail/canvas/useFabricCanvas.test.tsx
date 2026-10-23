@@ -1,6 +1,6 @@
 import { render, waitFor } from "@testing-library/react";
 import * as fabric from "fabric";
-import { useFabricCanvas } from "@/sketch-detail/draw/useFabricCanvas";
+import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
 
 type HookResult = ReturnType<typeof useFabricCanvas>;
 
