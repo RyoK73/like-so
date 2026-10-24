@@ -10,7 +10,7 @@ import {
 } from "@/sketch-detail/viewport/viewportMath";
 
 // Terms: the frame is `sketch.width x height`, the max size is the largest size of the canvas element, and the element is the `<canvas>` element.
-// A transform is `{ zoom, tx, ty }`. `(tx, ty)` is where the scene origin (the top-left of the frame) appears on the element.
+// A transform is `{ zoom, tx, ty }`. `(tx, ty)` is where the frame origin (the top-left of the frame) appears on the element.
 
 const WHEEL_BASE = 0.999;
 
@@ -111,7 +111,7 @@ describe("clampZoom", () => {
 });
 
 describe("zoomAt", () => {
-  const scenePointAt = (
+  const framePointAt = (
     transform: { zoom: number; tx: number; ty: number },
     pointer: { x: number; y: number },
   ) => ({
@@ -156,17 +156,17 @@ describe("zoomAt", () => {
     expect(result).toEqual(transform);
   });
 
-  it("should stop at the maximum and keep the scene point under the pointer", () => {
+  it("should stop at the maximum and keep the frame coordinate under the pointer", () => {
     const before = { zoom: 3, tx: -30, ty: -20 };
     const pointer = { x: 100, y: 50 };
 
     const result = zoomAt(before, pointer, 2);
 
     expect(result.zoom).toBeCloseTo(4);
-    const sceneBefore = scenePointAt(before, pointer);
-    const sceneAfter = scenePointAt(result, pointer);
-    expect(sceneAfter.x).toBeCloseTo(sceneBefore.x);
-    expect(sceneAfter.y).toBeCloseTo(sceneBefore.y);
+    const frameBefore = framePointAt(before, pointer);
+    const frameAfter = framePointAt(result, pointer);
+    expect(frameAfter.x).toBeCloseTo(frameBefore.x);
+    expect(frameAfter.y).toBeCloseTo(frameBefore.y);
   });
 });
 
@@ -370,8 +370,8 @@ describe("getNewShapeCenter", () => {
     expect(result).toEqual({ x: 450, y: 300 });
   });
 
-  it("should return the scene point at the center of the view when zoomed", () => {
-    // The center of the element (450, 300) is the scene point ((450 + 600) / 2, (300 + 400) / 2) = (525, 350).
+  it("should return the frame coordinate at the center of the view when zoomed", () => {
+    // The center of the element (450, 300) is the frame coordinate ((450 + 600) / 2, (300 + 400) / 2) = (525, 350).
     const result = getNewShapeCenter({ zoom: 2, tx: -600, ty: -400 }, element, {
       width: 1200,
       height: 800,
@@ -381,7 +381,7 @@ describe("getNewShapeCenter", () => {
   });
 
   it("should return the nearest point in the frame when the center of the view is outside", () => {
-    // The center of the view is the scene point (-50, 300).
+    // The center of the view is the frame coordinate (-50, 300).
     const result = getNewShapeCenter({ zoom: 1, tx: 500, ty: 0 }, element, {
       width: 400,
       height: 300,

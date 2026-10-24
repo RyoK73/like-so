@@ -17,13 +17,13 @@ The calculations are pure functions that do not depend on fabric (`src/sketch-de
 | Canvas container  | The `div` that holds the `<canvas>` element (`canvasContainerRef`). It fills the free space on the screen without the toolbar. |
 | Max size          | The inner size of the canvas container, measured by `ResizeObserver`. The largest size the element can take.                   |
 | Element           | The `<canvas>` element. The largest size that fits the max size, with the same aspect ratio as the frame.                      |
-| Scene coordinate  | A coordinate of a shape, with the top-left of the frame as the origin. It does not change by zoom or pan.                      |
+| Frame coordinate  | A coordinate of a shape, with the top-left of the frame as the origin. It does not change by zoom or pan.                      |
 | Screen coordinate | A position on the screen, with the top-left of the element as the origin.                                                      |
 | Zoom `z`          | The display scale. `1` is 100%.                                                                                                |
-| `t`               | Where the scene origin (the top-left of the frame) appears on the screen. It is `(tx, ty)` in px.                              |
+| `t`               | Where the frame origin (the top-left of the frame) appears on the screen. It is `(tx, ty)` in px.                              |
 
 With only pan and zoom, `viewportTransform` has the form `[z, 0, 0, z, tx, ty]`.
-The scene coordinate `s` and the screen coordinate `p` are related as follows.
+The frame coordinate `s` and the screen coordinate `p` are related as follows.
 
 ```
 p = s × z + t
@@ -31,7 +31,7 @@ s = (p − t) / z
 ```
 
 Only `z` and `t` change by zoom and pan.
-The data of the shapes (scene coordinates) does not change, so the saved content is not affected.
+The data of the shapes (frame coordinates) does not change, so the saved content is not affected.
 
 ## Initial fit
 
@@ -62,9 +62,9 @@ The zoom is limited to 10% to 400% (`clampZoom`).
 ### Zoom around the pointer
 
 The point under the pointer stays at the same screen position before and after the zoom.
-In other words, the scene coordinate `s` under the pointer does not change by the zoom.
+In other words, the frame coordinate `s` under the pointer does not change by the zoom.
 
-1. Get the scene coordinate under the pointer from its screen coordinate `p`: `s = (p − t) / z`
+1. Get the frame coordinate under the pointer from its screen coordinate `p`: `s = (p − t) / z`
 2. Decide the new zoom `z'`: `z' = clamp(z × factor, 0.1, 4)`
 3. Decide `t'` so that `s` appears at the same `p`: `t' = p − s × z'`
 
@@ -117,10 +117,10 @@ A shape larger than the frame can also be added, and the part outside the frame 
 - Move: when the center is about to leave the frame, the center is stopped at the edge of the frame (`clampCenter`).
   Scaling and rotation are not limited.
 - Load: a shape whose center is already outside the frame is kept as it is.
-- Create: a shape is created at the scene coordinate of the center of the view, clamped into the frame (`getNewShapeCenter`).
+- Create: a shape is created at the frame coordinate of the center of the view, clamped into the frame (`getNewShapeCenter`).
 
 ```
-scene coordinate of the center of the view = ((element width/2 − tx) / z, (element height/2 − ty) / z)
+frame coordinate of the center of the view = ((element width/2 − tx) / z, (element height/2 − ty) / z)
 ```
 
 ## Files

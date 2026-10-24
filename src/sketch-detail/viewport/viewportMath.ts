@@ -1,6 +1,6 @@
 type Size = { width: number; height: number };
 type Point = { x: number; y: number };
-// `(tx, ty)` is where the scene origin (the top-left of the frame) appears on the element.
+// `(tx, ty)` is where the frame origin (the top-left of the frame) appears on the element.
 type Transform = { zoom: number; tx: number; ty: number };
 
 type WheelInput = {
@@ -45,7 +45,7 @@ const fitFrame = (
 
 const clampZoom = (zoom: number) => clamp(zoom, MIN_ZOOM, MAX_ZOOM);
 
-// Keep the scene point under the pointer at the same screen position.
+// Keep the point (in frame coordinates) under the pointer at the same screen position.
 const zoomAt = (
   transform: Transform,
   pointer: Point,
@@ -54,12 +54,12 @@ const zoomAt = (
   const zoom = clampZoom(transform.zoom * factor);
   if (zoom === transform.zoom) return transform;
 
-  const sceneX = (pointer.x - transform.tx) / transform.zoom;
-  const sceneY = (pointer.y - transform.ty) / transform.zoom;
+  const frameX = (pointer.x - transform.tx) / transform.zoom;
+  const frameY = (pointer.y - transform.ty) / transform.zoom;
   return {
     zoom,
-    tx: pointer.x - sceneX * zoom,
-    ty: pointer.y - sceneY * zoom,
+    tx: pointer.x - frameX * zoom,
+    ty: pointer.y - frameY * zoom,
   };
 };
 
@@ -102,7 +102,7 @@ const clampCenter = (center: Point, frame: Size): Point => ({
   y: clamp(center.y, 0, frame.height),
 });
 
-// The scene coordinate at the center of the view, clamped into the frame.
+// The frame coordinate at the center of the view, clamped into the frame.
 const getNewShapeCenter = (
   transform: Transform,
   element: Size,
