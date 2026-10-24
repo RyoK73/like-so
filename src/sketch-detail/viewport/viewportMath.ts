@@ -24,15 +24,18 @@ const WHEEL_ZOOM_BASE = 0.999;
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
-// The element is the largest size that fits the area with the aspect ratio of the frame. It is never enlarged.
-const fitFrame = (frame: Size, area: Size): { element: Size; zoom: number } => {
+// The element is the largest size that fits the max size with the aspect ratio of the frame. It is never enlarged.
+const fitFrame = (
+  frame: Size,
+  maxSize: Size,
+): { elementSize: Size; zoom: number } => {
   const zoom = Math.min(
     1,
-    area.width / frame.width,
-    area.height / frame.height,
+    maxSize.width / frame.width,
+    maxSize.height / frame.height,
   );
   return {
-    element: {
+    elementSize: {
       width: Math.round(frame.width * zoom),
       height: Math.round(frame.height * zoom),
     },

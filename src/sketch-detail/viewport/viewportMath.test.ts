@@ -9,7 +9,7 @@ import {
   type WheelInput,
 } from "@/sketch-detail/viewport/viewportMath";
 
-// Terms: the frame is `sketch.width x height`, the area is the free space for the canvas, and the element is the `<canvas>` element.
+// Terms: the frame is `sketch.width x height`, the max size is the largest size of the canvas element, and the element is the `<canvas>` element.
 // A transform is `{ zoom, tx, ty }`. `(tx, ty)` is where the scene origin (the top-left of the frame) appears on the element.
 
 const WHEEL_BASE = 0.999;
@@ -46,44 +46,44 @@ const expectZoomFactor = (
 describe("fitFrame", () => {
   it.each([
     {
-      name: "the frame is smaller than the area",
+      name: "the frame is smaller than the max size",
       frame: { width: 400, height: 300 },
-      area: { width: 900, height: 600 },
+      maxSize: { width: 900, height: 600 },
       element: { width: 400, height: 300 },
       zoom: 1,
     },
     {
-      name: "the frame is larger than the area",
+      name: "the frame is larger than the max size",
       frame: { width: 1200, height: 800 },
-      area: { width: 900, height: 600 },
+      maxSize: { width: 900, height: 600 },
       element: { width: 900, height: 600 },
       zoom: 0.75,
     },
     {
       name: "the height limits the size",
       frame: { width: 1200, height: 800 },
-      area: { width: 900, height: 300 },
+      maxSize: { width: 900, height: 300 },
       element: { width: 450, height: 300 },
       zoom: 0.375,
     },
     {
       name: "the width limits the size",
       frame: { width: 1200, height: 800 },
-      area: { width: 600, height: 800 },
+      maxSize: { width: 600, height: 800 },
       element: { width: 600, height: 400 },
       zoom: 0.5,
     },
     {
-      name: "the frame and the area are the same size",
+      name: "the frame and the max size are the same size",
       frame: { width: 800, height: 600 },
-      area: { width: 800, height: 600 },
+      maxSize: { width: 800, height: 600 },
       element: { width: 800, height: 600 },
       zoom: 1,
     },
-  ])("$name", ({ frame, area, element, zoom }) => {
-    const result = fitFrame(frame, area);
+  ])("$name", ({ frame, maxSize, element, zoom }) => {
+    const result = fitFrame(frame, maxSize);
 
-    expect(result.element).toEqual(element);
+    expect(result.elementSize).toEqual(element);
     expect(result.zoom).toBeCloseTo(zoom, 10);
   });
 
@@ -93,7 +93,7 @@ describe("fitFrame", () => {
       { width: 500, height: 500 },
     );
 
-    expect(result.element).toEqual({ width: 500, height: 362 });
+    expect(result.elementSize).toEqual({ width: 500, height: 362 });
     expect(result.zoom).toBeCloseTo(500 / 650, 10);
   });
 });
