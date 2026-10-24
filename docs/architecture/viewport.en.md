@@ -11,15 +11,16 @@ The calculations are pure functions that do not depend on fabric (`src/sketch-de
 
 ## Terms and coordinates
 
-| Term              | Meaning                                                                                                   |
-| ----------------- | --------------------------------------------------------------------------------------------------------- |
-| Frame             | The drawing range of the sketch. `sketch.width` × `sketch.height`                                         |
-| Area              | The free space on the screen for the canvas, without the toolbar. Measured by `ResizeObserver`.           |
-| Element           | The `<canvas>` element. The largest size that fits the area, with the same aspect ratio as the frame.     |
-| Scene coordinate  | A coordinate of a shape, with the top-left of the frame as the origin. It does not change by zoom or pan. |
-| Screen coordinate | A position on the screen, with the top-left of the element as the origin.                                 |
-| Zoom `z`          | The display scale. `1` is 100%.                                                                           |
-| `t`               | Where the scene origin (the top-left of the frame) appears on the screen. It is `(tx, ty)` in px.         |
+| Term              | Meaning                                                                                                                        |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Frame             | The drawing range of the sketch. `sketch.width` × `sketch.height`                                                              |
+| Canvas container  | The `div` that holds the `<canvas>` element (`canvasContainerRef`). It fills the free space on the screen without the toolbar. |
+| Max size          | The inner size of the canvas container, measured by `ResizeObserver`. The largest size the element can take.                   |
+| Element           | The `<canvas>` element. The largest size that fits the max size, with the same aspect ratio as the frame.                      |
+| Scene coordinate  | A coordinate of a shape, with the top-left of the frame as the origin. It does not change by zoom or pan.                      |
+| Screen coordinate | A position on the screen, with the top-left of the element as the origin.                                                      |
+| Zoom `z`          | The display scale. `1` is 100%.                                                                                                |
+| `t`               | Where the scene origin (the top-left of the frame) appears on the screen. It is `(tx, ty)` in px.                              |
 
 With only pan and zoom, `viewportTransform` has the form `[z, 0, 0, z, tx, ty]`.
 The scene coordinate `s` and the screen coordinate `p` are related as follows.
@@ -34,22 +35,22 @@ The data of the shapes (scene coordinates) does not change, so the saved content
 
 ## Initial fit
 
-The element is the largest size that fits the area.
-If the frame is smaller than the area, it is not enlarged, and the element is the same size as the frame at 100%.
+The element is the largest size that fits the max size.
+If the frame is smaller than the max size, it is not enlarged, and the element is the same size as the frame at 100%.
 
 ```
-scale = min(1, area width / frame width, area height / frame height)
+scale = min(1, max size width / frame width, max size height / frame height)
 element width = round(frame width × scale)
 element height = round(frame height × scale)
 initial zoom = scale    (not rounded)
 initial t = (0, 0)
 ```
 
-| Frame    | Area    | Element | Initial zoom |
-| -------- | ------- | ------- | ------------ |
-| 400×300  | 900×600 | 400×300 | 1            |
-| 1200×800 | 900×600 | 900×600 | 0.75         |
-| 1200×800 | 900×300 | 450×300 | 0.375        |
+| Frame    | Max size | Element | Initial zoom |
+| -------- | -------- | ------- | ------------ |
+| 400×300  | 900×600  | 400×300 | 1            |
+| 1200×800 | 900×600  | 900×600 | 0.75         |
+| 1200×800 | 900×300  | 450×300 | 0.375        |
 
 When the window is resized, the zoom and the pan are not kept, and the view goes back to the initial one.
 The zoom and the pan are not saved. A sketch always opens with the initial view.
