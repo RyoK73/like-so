@@ -39,19 +39,21 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | `src/dev-scripts/`     | Scripts for development                                                                                                                    |
 | `src/test/`            | Pure helpers for tests                                                                                                                     |
 
-## Drawing (`canvas/`, `shapes/` and `history/` in `src/sketch-detail/`)
+## Drawing (`canvas/`, `shapes/`, `history/` and `viewport/` in `src/sketch-detail/`)
 
-| Directory  | Responsibility                                     |
-| ---------- | -------------------------------------------------- |
-| `canvas/`  | Creating, disposing and loading the fabric canvas  |
-| `shapes/`  | Creating shapes                                    |
-| `history/` | Undo / redo                                        |
+| Directory   | Responsibility                                    |
+| ----------- | ------------------------------------------------- |
+| `canvas/`   | Creating, disposing and loading the fabric canvas |
+| `shapes/`   | Creating shapes                                   |
+| `history/`  | Undo / redo                                       |
+| `viewport/` | Fixed frame, pan and zoom                         |
 
-| File                        | Role                                                                      |
-| --------------------------- | ------------------------------------------------------------------------- |
-| `canvas/useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount    |
-| `shapes/useShapes.ts`       | Adds a rect, circle or triangle to the center of the canvas               |
-| `history/useHistory.ts`     | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo` |
+| File                        | Role                                                                                                        |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `canvas/useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                      |
+| `shapes/useShapes.ts`       | Adds a rect, circle or triangle to the center of the view (inside the frame)                                |
+| `history/useHistory.ts`     | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo`                                   |
+| `viewport/`                 | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md) |
 
 Details of `useFabricCanvas`:
 
@@ -118,14 +120,17 @@ See [Authentication](./auth.en.md) for details.
 | `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                           |
 | `shapes/`           | Creating shapes (see the section above)                                                             |
 | `history/`          | Undo / redo (see the section above)                                                                 |
+| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md)) |
 | `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                      |
 | `index.ts`          | Exports only `SketchDetail`                                                                         |
 
 Details of `SketchCanvas`:
 
-- It draws the canvas at actual size (`width` × `height`) and the parent element scrolls.
+- The canvas element is sized to fit the free space on the screen, and the content of the frame (`width` × `height`) is shown with pan and zoom.
+  The page itself does not scroll.
 - The paper and the grid of the canvas are drawn by CSS on the parent element, so the background of fabric is `transparent`.
-  The interval of the grid is `cell_size` of the sketch.
+  The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
+  The outside of the frame is dimmed with a translucent color.
 - The buttons to add shapes are disabled until `isSketchLoaded` becomes `true`.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.

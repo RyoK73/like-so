@@ -125,8 +125,9 @@ frame coordinate of the center of the view = ((element width/2 − tx) / z, (ele
 
 ## Files
 
-| File                                               | Role                                                                              |
-| -------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `src/sketch-detail/viewport/viewportMath.ts`       | Pure functions for the calculations above                                         |
-| `src/sketch-detail/viewport/useViewport.ts`        | Hook that connects wheel, space + drag and resize to fabric (not implemented)     |
-| `src/sketch-detail/viewport/useFrameConstraint.ts` | Hook that stops the center of a shape in the frame while moving (not implemented) |
+| File                                               | Role                                                                                                    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `src/sketch-detail/viewport/viewportMath.ts`       | Pure functions for the calculations above                                                               |
+| `src/sketch-detail/viewport/viewportStyle.ts`      | Functions for the background of the grid and where the frame appears on the screen (the dimmed outside) |
+| `src/sketch-detail/viewport/useViewport.ts`        | Hook that applies wheel, space + drag and resize operations to the view of fabric                       |
+| `src/sketch-detail/viewport/useFrameConstraint.ts` | Hook that stops the center of a shape in the frame while moving                                         |

@@ -125,8 +125,9 @@ ty の範囲: m' − 枠の画面上の高さ ≤  ty  ≤  要素の高さ − 
 
 ## ファイル
 
-| ファイル                                           | 役割                                                                     |
-| -------------------------------------------------- | ------------------------------------------------------------------------ |
-| `src/sketch-detail/viewport/viewportMath.ts`       | 上記の計算をまとめた純粋関数                                             |
-| `src/sketch-detail/viewport/useViewport.ts`        | ホイール、スペース+ドラッグ、リサイズをfabricに結び付けるフック (未実装) |
-| `src/sketch-detail/viewport/useFrameConstraint.ts` | 図形の移動中に、中心を枠内に止めるフック (未実装)                        |
+| ファイル                                           | 役割                                                                         |
+| -------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `src/sketch-detail/viewport/viewportMath.ts`       | 上記の計算をまとめた純粋関数                                                 |
+| `src/sketch-detail/viewport/viewportStyle.ts`      | グリッドの背景と、画面上の枠の位置・大きさ(枠外を薄くする表示)を計算する関数 |
+| `src/sketch-detail/viewport/useViewport.ts`        | ホイール、スペース+ドラッグ、リサイズの操作を、fabricの表示に反映するフック  |
+| `src/sketch-detail/viewport/useFrameConstraint.ts` | 図形の移動中に、中心を枠内に止めるフック                                     |
