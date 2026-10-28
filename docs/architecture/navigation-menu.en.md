@@ -25,40 +25,42 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 
 ## Files
 
-| File                         | Role                                                                     |
-| ---------------------------- | ------------------------------------------------------------------------ |
-| `navigation-menu.tsx`        | Server Component. Lines up the items for the auth state                  |
-| `sketch-list-link.tsx`       | Client Component. A link to `/sketches`                                  |
-| `new-sketch-icon-button.tsx` | Passes an icon and a tooltip to `NewSketchButton` (`src/new-sketch/`)    |
-| `sign-up-link.tsx`           | A link to `/signup`                                                      |
-| `sign-in-link.tsx`           | A link to `/signin`                                                      |
-| `theme-toggle-button.tsx`    | Client Component. Switches between `dark` and `light`                    |
-| `sign-out/`                  | `SignOutButton` and `signOutAction` (Server Action). Handles signing out |
-| `index.ts`                   | Exports `NavigationMenu`                                                 |
+| File                         | Role                                                                         |
+| ---------------------------- | ---------------------------------------------------------------------------- |
+| `navigation-menu.tsx`        | Server Component. Lines up the items for the auth state                      |
+| `sketch-list-link.tsx`       | Client Component. A link to `/sketches`                                      |
+| `new-sketch-icon-button.tsx` | Passes an icon and the tooltip side to `NewSketchButton` (`src/new-sketch/`) |
+| `constants.ts`               | Holds the tooltip side (`TOOLTIP_SIDE`). Not exported outside                |
+| `sign-up-link.tsx`           | A link to `/signup`                                                          |
+| `sign-in-link.tsx`           | A link to `/signin`                                                          |
+| `theme-toggle-button.tsx`    | Client Component. Switches between `dark` and `light`                        |
+| `sign-out/`                  | `SignOutButton` and `signOutAction` (Server Action). Handles signing out     |
+| `index.ts`                   | Exports `NavigationMenu`                                                     |
 
 ## Details
 
 - `SketchListLink` highlights itself as the current page (`bg-paint-yellow`) only when `usePathname` equals `/sketches`.
   It does not highlight on `/sketches/[id]`.
-- `NewSketchIconButton` uses the `tooltip` prop of `NewSketchButton`.
-  It passes `variant="icon"` so that the button has no brush frame.
+- `NewSketchIconButton` passes `variant="icon"` and `tooltipSide` to `NewSketchButton`.
+  With `variant="icon"`, `NewSketchButton` uses `IconButton` (`src/design-system/icon-button.tsx`).
+  The button has no brush frame.
   See [Routing](./routing.en.md) for the flow of creating a sketch.
 - `ThemeToggleButton` switches between `dark` and `light` on each click with `useTheme` of `next-themes`.
   It shows the icon (`LuSun` or `LuMoonStar`) with the CSS `dark:` variant.
-  It shows its tooltip ("テーマ切り替え") on the right side (`side="right"`) with `MyToolTip`.
+  It shows the button and its tooltip ("テーマ切り替え") with `IconButton`.
   It depends on `ThemeProvider` (`src/design-system/`).
   See [Overview](./overview.en.md) for the tech stack.
 - `SignOutButton` calls `signOutAction` with `useActionState` (Client Component).
   It is `disabled` while the action is pending.
   Its icon is `LuLogOut`.
-  It shows its tooltip ("サインアウト") on the right side (`side="right"`) with `MyToolTip`.
+  It shows the button and its tooltip ("サインアウト") with `IconButton`.
   On success, it redirects to `/`.
   On failure, `signOutAction` returns "サインアウトに失敗しました", and the button shows it as a toast (`error`).
 - `NavigationMenu` passes a common `className` (`iconItemClassName`) to each item.
 
 ## Tooltip
 
-The icon-only items show their names with `MyToolTip` (`src/design-system/tool-tip.tsx`).
-All of them use `side="right"` (the right side of the item).
+The icon-only items show their names with `IconButton` (`src/design-system/icon-button.tsx`) or `MyToolTip` (`src/design-system/tool-tip.tsx`).
+All of them use `TOOLTIP_SIDE` in `constants.ts` (`"right"`, the right side of the item).
 `MyToolTipProvider` is placed in `src/app/layout.tsx`.
 See `tooltip` in `DESIGN.md` for the look.
