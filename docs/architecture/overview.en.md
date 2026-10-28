@@ -23,21 +23,21 @@ On saving, the version at that time is recorded in the DB as `fabric_version`.
 The codebase is split by what it does (vertical).
 See [Directory structure](../rules/directory-structure.en.md) for the rule.
 
-| Directory              | Role                                                                                                                                       |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `src/app/`             | Routing only                                                                                                                               |
-| `src/proxy.ts`         | Next.js proxy. Refreshes the auth session on each request                                                                                  |
-| `src/auth-form/`       | The form for sign-in and guest registration                                                                                                |
-| `src/landing-page/`    | Showing the landing page (buttons by auth state)                                                                                           |
-| `src/navigation-menu/` | The navigation menu (items by auth state)                                                                                                  |
-| `src/new-sketch/`      | Creating a sketch (button and Server Action)                                                                                               |
-| `src/sketch-detail/`   | The sketch page (showing, drawing and saving to the DB)                                                                                    |
-| `src/design-system/`   | Generic UI parts (button, input, label and toast from shadcn/ui, `LocalTime`, tooltip (`MyToolTip`, `MyToolTipProvider`), `ThemeProvider`) |
-| `src/sketch-list/`     | Showing the sketch list (Server and Client Components)                                                                                     |
-| `src/supabase/`        | Supabase clients, auth, CRUD and DB tests                                                                                                  |
-| `src/utils/`           | Shared types                                                                                                                               |
-| `src/dev-scripts/`     | Scripts for development                                                                                                                    |
-| `src/test/`            | Pure helpers for tests                                                                                                                     |
+| Directory              | Role                                                                                                                                                     |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/app/`             | Routing only                                                                                                                                             |
+| `src/proxy.ts`         | Next.js proxy. Refreshes the auth session on each request                                                                                                |
+| `src/auth-form/`       | The form for sign-in and guest registration                                                                                                              |
+| `src/landing-page/`    | Showing the landing page (buttons by auth state)                                                                                                         |
+| `src/navigation-menu/` | The navigation menu (items by auth state)                                                                                                                |
+| `src/new-sketch/`      | Creating a sketch (button and Server Action)                                                                                                             |
+| `src/sketch-detail/`   | The sketch page (showing, drawing and saving to the DB)                                                                                                  |
+| `src/design-system/`   | Generic UI parts (button, input, label and toast from shadcn/ui, `LocalTime`, tooltip (`MyToolTip`, `MyToolTipProvider`), `IconButton`, `ThemeProvider`) |
+| `src/sketch-list/`     | Showing the sketch list (Server and Client Components)                                                                                                   |
+| `src/supabase/`        | Supabase clients, auth, CRUD and DB tests                                                                                                                |
+| `src/utils/`           | Shared types                                                                                                                                             |
+| `src/dev-scripts/`     | Scripts for development                                                                                                                                  |
+| `src/test/`            | Pure helpers for tests                                                                                                                                   |
 
 ## Drawing (`canvas/`, `shapes/`, `history/` and `viewport/` in `src/sketch-detail/`)
 
