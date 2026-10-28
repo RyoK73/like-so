@@ -1,10 +1,10 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { Button } from "@/design-system/button";
 import { toast } from "@/design-system/toast";
+import { ShapeNavigation } from "@/sketch-detail/shape-navigation";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
-import { useShapes, type ShapeType } from "@/sketch-detail/shapes/useShapes";
+import { useShapes } from "@/sketch-detail/shapes/useShapes";
 import { useSave } from "@/sketch-detail/save/useSave";
 import type { CanvasFrame } from "@/sketch-detail/save/saveToDb.types";
 import { useFrameConstraint } from "@/sketch-detail/viewport/useFrameConstraint";
@@ -18,12 +18,6 @@ import type { GetSketch } from "@/supabase/sketch-crud/getSketch.types";
 // The paper and the grid are drawn by CSS (`bg-canvas`), so fabric stays transparent. The canvas stays light in both modes.
 const CANVAS_BACKGROUND = "transparent";
 const SAVE_ERROR_TOAST_ID = "save-sketch-error";
-
-const SHAPE_BUTTONS: { type: ShapeType; label: string }[] = [
-  { type: "rect", label: "四角形" },
-  { type: "circle", label: "円" },
-  { type: "triangle", label: "三角形" },
-];
 
 const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
   const { canvasElRef, fabricCanvasRef, isLoaded, loadError } = useFabricCanvas(
@@ -97,19 +91,6 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col gap-2">
-      <div role="toolbar" aria-label="図形の追加" className="flex gap-2">
-        {SHAPE_BUTTONS.map(({ type, label }) => (
-          <Button
-            key={type}
-            type="button"
-            variant="outline"
-            disabled={!isLoaded}
-            onClick={() => createShape(type)}
-          >
-            {`${label}を追加`}
-          </Button>
-        ))}
-      </div>
       {/* The canvas container is measured to decide the size of the canvas element. Its children are absolute, so they do not change its size. */}
       <div ref={canvasContainerRef} className="relative min-h-0 min-w-0 flex-1">
         <div className="absolute inset-0 flex items-center justify-center">
@@ -137,6 +118,9 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
             />
           </div>
         </div>
+      </div>
+      <div className="flex justify-center pb-4">
+        <ShapeNavigation disabled={!isLoaded} onAddShape={createShape} />
       </div>
     </div>
   );

@@ -1,4 +1,9 @@
 import type { ComponentType } from "react";
+import { cn } from "cn";
+import {
+  iconItemClassName,
+  iconItemListClassName,
+} from "@/design-system/constants";
 import { getAuthState, type AuthState } from "@/supabase/auth/getAuthState";
 import { createSupabaseServerClient } from "@/supabase/utils/serverClient";
 import { SketchListLink } from "@/navigation-menu/sketch-list-link";
@@ -7,9 +12,6 @@ import { ThemeToggleButton } from "@/navigation-menu/theme-toggle-button";
 import { SignOutButton } from "@/navigation-menu/sign-out/sign-out-button";
 import { SignUpLink } from "@/navigation-menu/sign-up-link";
 import { SignInLink } from "@/navigation-menu/sign-in-link";
-
-const iconItemClassName =
-  "inline-flex size-10 items-center justify-center rounded-xl bg-transparent text-foreground hover:bg-accent [&_svg:not([class*='size-'])]:size-5";
 
 type MenuItem = {
   key: string;
@@ -49,7 +51,7 @@ const NavigationMenu = async () => {
       aria-label="ナビゲーションメニュー"
       className="sticky top-0 z-10 flex h-screen shrink-0 items-center pl-4"
     >
-      <ul className="flex flex-col gap-2 bg-card p-2 border-2 border-foreground/60 shadow-float brush-a rotate-0">
+      <ul className={cn(iconItemListClassName, "flex-col")}>
         {menuItems
           .filter(({ visibleFor }) => visibleFor.includes(userState))
           .map(({ key, Item }) => (

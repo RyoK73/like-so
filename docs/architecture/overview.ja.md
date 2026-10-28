@@ -23,21 +23,21 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 コードは「何をするか」で縦に分割しています(vertical)。
 ルールは[ディレクトリ構成](../rules/directory-structure.ja.md)を参照してください。
 
-| ディレクトリ           | 役割                                                                                                                                            |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/`             | ルーティング専用                                                                                                                                |
-| `src/proxy.ts`         | Next.jsのproxy。リクエストごとに認証セッションを更新します。                                                                                    |
-| `src/auth-form/`       | サインインとゲスト登録のフォーム                                                                                                                |
-| `src/landing-page/`    | ランディングページの表示(認証状態ごとのボタン)                                                                                                  |
-| `src/navigation-menu/` | ナビゲーションメニュー(認証状態ごとの項目)                                                                                                      |
-| `src/new-sketch/`      | スケッチの新規作成(ボタンとServer Action)                                                                                                       |
-| `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                                                                                                    |
-| `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)                                                                                          |
-| `src/design-system/`   | 汎用UI部品(shadcn/ui由来のボタン、入力欄、ラベル、toast、`LocalTime`、tooltip(`MyToolTip`、`MyToolTipProvider`)、`IconButton`、`ThemeProvider`) |
-| `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                                                                                                    |
-| `src/utils/`           | 共通の型                                                                                                                                        |
-| `src/dev-scripts/`     | 開発用スクリプト                                                                                                                                |
-| `src/test/`            | テスト用のヘルパー                                                                                                                              |
+| ディレクトリ           | 役割                                                         |
+| ---------------------- | ------------------------------------------------------------ |
+| `src/app/`             | ルーティング専用                                             |
+| `src/proxy.ts`         | Next.jsのproxy。リクエストごとに認証セッションを更新します。 |
+| `src/auth-form/`       | サインインとゲスト登録のフォーム                             |
+| `src/landing-page/`    | ランディングページの表示(認証状態ごとのボタン)               |
+| `src/navigation-menu/` | ナビゲーションメニュー(認証状態ごとの項目)                   |
+| `src/new-sketch/`      | スケッチの新規作成(ボタンとServer Action)                    |
+| `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                 |
+| `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)       |
+| `src/design-system/`   | 汎用UI部品                                                   |
+| `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                 |
+| `src/utils/`           | 共通の型                                                     |
+| `src/dev-scripts/`     | 開発用スクリプト                                             |
+| `src/test/`            | テスト用のヘルパー                                           |
 
 ## 描画(`src/sketch-detail/`の`canvas/`・`shapes/`・`history/`・`viewport/`)
 
@@ -51,7 +51,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | ファイル                    | 役割                                                                                                   |
 | --------------------------- | ------------------------------------------------------------------------------------------------------ |
 | `canvas/useFabricCanvas.ts` | fabricのキャンバスを作成して`canvasJson`を読み込み、アンマウント時に破棄します。                       |
-| `shapes/useShapes.ts`       | 四角形、円、三角形を、表示中のビューの中央(枠内)に追加します。                                         |
+| `shapes/useShapes.ts`       | 四角形、円を、表示中のビューの中央(枠内)に追加します。                                                 |
 | `history/useHistory.ts`     | `past` / `present` / `future`を保持し、`set`、`undo`、`redo`を提供します。                             |
 | `viewport/`                 | 固定枠、パン、ズームの計算とフック。詳細は[固定枠とパン・ズーム](./viewport.ja.md)を参照してください。 |
 
@@ -115,7 +115,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | ファイル            | 役割                                                                                     |
 | ------------------- | ---------------------------------------------------------------------------------------- |
 | `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件のメタ情報を描画し、`SketchCanvas`に渡します。 |
-| `sketch-canvas.tsx` | Client Component。キャンバス、図形の追加ボタン、自動保存を担当します。                   |
+| `sketch-canvas.tsx` | Client Component。キャンバス、図形用ナビ(`ShapeNavigation`)、自動保存を担当します。      |
 | `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                     |
 | `shapes/`           | 図形の作成(前節を参照)                                                                   |
 | `history/`          | undo/redo(前節を参照)                                                                    |
@@ -130,7 +130,10 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 - キャンバスの紙とグリッドは、親要素のCSSで描くので、fabricの背景は`transparent`です。
   グリッドの間隔は、スケッチの`cell_size`で、ズームとパンに追従します。
   枠の外側は、半透明の色で薄く表示します。
-- 図形の追加ボタンは、`isSketchLoaded`が`true`になるまで無効です。
+- 図形用ナビ(`src/sketch-detail/shape-navigation/`の`ShapeNavigation`)は、キャンバスの下に、画面の下端から少し浮かせて中央に置きます。
+  キャンバスには重ならず、キャンバスの高さがナビの分だけ縮みます。
+  ナビのボタンは、四角形と円です。
+  `isLoaded`が`true`になるまで無効です。
 - 保存に失敗すると、固定の文言をtoast(`id`は固定)で表示します。
   同じ`id`のtoastは、重ねずに更新されます。
 - 読み込みに失敗した場合、または`canvas_json`がオブジェクトでない場合は、キャンバスとボタンを表示しません。

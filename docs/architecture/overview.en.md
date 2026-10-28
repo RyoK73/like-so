@@ -23,21 +23,21 @@ On saving, the version at that time is recorded in the DB as `fabric_version`.
 The codebase is split by what it does (vertical).
 See [Directory structure](../rules/directory-structure.en.md) for the rule.
 
-| Directory              | Role                                                                                                                                                     |
-| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/`             | Routing only                                                                                                                                             |
-| `src/proxy.ts`         | Next.js proxy. Refreshes the auth session on each request                                                                                                |
-| `src/auth-form/`       | The form for sign-in and guest registration                                                                                                              |
-| `src/landing-page/`    | Showing the landing page (buttons by auth state)                                                                                                         |
-| `src/navigation-menu/` | The navigation menu (items by auth state)                                                                                                                |
-| `src/new-sketch/`      | Creating a sketch (button and Server Action)                                                                                                             |
-| `src/sketch-detail/`   | The sketch page (showing, drawing and saving to the DB)                                                                                                  |
-| `src/design-system/`   | Generic UI parts (button, input, label and toast from shadcn/ui, `LocalTime`, tooltip (`MyToolTip`, `MyToolTipProvider`), `IconButton`, `ThemeProvider`) |
-| `src/sketch-list/`     | Showing the sketch list (Server and Client Components)                                                                                                   |
-| `src/supabase/`        | Supabase clients, auth, CRUD and DB tests                                                                                                                |
-| `src/utils/`           | Shared types                                                                                                                                             |
-| `src/dev-scripts/`     | Scripts for development                                                                                                                                  |
-| `src/test/`            | Pure helpers for tests                                                                                                                                   |
+| Directory              | Role                                                      |
+| ---------------------- | --------------------------------------------------------- |
+| `src/app/`             | Routing only                                              |
+| `src/proxy.ts`         | Next.js proxy. Refreshes the auth session on each request |
+| `src/auth-form/`       | The form for sign-in and guest registration               |
+| `src/landing-page/`    | Showing the landing page (buttons by auth state)          |
+| `src/navigation-menu/` | The navigation menu (items by auth state)                 |
+| `src/new-sketch/`      | Creating a sketch (button and Server Action)              |
+| `src/sketch-detail/`   | The sketch page (showing, drawing and saving to the DB)   |
+| `src/design-system/`   | Generic UI parts                                          |
+| `src/sketch-list/`     | Showing the sketch list (Server and Client Components)    |
+| `src/supabase/`        | Supabase clients, auth, CRUD and DB tests                 |
+| `src/utils/`           | Shared types                                              |
+| `src/dev-scripts/`     | Scripts for development                                   |
+| `src/test/`            | Pure helpers for tests                                    |
 
 ## Drawing (`canvas/`, `shapes/`, `history/` and `viewport/` in `src/sketch-detail/`)
 
@@ -51,7 +51,7 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | File                        | Role                                                                                                        |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `canvas/useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                      |
-| `shapes/useShapes.ts`       | Adds a rect, circle or triangle to the center of the view (inside the frame)                                |
+| `shapes/useShapes.ts`       | Adds a rect or circle to the center of the view (inside the frame)                                          |
 | `history/useHistory.ts`     | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo`                                   |
 | `viewport/`                 | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md) |
 
@@ -116,7 +116,7 @@ See [Authentication](./auth.en.md) for details.
 | File                | Role                                                                                                |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | `sketch-detail.tsx` | Server Component. Renders the info of one sketch got by `getSketch` and passes it to `SketchCanvas` |
-| `sketch-canvas.tsx` | Client Component. Handles the canvas, the buttons to add shapes and auto-save                       |
+| `sketch-canvas.tsx` | Client Component. Handles the canvas, the shape navigation (`ShapeNavigation`) and auto-save        |
 | `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                           |
 | `shapes/`           | Creating shapes (see the section above)                                                             |
 | `history/`          | Undo / redo (see the section above)                                                                 |
@@ -131,7 +131,10 @@ Details of `SketchCanvas`:
 - The paper and the grid of the canvas are drawn by CSS on the parent element, so the background of fabric is `transparent`.
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
   The outside of the frame is dimmed with a translucent color.
-- The buttons to add shapes are disabled until `isSketchLoaded` becomes `true`.
+- The shape navigation (`ShapeNavigation` in `src/sketch-detail/shape-navigation/`) is placed below the canvas, centered and slightly lifted from the bottom edge of the screen.
+  It does not overlap the canvas, so the canvas becomes shorter by the height of the navigation.
+  Its buttons are the rectangle and the circle.
+  They are disabled until `isLoaded` becomes `true`.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
 - When the loading fails, or `canvas_json` is not an object, it shows neither the canvas nor the buttons.
