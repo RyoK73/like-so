@@ -5,25 +5,35 @@ import {
   type ComponentProps,
   type ReactNode,
 } from "react";
+import type { Side } from "@base-ui/react/internals/useAnchorPositioning";
 import { toast } from "@/design-system/toast";
 import { Button } from "@/design-system/button";
-import { MyToolTip } from "@/design-system/tool-tip";
+import { IconButton } from "@/design-system/icon-button";
 import { startNewSketch } from "@/new-sketch/start-new-sketch";
 
-type NewSketchButtonProps = {
+type CommonProps = {
   ariaLabel: string;
   className?: string;
   children?: ReactNode;
-  tooltip?: Pick<ComponentProps<typeof MyToolTip>, "message" | "side">;
-  variant?: ComponentProps<typeof Button>["variant"];
 };
+
+type VariantProps =
+  | {
+      variant: "icon";
+      tooltipSide: Side;
+    }
+  | {
+      variant?: Exclude<ComponentProps<typeof Button>["variant"], "icon">;
+      tooltipSide?: never;
+    };
+
+type NewSketchButtonProps = CommonProps & VariantProps;
 
 const NewSketchButton = ({
   className,
   children = "新規作成",
-  tooltip,
   ariaLabel,
-  variant,
+  ...variantProps
 }: NewSketchButtonProps) => {
   const [state, formAction, isPending] = useActionState(startNewSketch, null);
 
@@ -33,21 +43,29 @@ const NewSketchButton = ({
     }
   }, [state]);
 
-  const button = (
-    <Button
-      type="submit"
-      className={className}
-      disabled={isPending}
-      aria-label={ariaLabel}
-      variant={variant}
-    >
-      {children}
-    </Button>
-  );
-
   return (
     <form action={formAction}>
-      {tooltip ? <MyToolTip {...tooltip}>{button}</MyToolTip> : button}
+      {variantProps.variant === "icon" ? (
+        <IconButton
+          type="submit"
+          className={className}
+          disabled={isPending}
+          label={ariaLabel}
+          side={variantProps.tooltipSide}
+        >
+          {children}
+        </IconButton>
+      ) : (
+        <Button
+          type="submit"
+          className={className}
+          disabled={isPending}
+          aria-label={ariaLabel}
+          variant={variantProps.variant}
+        >
+          {children}
+        </Button>
+      )}
     </form>
   );
 };

@@ -36,22 +36,23 @@ describe("NewSketchButton", () => {
     });
   });
 
-  test("should show a tooltip on hover when the tooltip prop is given", async () => {
+  test("should show a tooltip on hover when variant is icon", async () => {
     render(
       <NewSketchButton
-        tooltip={{ message: "ツールチップ", side: "right" }}
+        variant="icon"
+        tooltipSide="right"
         ariaLabel={ARIA_LABEL}
       />,
     );
     await userEvent.hover(screen.getByRole("button", { name: ARIA_LABEL }));
 
-    expect(await screen.findByText("ツールチップ")).toBeInTheDocument();
+    expect(await screen.findByText(ARIA_LABEL)).toBeInTheDocument();
   });
 
-  test("should not show a tooltip on hover when the tooltip prop is omitted", async () => {
+  test("should not show a tooltip on hover when variant is not icon", async () => {
     render(<NewSketchButton ariaLabel={ARIA_LABEL} />);
     await userEvent.hover(screen.getByRole("button", { name: ARIA_LABEL }));
 
-    expect(screen.queryByText("ツールチップ")).toBeNull();
+    expect(screen.queryByText(ARIA_LABEL)).toBeNull();
   });
 });
