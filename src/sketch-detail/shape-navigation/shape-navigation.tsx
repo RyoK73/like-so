@@ -6,17 +6,16 @@ import {
 } from "@/design-system/constants";
 import { IconButton } from "@/design-system/icon-button";
 import { TOOLTIP_SIDE } from "@/sketch-detail/shape-navigation/constants";
-
-type ShapeKind = "rect" | "circle";
+import type { ShapeType } from "@/sketch-detail/shapes/useShapes";
 
 type ShapeNavigationProps = {
   disabled: boolean;
-  onAddShape: (type: ShapeKind) => void;
+  onAddShape: (type: ShapeType) => void;
 };
 
 type ShapeItem = {
   key: string;
-  type: ShapeKind;
+  type: ShapeType;
   label: string;
   Icon: ComponentType;
 };
@@ -50,4 +49,3 @@ const ShapeNavigation = ({ disabled, onAddShape }: ShapeNavigationProps) => {
 };
 
 export { ShapeNavigation };
-export type { ShapeKind };
