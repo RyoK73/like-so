@@ -23,21 +23,21 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 コードは「何をするか」で縦に分割しています(vertical)。
 ルールは[ディレクトリ構成](../rules/directory-structure.ja.md)を参照してください。
 
-| ディレクトリ           | 役割                                                                                                                                            |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/app/`             | ルーティング専用                                                                                                                                |
-| `src/proxy.ts`         | Next.jsのproxy。リクエストごとに認証セッションを更新します。                                                                                    |
-| `src/auth-form/`       | サインインとゲスト登録のフォーム                                                                                                                |
-| `src/landing-page/`    | ランディングページの表示(認証状態ごとのボタン)                                                                                                  |
-| `src/navigation-menu/` | ナビゲーションメニュー(認証状態ごとの項目)                                                                                                      |
-| `src/new-sketch/`      | スケッチの新規作成(ボタンとServer Action)                                                                                                       |
-| `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                                                                                                    |
-| `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)                                                                                          |
-| `src/design-system/`   | 汎用UI部品(shadcn/ui由来のボタン、入力欄、ラベル、toast、`LocalTime`、tooltip(`MyToolTip`、`MyToolTipProvider`)、`IconButton`、`ThemeProvider`) |
-| `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                                                                                                    |
-| `src/utils/`           | 共通の型                                                                                                                                        |
-| `src/dev-scripts/`     | 開発用スクリプト                                                                                                                                |
-| `src/test/`            | テスト用のヘルパー                                                                                                                              |
+| ディレクトリ           | 役割                                                         |
+| ---------------------- | ------------------------------------------------------------ |
+| `src/app/`             | ルーティング専用                                             |
+| `src/proxy.ts`         | Next.jsのproxy。リクエストごとに認証セッションを更新します。 |
+| `src/auth-form/`       | サインインとゲスト登録のフォーム                             |
+| `src/landing-page/`    | ランディングページの表示(認証状態ごとのボタン)               |
+| `src/navigation-menu/` | ナビゲーションメニュー(認証状態ごとの項目)                   |
+| `src/new-sketch/`      | スケッチの新規作成(ボタンとServer Action)                    |
+| `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                 |
+| `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)       |
+| `src/design-system/`   | 汎用UI部品                                                   |
+| `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                 |
+| `src/utils/`           | 共通の型                                                     |
+| `src/dev-scripts/`     | 開発用スクリプト                                             |
+| `src/test/`            | テスト用のヘルパー                                           |
 
 ## 描画(`src/sketch-detail/`の`canvas/`・`shapes/`・`history/`・`viewport/`)
 
