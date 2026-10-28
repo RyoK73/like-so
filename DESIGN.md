@@ -117,6 +117,11 @@ components:
     textColor: "{colors.foreground}"
     rounded: "{rounded.brush-a}"
     padding: 8px
+  shape-navigation:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.brush-a}"
+    padding: 8px
   canvas-frame:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.foreground}"
@@ -258,6 +263,11 @@ Like-so は、思いついたアイデアをその場でスケッチして、そ
   ラベルは `label-md` を使います。
 - **navigation-menu**: 画面の左側に固定された、縦のメニューです。
   `card` の塗りと `brush-a` の枠で、サインイン状態によって項目が変わります。
+- **shape-navigation**: 図形を追加するための、横並びのメニューです。
+  `navigation-menu` と同じ `card` の塗りと `brush-a` の枠、`shadow-float` の影で、傾きは消します。
+  描画面の下に、画面の下端から少し浮かせて中央に置きます。
+  描画面とは重ならず、描画面の高さがメニューの分だけ縮みます。
+  ボタンは `button-icon` で、ツールチップは上向きに出します。
 - **canvas-frame**: 描画面です。
   常に明るい紙の色で、`cell_size` に合わせたグリッド線を CSS で描きます。
   Fabric.js の背景は透明にしています。
