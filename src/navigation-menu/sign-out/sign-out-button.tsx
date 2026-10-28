@@ -2,9 +2,9 @@
 import { useActionState } from "react";
 import { signOutAction } from "@/navigation-menu/sign-out/signOutAction";
 import { LuLogOut } from "react-icons/lu";
-import { MyToolTip } from "@/design-system/tool-tip";
 import { toast } from "@/design-system/toast";
-import { Button } from "@/design-system/button";
+import { IconButton } from "@/design-system/icon-button";
+import { TOOLTIP_SIDE } from "@/navigation-menu/constants";
 import { useEffect } from "react";
 
 const SignOutButton = ({ className }: { className?: string }) => {
@@ -17,19 +17,17 @@ const SignOutButton = ({ className }: { className?: string }) => {
   }, [state]);
 
   return (
-    <MyToolTip message="サインアウト" side="right">
-      <form action={formAction}>
-        <Button
-          type="submit"
-          disabled={isPending}
-          aria-label="サインアウト"
-          className={className}
-          variant="icon"
-        >
-          <LuLogOut />
-        </Button>
-      </form>
-    </MyToolTip>
+    <form action={formAction}>
+      <IconButton
+        type="submit"
+        disabled={isPending}
+        label="サインアウト"
+        side={TOOLTIP_SIDE}
+        className={className}
+      >
+        <LuLogOut />
+      </IconButton>
+    </form>
   );
 };
 

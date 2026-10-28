@@ -1,25 +1,24 @@
 "use client";
 import { useTheme } from "next-themes";
 import { LuSun, LuMoonStar } from "react-icons/lu";
-import { MyToolTip } from "@/design-system/tool-tip";
+import { IconButton } from "@/design-system/icon-button";
+import { TOOLTIP_SIDE } from "@/navigation-menu/constants";
 
 const ThemeToggleButton = ({ className }: { className?: string }) => {
   const { setTheme, theme } = useTheme();
 
   return (
-    <MyToolTip side="right" message="テーマ切り替え">
-      <button
-        type="button"
-        aria-label="テーマ切り替え"
-        className={className}
-        onClick={() => {
-          setTheme(theme === "dark" ? "light" : "dark");
-        }}
-      >
-        <LuSun className="dark:hidden" />
-        <LuMoonStar className="hidden dark:block" />
-      </button>
-    </MyToolTip>
+    <IconButton
+      label="テーマ切り替え"
+      side={TOOLTIP_SIDE}
+      className={className}
+      onClick={() => {
+        setTheme(theme === "dark" ? "light" : "dark");
+      }}
+    >
+      <LuSun className="dark:hidden" />
+      <LuMoonStar className="hidden dark:block" />
+    </IconButton>
   );
 };
 
