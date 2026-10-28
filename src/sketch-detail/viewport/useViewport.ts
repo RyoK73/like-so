@@ -101,11 +101,12 @@ const useViewport = ({
     let isPanMode = false;
     let isDragging = false;
     let last = { x: 0, y: 0 };
-    let saved = {
+    const getCanvasInteraction = () => ({
       selection: canvas.selection,
       skipTargetFind: canvas.skipTargetFind,
       defaultCursor: canvas.defaultCursor,
-    };
+    });
+    let savedInteraction = getCanvasInteraction();
 
     const setCursor = (cursor: string) => {
       canvas.defaultCursor = cursor;
@@ -113,11 +114,7 @@ const useViewport = ({
     };
 
     const startPanMode = () => {
-      saved = {
-        selection: canvas.selection,
-        skipTargetFind: canvas.skipTargetFind,
-        defaultCursor: canvas.defaultCursor,
-      };
+      savedInteraction = getCanvasInteraction();
       isPanMode = true;
       canvas.selection = false;
       canvas.skipTargetFind = true;
@@ -128,9 +125,9 @@ const useViewport = ({
       if (!isPanMode) return;
       isPanMode = false;
       isDragging = false;
-      canvas.selection = saved.selection;
-      canvas.skipTargetFind = saved.skipTargetFind;
-      setCursor(saved.defaultCursor);
+      canvas.selection = savedInteraction.selection;
+      canvas.skipTargetFind = savedInteraction.skipTargetFind;
+      setCursor(savedInteraction.defaultCursor);
     };
 
     const onKeyDown = (e: KeyboardEvent) => {
