@@ -1,5 +1,5 @@
 import { useEffect, type RefObject } from "react";
-import { Canvas, Point } from "fabric";
+import { Canvas, Point, FabricObject } from "fabric";
 import { clampCenter } from "@/sketch-detail/viewport/viewportMath";
 import type { Size } from "@/sketch-detail/viewport/viewportMath";
 
@@ -15,11 +15,7 @@ const useFrameConstraint = (
   useEffect(() => {
     const canvas = fabricCanvasRef.current;
     if (!isLoaded || !canvas) return;
-    const onMoving = ({
-      target,
-    }: {
-      target: ReturnType<Canvas["getObjects"]>[number];
-    }) => {
+    const onMoving = ({ target }: { target: FabricObject }) => {
       const center = target.getCenterPoint();
       const clamped = clampCenter(center, { width, height });
       if (clamped.x === center.x && clamped.y === center.y) return;
