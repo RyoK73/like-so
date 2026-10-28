@@ -3,10 +3,15 @@ import {
   Circle,
   FabricObject,
   FabricObjectProps,
+  Point,
   Rect,
   Triangle,
 } from "fabric";
 import { RefObject } from "react";
+import {
+  getNewShapeCenter,
+  type Size,
+} from "@/sketch-detail/viewport/viewportMath";
 
 type ShapeType = "rect" | "circle" | "triangle";
 
@@ -38,7 +43,7 @@ const shapes: Record<ShapeType, Builder> = {
     new Triangle({ ...commonParameters, ...optionalParam }),
 };
 
-const useShapes = (fabricCanvasRef: RefObject<Canvas | null>) => {
+const useShapes = (fabricCanvasRef: RefObject<Canvas | null>, frame: Size) => {
   const createShape = (
     type: ShapeType,
     fillColor: string = "transparent",
@@ -53,7 +58,22 @@ const useShapes = (fabricCanvasRef: RefObject<Canvas | null>) => {
       strokeWidth: strokeWidth,
     });
     currentFabricCanvasRef.add(shape);
-    currentFabricCanvasRef.centerObject(shape);
+    // Put the shape at the center of the view, not at the center of the frame.
+    const [zoom, , , , tx, ty] = currentFabricCanvasRef.viewportTransform;
+    const center = getNewShapeCenter(
+      { zoom, tx, ty },
+      {
+        width: currentFabricCanvasRef.getWidth(),
+        height: currentFabricCanvasRef.getHeight(),
+      },
+      frame,
+    );
+    shape.setPositionByOrigin(
+      new Point(center.x, center.y),
+      "center",
+      "center",
+    );
+    shape.setCoords();
   };
 
   return { createShape };

@@ -23,6 +23,7 @@ When you implement UI, read `DESIGN.md` and follow its colors, typography, spaci
 |              | `docs/architecture/database.*.md`        | Tables, RLS, privileges, triggers                           |
 |              | `docs/architecture/save.*.md`            | Flow of saving a sketch                                     |
 |              | `docs/architecture/navigation-menu.*.md` | Navigation menu, visibility by auth state, tooltip          |
+|              | `docs/architecture/viewport.*.md`        | Fixed frame, pan and zoom, coordinates and formulas         |
 | Rules        | `docs/rules/directory-structure.*.md`    | Directory structure (Vertical Codebase)                     |
 |              | `docs/rules/naming.*.md`                 | Naming                                                      |
 |              | `docs/rules/typescript.*.md`             | TypeScript                                                  |
