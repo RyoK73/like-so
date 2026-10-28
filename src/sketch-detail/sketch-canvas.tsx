@@ -22,7 +22,6 @@ const SAVE_ERROR_TOAST_ID = "save-sketch-error";
 const SHAPE_BUTTONS: { type: ShapeType; label: string }[] = [
   { type: "rect", label: "四角形" },
   { type: "circle", label: "円" },
-  { type: "triangle", label: "三角形" },
 ];
 
 const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {

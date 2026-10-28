@@ -51,7 +51,7 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | File                        | Role                                                                                                        |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------- |
 | `canvas/useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                      |
-| `shapes/useShapes.ts`       | Adds a rect, circle or triangle to the center of the view (inside the frame)                                |
+| `shapes/useShapes.ts`       | Adds a rect or circle to the center of the view (inside the frame)                                          |
 | `history/useHistory.ts`     | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo`                                   |
 | `viewport/`                 | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md) |
 

@@ -5,7 +5,6 @@ import {
   FabricObjectProps,
   Point,
   Rect,
-  Triangle,
 } from "fabric";
 import { RefObject } from "react";
 import {
@@ -13,7 +12,7 @@ import {
   type Size,
 } from "@/sketch-detail/viewport/viewportMath";
 
-type ShapeType = "rect" | "circle" | "triangle";
+type ShapeType = "rect" | "circle";
 
 type OptionalParameters = {
   fill: string;
@@ -39,8 +38,6 @@ const shapes: Record<ShapeType, Builder> = {
     }),
   circle: (optionalParam) =>
     new Circle({ ...commonParameters, ...optionalParam, radius: 100 }),
-  triangle: (optionalParam) =>
-    new Triangle({ ...commonParameters, ...optionalParam }),
 };
 
 const useShapes = (fabricCanvasRef: RefObject<Canvas | null>, frame: Size) => {

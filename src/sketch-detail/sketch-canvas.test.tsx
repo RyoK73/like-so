@@ -60,7 +60,6 @@ it("should enable the shape buttons after the sketch is loaded", async () => {
   expect(getAddShapeButton("四角形")).toBeDisabled();
   await waitFor(() => expect(getAddShapeButton("四角形")).toBeEnabled());
   expect(getAddShapeButton("円")).toBeEnabled();
-  expect(getAddShapeButton("三角形")).toBeEnabled();
 });
 
 it("should add a shape and save the sketch when a shape button is clicked", async () => {
@@ -115,9 +114,9 @@ it("should show an error toast with a fixed id when saving fails", async () => {
   });
   const user = userEvent.setup();
   render(<SketchCanvas sketch={createSketch()} />);
-  await waitFor(() => expect(getAddShapeButton("三角形")).toBeEnabled());
+  await waitFor(() => expect(getAddShapeButton("円")).toBeEnabled());
 
-  await user.click(getAddShapeButton("三角形"));
+  await user.click(getAddShapeButton("円"));
 
   await waitFor(() =>
     expect(toast.add).toHaveBeenCalledWith(
