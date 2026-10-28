@@ -29,7 +29,8 @@
 | ---------------------------- | ------------------------------------------------------------------------------- |
 | `navigation-menu.tsx`        | Server Component。認証状態に応じて項目を並べます。                              |
 | `sketch-list-link.tsx`       | Client Component。`/sketches`へのリンクです。                                   |
-| `new-sketch-icon-button.tsx` | `NewSketchButton`(`src/new-sketch/`)に、アイコンとtooltipを渡します。           |
+| `new-sketch-icon-button.tsx` | `NewSketchButton`(`src/new-sketch/`)に、アイコンとtooltipの表示位置を渡します。 |
+| `constants.ts`               | tooltipの表示位置(`TOOLTIP_SIDE`)を持ちます。外部には公開しません。             |
 | `sign-up-link.tsx`           | `/signup`へのリンクです。                                                       |
 | `sign-in-link.tsx`           | `/signin`へのリンクです。                                                       |
 | `theme-toggle-button.tsx`    | Client Component。`dark`と`light`を切り替えます。                               |
@@ -40,25 +41,26 @@
 
 - `SketchListLink`は、`usePathname`が`/sketches`と一致するときだけ、現在地として強調します(`bg-paint-yellow`)。
   `/sketches/[id]`では強調しません。
-- `NewSketchIconButton`は、`NewSketchButton`の`tooltip`プロップを使います。
-  手描き風の枠を付けないよう、`variant="icon"`を渡します。
+- `NewSketchIconButton`は、`NewSketchButton`に`variant="icon"`と`tooltipSide`を渡します。
+  `variant="icon"`のとき、`NewSketchButton`は`IconButton`(`src/design-system/icon-button.tsx`)を使います。
+  手描き風の枠は付きません。
   新規作成の流れは[ルーティング](./routing.ja.md)を参照してください。
 - `ThemeToggleButton`は、`next-themes`の`useTheme`で、クリックするたびに`dark`と`light`を切り替えます。
   アイコン(`LuSun`、`LuMoonStar`)は、CSSの`dark:`で出し分けます。
-  tooltip(「テーマ切り替え」)は、`MyToolTip`で右側(`side="right"`)に表示します。
+  ボタンとtooltip(「テーマ切り替え」)は、`IconButton`で表示します。
   `ThemeProvider`(`src/design-system/`)に依存します。
   技術スタックは[概要](./overview.ja.md)を参照してください。
 - `SignOutButton`は、`useActionState`で`signOutAction`を呼びます(Client Component)。
   処理中は`disabled`になります。
   アイコンは`LuLogOut`です。
-  tooltip(「サインアウト」)は、`MyToolTip`で右側(`side="right"`)に表示します。
+  ボタンとtooltip(「サインアウト」)は、`IconButton`で表示します。
   成功すると`/`へリダイレクトします。
   失敗すると「サインアウトに失敗しました」を返し、toast(`error`)で表示します。
 - 各項目の`className`は、`NavigationMenu`が共通の値(`iconItemClassName`)を渡します。
 
 ## tooltip
 
-アイコンだけの項目は、`MyToolTip`(`src/design-system/tool-tip.tsx`)で名前を表示します。
-表示位置は、すべて`side="right"`(項目の右側)です。
+アイコンだけの項目は、`IconButton`(`src/design-system/icon-button.tsx`)または`MyToolTip`(`src/design-system/tool-tip.tsx`)で名前を表示します。
+表示位置は、`constants.ts`の`TOOLTIP_SIDE`(`"right"`、項目の右側)で統一しています。
 `MyToolTipProvider`は、`src/app/layout.tsx`に配置しています。
 見た目は、`DESIGN.md`の`tooltip`を参照してください。
