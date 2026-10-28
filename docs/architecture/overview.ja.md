@@ -115,7 +115,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | ファイル            | 役割                                                                                     |
 | ------------------- | ---------------------------------------------------------------------------------------- |
 | `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件のメタ情報を描画し、`SketchCanvas`に渡します。 |
-| `sketch-canvas.tsx` | Client Component。キャンバス、図形の追加ボタン、自動保存を担当します。                   |
+| `sketch-canvas.tsx` | Client Component。キャンバス、図形用ナビ(`ShapeNavigation`)、自動保存を担当します。      |
 | `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                     |
 | `shapes/`           | 図形の作成(前節を参照)                                                                   |
 | `history/`          | undo/redo(前節を参照)                                                                    |
@@ -130,7 +130,10 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 - キャンバスの紙とグリッドは、親要素のCSSで描くので、fabricの背景は`transparent`です。
   グリッドの間隔は、スケッチの`cell_size`で、ズームとパンに追従します。
   枠の外側は、半透明の色で薄く表示します。
-- 図形の追加ボタンは、`isSketchLoaded`が`true`になるまで無効です。
+- 図形用ナビ(`src/sketch-detail/shape-navigation/`の`ShapeNavigation`)は、キャンバスの下に、画面の下端から少し浮かせて中央に置きます。
+  キャンバスには重ならず、キャンバスの高さがナビの分だけ縮みます。
+  ナビのボタンは、四角形と円です。
+  `isLoaded`が`true`になるまで無効です。
 - 保存に失敗すると、固定の文言をtoast(`id`は固定)で表示します。
   同じ`id`のtoastは、重ねずに更新されます。
 - 読み込みに失敗した場合、または`canvas_json`がオブジェクトでない場合は、キャンバスとボタンを表示しません。

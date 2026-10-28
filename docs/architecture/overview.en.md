@@ -116,7 +116,7 @@ See [Authentication](./auth.en.md) for details.
 | File                | Role                                                                                                |
 | ------------------- | --------------------------------------------------------------------------------------------------- |
 | `sketch-detail.tsx` | Server Component. Renders the info of one sketch got by `getSketch` and passes it to `SketchCanvas` |
-| `sketch-canvas.tsx` | Client Component. Handles the canvas, the buttons to add shapes and auto-save                       |
+| `sketch-canvas.tsx` | Client Component. Handles the canvas, the shape navigation (`ShapeNavigation`) and auto-save        |
 | `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                           |
 | `shapes/`           | Creating shapes (see the section above)                                                             |
 | `history/`          | Undo / redo (see the section above)                                                                 |
@@ -131,7 +131,10 @@ Details of `SketchCanvas`:
 - The paper and the grid of the canvas are drawn by CSS on the parent element, so the background of fabric is `transparent`.
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
   The outside of the frame is dimmed with a translucent color.
-- The buttons to add shapes are disabled until `isSketchLoaded` becomes `true`.
+- The shape navigation (`ShapeNavigation` in `src/sketch-detail/shape-navigation/`) is placed below the canvas, centered and slightly lifted from the bottom edge of the screen.
+  It does not overlap the canvas, so the canvas becomes shorter by the height of the navigation.
+  Its buttons are the rectangle and the circle.
+  They are disabled until `isLoaded` becomes `true`.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
 - When the loading fails, or `canvas_json` is not an object, it shows neither the canvas nor the buttons.
