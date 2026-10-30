@@ -62,7 +62,7 @@ describe("SketchDetail", () => {
     const sketch = {
       id: validId,
       title: "my sketch",
-      description: null,
+      description: "",
       width: 1920,
       height: 1080,
       created_at: "2026-10-01T00:00:00Z",

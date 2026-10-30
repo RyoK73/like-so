@@ -29,9 +29,7 @@ const SketchList = async () => {
                 {sketch.description}
               </span>
             )}
-            {sketch.updated_at ? (
-              <LocalTime updatedAt={sketch.updated_at} />
-            ) : null}
+            <LocalTime updatedAt={sketch.updated_at} />
           </Link>
         </li>
       ))}

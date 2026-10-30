@@ -100,7 +100,7 @@ describe("saveToDb", () => {
         title: testTitle,
         fabric_version: version,
         created_at: Date.now().toString(),
-        description: null,
+        description: "",
         cell_size: 32,
         frame_id: testFrame.frame_id ?? null,
         width: testFrame.width,

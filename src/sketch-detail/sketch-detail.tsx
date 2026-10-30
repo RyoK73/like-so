@@ -35,7 +35,7 @@ const SketchDetail = async ({ id }: { id: string }) => {
       <p className="text-sm text-muted-foreground">
         {sketch.width} × {sketch.height}
       </p>
-      {sketch.updated_at ? <LocalTime updatedAt={sketch.updated_at} /> : null}
+      <LocalTime updatedAt={sketch.updated_at} />
       <SketchCanvas sketch={sketch} />
     </div>
   );

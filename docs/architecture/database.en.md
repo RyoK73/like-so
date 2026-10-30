@@ -18,13 +18,15 @@ A sketch drawn by a user.
 | `id`                       | uuid, primary key                                                       |
 | `user_id`                  | References `auth.users` (`ON DELETE CASCADE`). Defaults to `auth.uid()` |
 | `title`                    | Defaults to `'Untitled'`                                                |
-| `description`              |                                                                         |
+| `description`              | `NOT NULL`. Defaults to `''`                                            |
 | `canvas_json`              | jsonb. The fabric canvas serialized with `toJSON()`. Defaults to `{}`   |
 | `fabric_version`           | The fabric version from package.json at save time                       |
 | `frame_id`                 | References `canvas_frames` (`ON DELETE SET NULL`)                       |
 | `width`, `height`          | 320 to 1920                                                             |
 | `cell_size`                | Defaults to 20. 4 to 200                                                |
-| `created_at`, `updated_at` | `updated_at` is set by the `trg_set_updated_at` trigger                 |
+| `created_at`, `updated_at` | `NOT NULL`. `updated_at` is set by the `trg_set_updated_at` trigger     |
+
+The `NOT NULL` constraints on `description`, `created_at` and `updated_at` are tested in `src/supabase/DB/sketchesNotNull.test.ts`.
 
 ### `public.canvas_frames`
 
