@@ -17,7 +17,7 @@ let user: TestUser;
 const withNull = (column: "created_at" | "updated_at" | "description") =>
   ({ [column]: null }) as unknown as SketchPayload;
 
-// Launch the supabase DB before running this tests.
+// Launch the Supabase DB before running these tests.
 beforeEach(async () => {
   userTracker.reset();
   user = await userTracker.create();
@@ -60,6 +60,7 @@ describe("sketches NOT NULL columns", () => {
   });
 
   describe("update", () => {
+    // "updated_at" is overwritten by the trigger so these tests don't include it.
     test.each(["created_at", "description"] as const)(
       "should return an error and keep the value when %s is set to null",
       async (column) => {
