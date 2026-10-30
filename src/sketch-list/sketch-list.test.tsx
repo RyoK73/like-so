@@ -84,7 +84,7 @@ describe("SketchList", () => {
     const sketchWithoutDescription = {
       id: "id-1",
       title: "no description",
-      description: null,
+      description: "",
       created_at: "2026-10-01T00:00:00Z",
       updated_at: "2026-10-02T00:00:00Z",
     };

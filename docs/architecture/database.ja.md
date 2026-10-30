@@ -18,13 +18,15 @@ Supabase上のPostgresです。
 | `id`                       | uuid、主キー                                                                            |
 | `user_id`                  | `auth.users`を参照します(`ON DELETE CASCADE`)。デフォルトは`auth.uid()`です。           |
 | `title`                    | デフォルトは`'Untitled'`です。                                                          |
-| `description`              |                                                                                         |
+| `description`              | `NOT NULL`。デフォルトは`''`です。                                                      |
 | `canvas_json`              | jsonb。fabricのキャンバスを`toJSON()`でシリアライズしたものです。デフォルトは`{}`です。 |
 | `fabric_version`           | 保存時のpackage.jsonのfabricのバージョンです。                                          |
 | `frame_id`                 | `canvas_frames`を参照します(`ON DELETE SET NULL`)。                                     |
 | `width`, `height`          | 320〜1920                                                                               |
 | `cell_size`                | デフォルトは20です。4〜200                                                              |
-| `created_at`, `updated_at` | `updated_at`は`trg_set_updated_at`トリガで設定されます。                                |
+| `created_at`, `updated_at` | `NOT NULL`。`updated_at`は`trg_set_updated_at`トリガで設定されます。                    |
+
+`description`、`created_at`、`updated_at`の`NOT NULL`のテストは`src/supabase/DB/sketchesNotNull.test.ts`にあります。
 
 ### `public.canvas_frames`
 
