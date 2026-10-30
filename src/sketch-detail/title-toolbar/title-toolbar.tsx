@@ -21,7 +21,7 @@ const TitleToolbar = ({
     <div
       className={cn(
         floatingToolbarClassName,
-        "flex max-w-md flex-col gap-1 px-4 py-3",
+        "flex self-center max-w-md flex-col gap-1 px-4 py-3",
       )}
     >
       <h1 className="text-xl font-semibold tracking-tight">{title}</h1>

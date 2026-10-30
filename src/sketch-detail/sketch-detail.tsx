@@ -28,15 +28,13 @@ const SketchDetail = async ({ id }: { id: string }) => {
 
   return (
     <div className="flex h-dvh min-w-0 flex-1 flex-col gap-3 overflow-hidden bg-background bg-grid-paper px-6 py-8 [--grid-line:var(--grid-line-faint)]">
-      <div className="flex justify-center">
-        <TitleToolbar
-          title={sketch.title}
-          description={sketch.description}
-          width={sketch.width}
-          height={sketch.height}
-          updatedAt={sketch.updated_at}
-        />
-      </div>
+      <TitleToolbar
+        title={sketch.title}
+        description={sketch.description}
+        width={sketch.width}
+        height={sketch.height}
+        updatedAt={sketch.updated_at}
+      />
       <SketchCanvas sketch={sketch} />
     </div>
   );
