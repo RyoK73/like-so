@@ -113,16 +113,17 @@ See [Authentication](./auth.en.md) for details.
 
 ## Sketch page (`src/sketch-detail/`)
 
-| File                | Role                                                                                                |
-| ------------------- | --------------------------------------------------------------------------------------------------- |
-| `sketch-detail.tsx` | Server Component. Renders the info of one sketch got by `getSketch` and passes it to `SketchCanvas` |
-| `sketch-canvas.tsx` | Client Component. Handles the canvas, the shape navigation (`ShapeNavigation`) and auto-save        |
-| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                           |
-| `shapes/`           | Creating shapes (see the section above)                                                             |
-| `history/`          | Undo / redo (see the section above)                                                                 |
-| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md)) |
-| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                      |
-| `index.ts`          | Exports only `SketchDetail`                                                                         |
+| File                | Role                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------- |
+| `sketch-detail.tsx` | Server Component. Passes the info of one sketch got by `getSketch` to `TitleToolbar` and `SketchCanvas` |
+| `sketch-canvas.tsx` | Client Component. Handles the canvas, the shape navigation (`ShapeNavigation`) and auto-save            |
+| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the title, description, size and updated time                 |
+| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                               |
+| `shapes/`           | Creating shapes (see the section above)                                                                 |
+| `history/`          | Undo / redo (see the section above)                                                                     |
+| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))     |
+| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                          |
+| `index.ts`          | Exports only `SketchDetail`                                                                             |
 
 Details of `SketchCanvas`:
 
@@ -131,6 +132,11 @@ Details of `SketchCanvas`:
 - The paper and the grid of the canvas are drawn by CSS on the parent element, so the background of fabric is `transparent`.
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
   The outside of the frame is dimmed with a translucent color.
+- The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) is placed above the canvas, centered.
+  It does not overlap the canvas, so the canvas becomes shorter by the height of the toolbar.
+  It shows `title`, `description`, `width × height` and the updated time.
+  `description` is hidden when it is an empty string or only whitespace, and is clamped to 2 lines when shown.
+  It is not an operation UI, so it does not have `role="toolbar"`.
 - The shape navigation (`ShapeNavigation` in `src/sketch-detail/shape-navigation/`) is placed below the canvas, centered and slightly lifted from the bottom edge of the screen.
   It does not overlap the canvas, so the canvas becomes shorter by the height of the navigation.
   Its buttons are the rectangle and the circle.

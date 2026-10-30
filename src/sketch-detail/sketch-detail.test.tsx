@@ -2,11 +2,10 @@ import { render, screen } from "@testing-library/react";
 import { notFound } from "next/navigation";
 import { SketchDetail } from "@/sketch-detail/sketch-detail";
 import { SketchCanvas } from "@/sketch-detail/sketch-canvas";
+import { TitleToolbar } from "@/sketch-detail/title-toolbar";
 import { getSketch } from "@/supabase/sketch-crud/getSketch";
 import { createSupabaseServerClient } from "@/supabase/utils/serverClient";
-import { dateTimeTestHelper } from "@/sketch-list/testUtility";
 
-const { generateTestDateTime } = dateTimeTestHelper();
 const validId = "11111111-1111-4111-8111-111111111111";
 
 vi.mock("next/navigation", () => ({
@@ -21,6 +20,9 @@ vi.mock("@/supabase/sketch-crud/getSketch", () => ({ getSketch: vi.fn() }));
 vi.mock("@/sketch-detail/sketch-canvas", () => ({
   SketchCanvas: vi.fn(() => <div data-testid="sketch-canvas" />),
 }));
+vi.mock("@/sketch-detail/title-toolbar", () => ({
+  TitleToolbar: vi.fn(() => <div data-testid="title-toolbar" />),
+}));
 
 describe("SketchDetail", () => {
   beforeEach(() => {
@@ -30,7 +32,7 @@ describe("SketchDetail", () => {
     );
   });
 
-  test("should render the title, description, size and updated_at", async () => {
+  test("should pass the title, description, size and updated_at to TitleToolbar", async () => {
     vi.mocked(getSketch).mockResolvedValue({
       ok: true,
       value: {
@@ -50,12 +52,14 @@ describe("SketchDetail", () => {
 
     render(await SketchDetail({ id: validId }));
 
-    expect(screen.getByRole("heading")).toHaveTextContent("my sketch");
-    expect(screen.getByText("my description")).toBeInTheDocument();
-    expect(screen.getByText("1920 × 1080")).toBeInTheDocument();
-    expect(
-      screen.getByText(generateTestDateTime(new Date("2026-10-02T00:00:00Z"))),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("title-toolbar")).toBeInTheDocument();
+    expect(vi.mocked(TitleToolbar).mock.calls[0][0]).toEqual({
+      title: "my sketch",
+      description: "my description",
+      width: 1920,
+      height: 1080,
+      updatedAt: "2026-10-02T00:00:00Z",
+    });
   });
 
   test("should pass the fetched sketch to SketchCanvas", async () => {

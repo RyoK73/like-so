@@ -122,6 +122,11 @@ components:
     textColor: "{colors.foreground}"
     rounded: "{rounded.brush-a}"
     padding: 8px
+  title-toolbar:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.brush-a}"
+    padding: 12px 16px
   canvas-frame:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.foreground}"
@@ -268,6 +273,13 @@ Like-so は、思いついたアイデアをその場でスケッチして、そ
   描画面の下に、画面の下端から少し浮かせて中央に置きます。
   描画面とは重ならず、描画面の高さがメニューの分だけ縮みます。
   ボタンは `button-icon` で、ツールチップは上向きに出します。
+- **title-toolbar**: スケッチのタイトル、説明、サイズ、更新日時を見せる、縦並びのツールバーです。
+  `shape-navigation` と同じ `card` の塗りと `brush-a` の枠、`shadow-float` の影で、傾きは消します。
+  描画面の上に中央寄せで置き、描画面とは重ならず、描画面の高さがツールバーの分だけ縮みます。
+  操作用のUIではないので、`role="toolbar"` は付けません。
+  幅は内容に合わせ、描画面の幅の最大 80% までです。
+  タイトルは1行で切り詰め、全文は `title` 属性で見せます。
+  説明は2行で切り詰め、空なら表示しません。
 - **canvas-frame**: 描画面です。
   常に明るい紙の色で、`cell_size` に合わせたグリッド線を CSS で描きます。
   Fabric.js の背景は透明にしています。
