@@ -31,6 +31,15 @@ it("should render the title, description, size and updated_at", () => {
   ).toBeInTheDocument();
 });
 
+it("should expose the full title via the title attribute", () => {
+  renderToolbar({ title: "a very long sketch title" });
+
+  expect(screen.getByRole("heading")).toHaveAttribute(
+    "title",
+    "a very long sketch title",
+  );
+});
+
 it("should not render the description when it is an empty string", () => {
   renderToolbar({ description: "" });
 

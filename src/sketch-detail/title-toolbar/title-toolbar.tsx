@@ -21,10 +21,12 @@ const TitleToolbar = ({
     <div
       className={cn(
         floatingToolbarClassName,
-        "flex self-center max-w-md flex-col gap-1 px-4 py-3",
+        "flex self-center max-w-[80%] flex-col gap-1 px-4 py-3",
       )}
     >
-      <h1 className="text-xl font-semibold tracking-tight">{title}</h1>
+      <h1 className="truncate text-xl font-semibold tracking-tight" title={title}>
+        {title}
+      </h1>
       {description.trim() !== "" && (
         <p className="line-clamp-2 text-muted-foreground">{description}</p>
       )}
