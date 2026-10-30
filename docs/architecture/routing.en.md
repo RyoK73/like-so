@@ -89,8 +89,8 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
   It also gets `fabric_version`, but the app does not use it.
 - By the RLS, both a nonexistent `id` and an `id` of another user give `null`.
 
-| State                         | Display                                                                                      |
-| ----------------------------- | -------------------------------------------------------------------------------------------- |
-| `id` is not a uuid, or `null` | `notFound()`. `not-found.tsx` shows "スケッチが見つかりません。" and a link to the list      |
-| Error                         | "スケッチの取得に失敗しました。" with `role="alert"`                                         |
-| Success                       | Shows `title`, `description` (if any), `width × height`, the updated time and `SketchCanvas` |
+| State                         | Display                                                                                                       |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `id` is not a uuid, or `null` | `notFound()`. `not-found.tsx` shows "スケッチが見つかりません。" and a link to the list                       |
+| Error                         | "スケッチの取得に失敗しました。" with `role="alert"`                                                          |
+| Success                       | Shows `TitleToolbar` (`title`, `description` (if any), `width × height`, the updated time) and `SketchCanvas` |
