@@ -44,57 +44,63 @@ const expectZoomFactor = (
 };
 
 describe("fitFrame", () => {
+  // The element is the whole container, and the frame is centered in it within 80% of the container. It is never enlarged.
   it.each([
     {
-      name: "the frame is smaller than the max size",
+      name: "the frame is smaller than the container",
       frame: { width: 400, height: 300 },
-      maxSize: { width: 900, height: 600 },
-      element: { width: 400, height: 300 },
+      container: { width: 1000, height: 800 },
       zoom: 1,
+      tx: 300,
+      ty: 250,
     },
     {
-      name: "the frame is larger than the max size",
+      name: "the width limits the zoom",
       frame: { width: 1200, height: 800 },
-      maxSize: { width: 900, height: 600 },
-      element: { width: 900, height: 600 },
-      zoom: 0.75,
+      container: { width: 1000, height: 800 },
+      zoom: 2 / 3,
+      tx: 100,
+      ty: 133,
     },
     {
-      name: "the height limits the size",
-      frame: { width: 1200, height: 800 },
-      maxSize: { width: 900, height: 300 },
-      element: { width: 450, height: 300 },
-      zoom: 0.375,
+      name: "the height limits the zoom",
+      frame: { width: 1000, height: 1000 },
+      container: { width: 1000, height: 500 },
+      zoom: 0.4,
+      tx: 300,
+      ty: 50,
     },
     {
-      name: "the width limits the size",
-      frame: { width: 1200, height: 800 },
-      maxSize: { width: 600, height: 800 },
-      element: { width: 600, height: 400 },
-      zoom: 0.5,
-    },
-    {
-      name: "the frame and the max size are the same size",
-      frame: { width: 800, height: 600 },
-      maxSize: { width: 800, height: 600 },
-      element: { width: 800, height: 600 },
+      name: "the frame is exactly 80% of the container",
+      frame: { width: 800, height: 640 },
+      container: { width: 1000, height: 800 },
       zoom: 1,
+      tx: 100,
+      ty: 80,
     },
-  ])("$name", ({ frame, maxSize, element, zoom }) => {
-    const result = fitFrame(frame, maxSize);
+    {
+      name: "the frame is larger than the container",
+      frame: { width: 2000, height: 1000 },
+      container: { width: 1000, height: 500 },
+      zoom: 0.4,
+      tx: 100,
+      ty: 50,
+    },
+    {
+      name: "the centering offset is a half pixel",
+      frame: { width: 401, height: 300 },
+      container: { width: 1000, height: 800 },
+      zoom: 1,
+      tx: 300,
+      ty: 250,
+    },
+  ])("$name", ({ frame, container, zoom, tx, ty }) => {
+    const result = fitFrame(frame, container);
 
-    expect(result.elementSize).toEqual(element);
     expect(result.zoom).toBeCloseTo(zoom, 10);
-  });
-
-  it("should round the element size to integers and keep the zoom unrounded", () => {
-    const result = fitFrame(
-      { width: 650, height: 470 },
-      { width: 500, height: 500 },
-    );
-
-    expect(result.elementSize).toEqual({ width: 500, height: 362 });
-    expect(result.zoom).toBeCloseTo(500 / 650, 10);
+    expect(result.tx).toBe(tx);
+    expect(result.ty).toBe(ty);
+    expect(result.elementSize).toEqual(container);
   });
 });
 
@@ -205,6 +211,34 @@ describe("clampPan", () => {
 
     expect(result).toEqual({ zoom: 1, ...expected });
   });
+
+  it.each([
+    { name: "tx is too large", tx: 2000, ty: 0, expected: { tx: 950, ty: 0 } },
+    {
+      name: "tx is too small",
+      tx: -2000,
+      ty: 0,
+      expected: { tx: -350, ty: 0 },
+    },
+    { name: "ty is too large", tx: 0, ty: 2000, expected: { tx: 0, ty: 750 } },
+    {
+      name: "ty is too small",
+      tx: 0,
+      ty: -2000,
+      expected: { tx: 0, ty: -250 },
+    },
+  ])(
+    "should keep 50px of the frame on the full-size element when $name",
+    ({ tx, ty, expected }) => {
+      const result = clampPan(
+        { zoom: 1, tx, ty },
+        { width: 400, height: 300 },
+        { width: 1000, height: 800 },
+      );
+
+      expect(result).toEqual({ zoom: 1, ...expected });
+    },
+  );
 
   it("should not change a transform in the range", () => {
     const transform = { zoom: 1, tx: -100, ty: 30 };
@@ -368,6 +402,16 @@ describe("getNewShapeCenter", () => {
     });
 
     expect(result).toEqual({ x: 450, y: 300 });
+  });
+
+  it("should return the center of the frame when the frame is centered in a full-size element", () => {
+    const result = getNewShapeCenter(
+      { zoom: 1, tx: 300, ty: 250 },
+      { width: 1000, height: 800 },
+      { width: 400, height: 300 },
+    );
+
+    expect(result).toEqual({ x: 200, y: 150 });
   });
 
   it("should return the frame coordinate at the center of the view when zoomed", () => {

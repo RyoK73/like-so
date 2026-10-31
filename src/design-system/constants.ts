@@ -8,4 +8,12 @@ const floatingToolbarClassName =
 
 const iconItemListClassName = cn(floatingToolbarClassName, "flex gap-2 p-2");
 
-export { floatingToolbarClassName, iconItemClassName, iconItemListClassName };
+// The left padding for a page that must not go under the floating navigation menu (`left-4` + the menu width).
+const navigationMenuInsetClassName = "pl-24";
+
+export {
+  floatingToolbarClassName,
+  iconItemClassName,
+  iconItemListClassName,
+  navigationMenuInsetClassName,
+};

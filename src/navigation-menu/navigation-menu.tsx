@@ -49,7 +49,7 @@ const NavigationMenu = async () => {
   return (
     <nav
       aria-label="ナビゲーションメニュー"
-      className="sticky top-0 z-10 flex h-screen shrink-0 items-center pl-4"
+      className="fixed top-1/2 left-4 z-10 -translate-y-1/2"
     >
       <ul className={cn(iconItemListClassName, "flex-col")}>
         {menuItems

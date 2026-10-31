@@ -13,7 +13,7 @@ type View = { transform: Transform; elementSize: Size };
 
 type UseViewport = {
   fabricCanvasRef: RefObject<Canvas | null>;
-  // The element that holds the canvas. Its content box is the max size of the canvas element.
+  // The element that holds the canvas. Its content box is the size of the canvas element.
   canvasContainerRef: RefObject<HTMLElement | null>;
   frame: Size;
   isLoaded: boolean;
@@ -63,10 +63,10 @@ const useViewport = ({
       });
     };
 
-    const resetView = (maxSize: Size) => {
-      const { elementSize, zoom } = fitFrame(frameSize, maxSize);
+    const resetView = (containerSize: Size) => {
+      const { elementSize, zoom, tx, ty } = fitFrame(frameSize, containerSize);
       canvas.setDimensions(elementSize);
-      apply({ transform: { zoom, tx: 0, ty: 0 }, elementSize });
+      apply({ transform: { zoom, tx, ty }, elementSize });
     };
 
     const observer = new ResizeObserver(([entry]) => {
