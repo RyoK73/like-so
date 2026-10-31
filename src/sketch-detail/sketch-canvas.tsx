@@ -1,8 +1,8 @@
 "use client";
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { toast } from "@/design-system/toast";
 import { ShapeNavigation } from "@/sketch-detail/shape-navigation";
+import { SketchError } from "@/sketch-detail/sketch-error";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
 import { useShapes } from "@/sketch-detail/shapes/useShapes";
 import { useSave } from "@/sketch-detail/save/useSave";
@@ -78,14 +78,7 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
   // Do not edit when the canvas is not restored, or the next auto-save would overwrite the sketch.
   if (loadError) {
     return (
-      <>
-        <p role="alert">
-          スケッチの読み込みに失敗しました。ページを再読み込みしてください。
-        </p>
-        <Link href="/sketches" className="underline">
-          スケッチ一覧へ戻る
-        </Link>
-      </>
+      <SketchError message="スケッチの読み込みに失敗しました。ページを再読み込みしてください。" />
     );
   }
 
