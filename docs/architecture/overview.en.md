@@ -127,18 +127,19 @@ See [Authentication](./auth.en.md) for details.
 
 Details of `SketchCanvas`:
 
-- The canvas element is sized to fit the free space on the screen, and the content of the frame (`width` × `height`) is shown with pan and zoom.
+- The canvas element fills the whole screen (`h-dvh`, no margin), the frame (`width` × `height`) is placed at its center, and the content is shown with pan and zoom.
   The page itself does not scroll.
-- The paper and the grid of the canvas are drawn by CSS on the parent element, so the background of fabric is `transparent`.
+- The paper and the grid of the canvas are drawn by CSS on the canvas element, so the background of fabric is `transparent`.
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
-  The outside of the frame is dimmed with a translucent color.
-- The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) is placed above the canvas, centered.
-  It does not overlap the canvas, so the canvas becomes shorter by the height of the toolbar.
+  The grid continues outside the frame, and the outside of the frame is not dimmed.
+  The frame is shown with a thin outline (`brush-a` and `ring-border`).
+- The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) floats over the canvas at the top center.
+  The toolbar has its own position (`absolute`), so pointer events reach the canvas outside the toolbar.
   It shows `title`, `description`, `width × height` and the updated time.
   `description` is hidden when it is an empty string or only whitespace, and is clamped to 2 lines when shown.
   It is not an operation UI, so it does not have `role="toolbar"`.
-- The shape navigation (`ShapeNavigation` in `src/sketch-detail/shape-navigation/`) is placed below the canvas, centered and slightly lifted from the bottom edge of the screen.
-  It does not overlap the canvas, so the canvas becomes shorter by the height of the navigation.
+- The shape navigation (`ShapeNavigation` in `src/sketch-detail/shape-navigation/`) floats over the canvas, centered and slightly lifted from the bottom edge of the screen.
+  The navigation has its own position (`absolute`).
   Its buttons are the rectangle and the circle.
   They are disabled until `isLoaded` becomes `true`.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.

@@ -4,7 +4,11 @@
 
 `NavigationMenu`(`src/navigation-menu/navigation-menu.tsx`)は、Server Componentです。
 `src/app/sketches/layout.tsx`が表示するので、`/sketches`と`/sketches/[id]`の両方に出ます。
-`src/app/sketches/layout.tsx`が`flex`で本文と横に並べ、メニュー自体は画面の高さいっぱいの列(`sticky top-0 h-screen`)の中で縦中央に表示します。
+メニューは、本文の上に重ねて浮かせます。
+画面の左端から`left-4`の位置に固定し(`fixed`)、縦中央に表示します。
+本文の幅は占有しないので、本文がメニューの下に隠れないようにしたいページは、左余白に`navigationMenuInsetClassName`(`src/design-system/constants.ts`)を使います。
+`/sketches`は、この余白を使っています。
+`/sketches/[id]`は、canvasを画面全体に広げるので、余白は付けません。
 各項目はアイコンだけのボタンかリンクです。
 `index.ts`が公開するのは`NavigationMenu`のみです。
 
