@@ -13,7 +13,7 @@ type View = { transform: Transform; elementSize: Size };
 
 type UseViewport = {
   fabricCanvasRef: RefObject<Canvas | null>;
-  // The element that holds the canvas. Its content box is the max size of the canvas element.
+  // The element that holds the canvas. Its content box is the size of the canvas element.
   canvasContainerRef: RefObject<HTMLElement | null>;
   frame: Size;
   isLoaded: boolean;
