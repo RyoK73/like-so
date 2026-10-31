@@ -78,7 +78,6 @@
   --paint-red: oklch(0.62 0.2 28);
   --grid-size: 64px;
   --grid-line: oklch(0.9 0.008 85);
-  --grid-line-faint: oklch(0.94 0.006 85);
 }
 
 /* Soft dark: a lifted charcoal, not black. The canvas stays light. */
@@ -103,7 +102,6 @@
   --ring: oklch(0.65 0.01 75);
   --brand: oklch(0.76 0.12 255);
   --grid-line: oklch(1 0 0 / 8%);
-  --grid-line-faint: oklch(1 0 0 / 4%);
 }
 
 /* Hand-drawn brush frames: wobbly corners, a slight tilt and an ink-black outline. Two mirrored shapes, `brush-a` tilts left and `brush-b` tilts right. */
