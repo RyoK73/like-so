@@ -130,7 +130,7 @@ components:
   canvas-frame:
     backgroundColor: "{colors.canvas}"
     textColor: "{colors.foreground}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.brush-a}"
 ---
 
 ## Overview
@@ -268,20 +268,24 @@ Like-so は、思いついたアイデアをその場でスケッチして、そ
   ラベルは `label-md` を使います。
 - **navigation-menu**: 画面の左側に固定された、縦のメニューです。
   `card` の塗りと `brush-a` の枠で、サインイン状態によって項目が変わります。
+  描画面の上に重ねて浮かせます。
 - **shape-navigation**: 図形を追加するための、横並びのメニューです。
   `navigation-menu` と同じ `card` の塗りと `brush-a` の枠、`shadow-float` の影で、傾きは消します。
-  描画面の下に、画面の下端から少し浮かせて中央に置きます。
-  描画面とは重ならず、描画面の高さがメニューの分だけ縮みます。
+  描画面の上に重ねて、画面の下端から少し浮かせて中央に置きます。
   ボタンは `button-icon` で、ツールチップは上向きに出します。
 - **title-toolbar**: スケッチのタイトル、説明、サイズ、更新日時を見せる、縦並びのツールバーです。
   `shape-navigation` と同じ `card` の塗りと `brush-a` の枠、`shadow-float` の影で、傾きは消します。
-  描画面の上に中央寄せで置き、描画面とは重ならず、描画面の高さがツールバーの分だけ縮みます。
+  描画面の上に重ねて、上部中央に浮かせます。
   操作用のUIではないので、`role="toolbar"` は付けません。
   幅は内容に合わせ、描画面の幅の最大 80% までです。
   タイトルは1行で切り詰め、全文は `title` 属性で見せます。
   説明は2行で切り詰め、空なら表示しません。
 - **canvas-frame**: 描画面です。
-  常に明るい紙の色で、`cell_size` に合わせたグリッド線を CSS で描きます。
+  画面全体に広がり、常に明るい紙の色で、`cell_size` に合わせたグリッド線を CSS で描きます。
+  グリッド線は、枠の外側にも続けます。枠の外側を暗くはしません。
+  枠は、`brush-a` の形で、1px の `border` 色(`ring-border`)の細い枠線で示します。
+  図形(太く濃い線)やツールバー(`border-2`)と区別するため、細く薄くしています。
+  影は付けません。
   Fabric.js の背景は透明にしています。
 - **sketch-list item**: スケッチ一覧の項目です。
   `brush-a` の枠ですが、傾きは消しています。
