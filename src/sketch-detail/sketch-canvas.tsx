@@ -83,38 +83,28 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col gap-2">
-      {/* The canvas container is measured to decide the size of the canvas element. Its children are absolute, so they do not change its size. */}
-      <div ref={canvasContainerRef} className="relative min-h-0 min-w-0 flex-1">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div
-            className="relative overflow-hidden rounded-xl bg-canvas bg-[linear-gradient(var(--canvas-grid)_1px,transparent_1px),linear-gradient(90deg,var(--canvas-grid)_1px,transparent_1px)] shadow-float ring-1 ring-border"
-            style={{
-              width: elementSize.width,
-              height: elementSize.height,
-              ...getGridBackgroundStyle(transform, sketch.cell_size),
-            }}
-          >
-            {/* fabric wraps the canvas element, so React must own its parent element. */}
-            <div>
-              <canvas ref={canvasElRef} />
-            </div>
-            {/* Dim the outside of the frame. The huge spread of the shadow covers the rest of the element. */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute"
-              style={{
-                ...frameOnScreen,
-                boxShadow:
-                  "0 0 0 9999px color-mix(in oklch, var(--ink) 8%, transparent)",
-              }}
-            />
-          </div>
+    // The canvas container is measured to decide the size of the canvas element. Its children are absolute, so they do not change its size.
+    <div ref={canvasContainerRef} className="absolute inset-0">
+      <div
+        className="relative overflow-hidden bg-canvas bg-[linear-gradient(var(--canvas-grid)_1px,transparent_1px),linear-gradient(90deg,var(--canvas-grid)_1px,transparent_1px)]"
+        style={{
+          width: elementSize.width,
+          height: elementSize.height,
+          ...getGridBackgroundStyle(transform, sketch.cell_size),
+        }}
+      >
+        {/* fabric wraps the canvas element, so React must own its parent element. */}
+        <div>
+          <canvas ref={canvasElRef} />
         </div>
+        {/* Outline the frame on the paper. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute rotate-0 brush-a ring-1 ring-border"
+          style={frameOnScreen}
+        />
       </div>
-      <div className="flex justify-center pb-4">
-        <ShapeNavigation disabled={!isLoaded} onAddShape={createShape} />
-      </div>
+      <ShapeNavigation disabled={!isLoaded} onAddShape={createShape} />
     </div>
   );
 };

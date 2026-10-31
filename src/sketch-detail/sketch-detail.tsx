@@ -20,7 +20,7 @@ const SketchDetail = async ({ id }: { id: string }) => {
   if (!sketch) notFound();
 
   return (
-    <div className="flex h-dvh min-w-0 flex-1 flex-col gap-3 overflow-hidden bg-background bg-grid-paper px-6 py-8 [--grid-line:var(--grid-line-faint)]">
+    <div className="relative h-dvh overflow-hidden">
       <TitleToolbar
         title={sketch.title}
         description={sketch.description}
