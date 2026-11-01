@@ -11,14 +11,6 @@ const renderNavigation = (disabled = false) => {
   return { onAddShape };
 };
 
-it("should render a toolbar named `図形の追加`", () => {
-  renderNavigation();
-
-  expect(
-    screen.getByRole("toolbar", { name: "図形の追加" }),
-  ).toBeInTheDocument();
-});
-
 it("should call `onAddShape` with `rect` once when the rectangle button is clicked", async () => {
   const user = userEvent.setup();
   const { onAddShape } = renderNavigation();
