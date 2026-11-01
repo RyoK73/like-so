@@ -5,22 +5,24 @@
 The **frame** means `frame_size`'s frame, not the `<canvas>` element.
 
 A sketch is drawn inside a fixed frame (`sketch.width` × `sketch.height`, in px).
-The canvas element is shrunk to fit the screen, and the content of the frame is panned and zoomed inside it.
+The canvas element fills the whole canvas container (the whole screen).
+The frame is placed at its center, and the content of the frame is panned and zoomed.
+The toolbars and the navigation menu float over the canvas.
 Panning and zooming use the `viewportTransform` of fabric.
 The calculations are pure functions that do not depend on fabric (`src/sketch-detail/viewport/viewportMath.ts`).
 
 ## Terms and coordinates
 
-| Term              | Meaning                                                                                                                        |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Frame             | The drawing range of the sketch. `sketch.width` × `sketch.height`                                                              |
-| Canvas container  | The `div` that holds the `<canvas>` element (`canvasContainerRef`). It fills the free space on the screen without the toolbar. |
-| Max size          | The inner size of the canvas container, measured by `ResizeObserver`. The largest size the element can take.                   |
-| Element           | The `<canvas>` element. The largest size that fits the max size, with the same aspect ratio as the frame.                      |
-| Frame coordinate  | A coordinate of a shape, with the top-left of the frame as the origin. It does not change by zoom or pan.                      |
-| Screen coordinate | A position on the screen, with the top-left of the element as the origin.                                                      |
-| Zoom `z`          | The display scale. `1` is 100%.                                                                                                |
-| `t`               | Where the frame origin (the top-left of the frame) appears on the screen. It is `(tx, ty)` in px.                              |
+| Term              | Meaning                                                                                                   |
+| ----------------- | --------------------------------------------------------------------------------------------------------- |
+| Frame             | The drawing range of the sketch. `sketch.width` × `sketch.height`                                         |
+| Canvas container  | The `div` that holds the `<canvas>` element (`canvasContainerRef`). It fills the whole screen.            |
+| Container size    | The inner size of the canvas container, measured by `ResizeObserver`.                                     |
+| Element           | The `<canvas>` element. The same size as the container size.                                              |
+| Frame coordinate  | A coordinate of a shape, with the top-left of the frame as the origin. It does not change by zoom or pan. |
+| Screen coordinate | A position on the screen, with the top-left of the element as the origin.                                 |
+| Zoom `z`          | The display scale. `1` is 100%.                                                                           |
+| `t`               | Where the frame origin (the top-left of the frame) appears on the screen. It is `(tx, ty)` in px.         |
 
 With only pan and zoom, `viewportTransform` has the form `[z, 0, 0, z, tx, ty]`.
 The frame coordinate `s` and the screen coordinate `p` are related as follows.
@@ -35,22 +37,24 @@ The data of the shapes (frame coordinates) does not change, so the saved content
 
 ## Initial fit
 
-The element is the largest size that fits the max size.
-If the frame is smaller than the max size, it is not enlarged, and the element is the same size as the frame at 100%.
+The element is the same size as the container size (the whole container).
+The frame fits within 80% (`FIT_RATIO`) of the width and the height of the container, and is placed at the center of the container.
+If the frame is small, it is not enlarged, and the zoom is 100%.
+The overlap with the toolbars is not considered.
 
 ```
-scale = min(1, max size width / frame width, max size height / frame height)
-element width = round(frame width × scale)
-element height = round(frame height × scale)
+scale = min(1, 0.8 × container width / frame width, 0.8 × container height / frame height)
+element size = container size
 initial zoom = scale    (not rounded)
-initial t = (0, 0)
+initial tx = round((container width − frame width × scale) / 2)
+initial ty = round((container height − frame height × scale) / 2)
 ```
 
-| Frame    | Max size | Element | Initial zoom |
-| -------- | -------- | ------- | ------------ |
-| 400×300  | 900×600  | 400×300 | 1            |
-| 1200×800 | 900×600  | 900×600 | 0.75         |
-| 1200×800 | 900×300  | 450×300 | 0.375        |
+| Frame     | Container size | Initial zoom | Initial t  |
+| --------- | -------------- | ------------ | ---------- |
+| 400×300   | 1000×800       | 1            | (300, 250) |
+| 1200×800  | 1000×800       | about 0.667  | (100, 133) |
+| 1000×1000 | 1000×500       | 0.4          | (300, 50)  |
 
 When the window is resized, the zoom and the pan are not kept, and the view goes back to the initial one.
 The zoom and the pan are not saved. A sketch always opens with the initial view.
@@ -112,7 +116,7 @@ Example (element 900×600, frame 1200×800, zoom 1): the range of `tx` is `−11
 ## Limit of the center of a shape and where a shape is created
 
 A shape only needs its **center** inside the frame.
-A shape larger than the frame can also be added, and the part outside the frame is shown dimmed without being clipped.
+A shape larger than the frame can also be added, and the part outside the frame is shown without being clipped.
 
 - Move: when the center is about to leave the frame, the center is stopped at the edge of the frame (`clampCenter`).
   Scaling and rotation are not limited.
@@ -125,9 +129,9 @@ frame coordinate of the center of the view = ((element width/2 − tx) / z, (ele
 
 ## Files
 
-| File                                               | Role                                                                                                    |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `src/sketch-detail/viewport/viewportMath.ts`       | Pure functions for the calculations above                                                               |
-| `src/sketch-detail/viewport/viewportStyle.ts`      | Functions for the background of the grid and where the frame appears on the screen (the dimmed outside) |
-| `src/sketch-detail/viewport/useViewport.ts`        | Hook that applies wheel, space + drag and resize operations to the view of fabric                       |
-| `src/sketch-detail/viewport/useFrameConstraint.ts` | Hook that stops the center of a shape in the frame while moving                                         |
+| File                                               | Role                                                                                                   |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `src/sketch-detail/viewport/viewportMath.ts`       | Pure functions for the calculations above                                                              |
+| `src/sketch-detail/viewport/viewportStyle.ts`      | Functions for the background of the grid and where the frame appears on the screen (the frame outline) |
+| `src/sketch-detail/viewport/useViewport.ts`        | Hook that applies wheel, space + drag and resize operations to the view of fabric                      |
+| `src/sketch-detail/viewport/useFrameConstraint.ts` | Hook that stops the center of a shape in the frame while moving                                        |

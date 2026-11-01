@@ -4,7 +4,11 @@
 
 `NavigationMenu` (`src/navigation-menu/navigation-menu.tsx`) is a Server Component.
 `src/app/sketches/layout.tsx` renders it, so it appears on both `/sketches` and `/sketches/[id]`.
-`src/app/sketches/layout.tsx` lays it out beside the content with `flex`, and the menu itself is vertically centered in a column as tall as the screen (`sticky top-0 h-screen`).
+The menu floats over the content.
+It is fixed (`fixed`) at `left-4` from the left edge of the screen and vertically centered.
+It does not take any width from the content, so a page that must not go under the menu uses `navigationMenuInsetClassName` (`src/design-system/constants.ts`) for its left padding.
+`/sketches` uses this padding.
+`/sketches/[id]` does not add it, because the canvas fills the whole screen.
 Each item is an icon-only button or link.
 `index.ts` exports only `NavigationMenu`.
 

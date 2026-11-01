@@ -20,26 +20,27 @@ const MAX_ZOOM = 4;
 // The frame and the element must overlap by this many px on the screen.
 const MIN_OVERLAP = 50;
 const WHEEL_ZOOM_BASE = 0.999;
+// The initial frame fits within this ratio of the container.
+const FIT_RATIO = 0.8;
 
 const clamp = (value: number, min: number, max: number) =>
   Math.min(Math.max(value, min), max);
 
-// The element is the largest size that fits the max size with the aspect ratio of the frame. It is never enlarged.
+// The element is the whole container. The frame is centered in it, and fits within `FIT_RATIO` of the container. It is never enlarged.
 const fitFrame = (
   frame: Size,
-  maxSize: Size,
-): { elementSize: Size; zoom: number } => {
+  container: Size,
+): { elementSize: Size; zoom: number; tx: number; ty: number } => {
   const zoom = Math.min(
     1,
-    maxSize.width / frame.width,
-    maxSize.height / frame.height,
+    (container.width * FIT_RATIO) / frame.width,
+    (container.height * FIT_RATIO) / frame.height,
   );
   return {
-    elementSize: {
-      width: Math.round(frame.width * zoom),
-      height: Math.round(frame.height * zoom),
-    },
+    elementSize: container,
     zoom,
+    tx: Math.round((container.width - frame.width * zoom) / 2),
+    ty: Math.round((container.height - frame.height * zoom) / 2),
   };
 };
 
