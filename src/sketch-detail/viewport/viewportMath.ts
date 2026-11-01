@@ -15,11 +15,14 @@ type WheelAction =
   | { type: "zoom"; factor: number }
   | { type: "none" };
 
+// The range of the zoom as a ratio of the initial zoom (the fitted view, which is shown as 100%).
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 4;
 // The frame and the element must overlap by this many px on the screen.
 const MIN_OVERLAP = 50;
 const WHEEL_ZOOM_BASE = 0.999;
+// One press of the zoom in button multiplies the zoom by this. The zoom out button divides by it.
+const ZOOM_STEP = 1.25;
 // The initial frame fits within this ratio of the container.
 const FIT_RATIO = 0.8;
 
@@ -44,15 +47,28 @@ const fitFrame = (
   };
 };
 
-const clampZoom = (zoom: number) => clamp(zoom, MIN_ZOOM, MAX_ZOOM);
+const clampZoom = (zoom: number, initialZoom = 1) =>
+  clamp(zoom, initialZoom * MIN_ZOOM, initialZoom * MAX_ZOOM);
+
+const canZoomIn = (zoom: number, initialZoom = 1) =>
+  zoom < initialZoom * MAX_ZOOM;
+const canZoomOut = (zoom: number, initialZoom = 1) =>
+  zoom > initialZoom * MIN_ZOOM;
+
+// The initial zoom is 100%.
+const zoomToPercent = (zoom: number, initialZoom = 1) =>
+  Math.round((zoom / initialZoom) * 100);
+const percentToZoom = (percent: number, initialZoom = 1) =>
+  (percent / 100) * initialZoom;
 
 // Keep the point (in frame coordinates) under the pointer at the same screen position.
 const zoomAt = (
   transform: Transform,
   pointer: Point,
   factor: number,
+  initialZoom = 1,
 ): Transform => {
-  const zoom = clampZoom(transform.zoom * factor);
+  const zoom = clampZoom(transform.zoom * factor, initialZoom);
   if (zoom === transform.zoom) return transform;
 
   const frameX = (pointer.x - transform.tx) / transform.zoom;
@@ -118,12 +134,19 @@ const getNewShapeCenter = (
   );
 
 export {
+  MAX_ZOOM,
+  MIN_ZOOM,
+  ZOOM_STEP,
+  canZoomIn,
+  canZoomOut,
   clampCenter,
   clampPan,
   clampZoom,
   fitFrame,
   getNewShapeCenter,
+  percentToZoom,
   resolveWheelAction,
   zoomAt,
+  zoomToPercent,
 };
 export type { Point, Size, Transform, WheelAction, WheelInput };
