@@ -83,6 +83,64 @@ describe("useFabricCanvas", () => {
     );
   });
 
+  describe("strokeUniform of loaded objects", () => {
+    const rectWith = (props: Record<string, unknown> = {}) => ({
+      ...rectJson.objects[0],
+      ...props,
+    });
+    const loadObjects = async (objects: Record<string, unknown>[]) => {
+      const { result } = renderCanvas({ ...rectJson, objects });
+      await waitFor(() => expect(result.current?.isLoaded).toBe(true));
+      return result.current?.fabricCanvasRef.current?.getObjects() ?? [];
+    };
+
+    test("should set strokeUniform to true when canvasJson does not specify it", async () => {
+      const objects = await loadObjects([rectWith()]);
+
+      expect(objects[0].strokeUniform).toBe(true);
+    });
+
+    test("should overwrite strokeUniform false of canvasJson with true", async () => {
+      const objects = await loadObjects([rectWith({ strokeUniform: false })]);
+
+      expect(objects[0].strokeUniform).toBe(true);
+    });
+
+    test("should keep strokeUniform true of canvasJson", async () => {
+      const objects = await loadObjects([rectWith({ strokeUniform: true })]);
+
+      expect(objects[0].strokeUniform).toBe(true);
+    });
+
+    test("should set strokeUniform to true for every object", async () => {
+      const objects = await loadObjects([
+        rectWith(),
+        rectWith({ strokeUniform: false }),
+        { ...rectWith(), type: "Circle", radius: 50 },
+        { ...rectWith({ strokeUniform: false }), type: "Circle", radius: 50 },
+      ]);
+
+      expect(objects).toHaveLength(4);
+      expect(objects.map((object) => object.strokeUniform)).toEqual([
+        true,
+        true,
+        true,
+        true,
+      ]);
+    });
+
+    test("should not change the scale and the stroke width", async () => {
+      const objects = await loadObjects([
+        rectWith({ scaleX: 2, scaleY: 2, strokeWidth: 10 }),
+      ]);
+
+      expect(objects[0].scaleX).toBe(2);
+      expect(objects[0].scaleY).toBe(2);
+      expect(objects[0].strokeWidth).toBe(10);
+      expect(objects[0].strokeUniform).toBe(true);
+    });
+  });
+
   test("should set loadError and keep isLoaded false when loading fails", async () => {
     const loadError = new Error("test load error");
     vi.spyOn(fabric.Canvas.prototype, "loadFromJSON").mockRejectedValue(

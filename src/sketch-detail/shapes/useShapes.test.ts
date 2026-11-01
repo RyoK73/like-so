@@ -27,6 +27,38 @@ const createShapeAndGetCenter = (
   return objects[0].getCenterPoint();
 };
 
+describe("useShapes: stroke of a created shape", () => {
+  const createShapeAndGetObject = (
+    ...args: Parameters<ReturnType<typeof useShapes>["createShape"]>
+  ) => {
+    const canvas = createCanvas();
+    const { result } = renderHook(() =>
+      useShapes({ current: canvas }, { width: 1200, height: 800 }),
+    );
+
+    result.current.createShape(...args);
+
+    return canvas.getObjects()[0];
+  };
+
+  it("should keep the stroke width on resize for a rect", () => {
+    expect(createShapeAndGetObject("rect").strokeUniform).toBe(true);
+  });
+
+  it("should keep the stroke width on resize for a circle", () => {
+    expect(createShapeAndGetObject("circle").strokeUniform).toBe(true);
+  });
+
+  it("should keep the given colors and stroke width", () => {
+    const shape = createShapeAndGetObject("rect", "red", "blue", 5);
+
+    expect(shape.strokeUniform).toBe(true);
+    expect(shape.fill).toBe("red");
+    expect(shape.stroke).toBe("blue");
+    expect(shape.strokeWidth).toBe(5);
+  });
+});
+
 describe("useShapes: where a shape is created", () => {
   it("should create a shape at the center of the frame in the initial view", () => {
     const canvas = createCanvas();

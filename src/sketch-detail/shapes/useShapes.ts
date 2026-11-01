@@ -26,6 +26,8 @@ const commonParameters: Partial<FabricObjectProps> = {
   originX: "center",
   originY: "center",
   selectable: true,
+  // Keep the stroke width when the shape is resized.
+  strokeUniform: true,
 };
 
 const shapes: Record<ShapeType, Builder> = {
