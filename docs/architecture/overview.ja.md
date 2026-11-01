@@ -61,6 +61,9 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 - 読み込みが完了すると、`isLoaded`が`true`になります。
   読み込みに失敗すると、`isLoaded`は`false`のまま、`loadError`にエラーが入ります。
 - `loadFromJSON`はキャンバスの背景色を消すので、読み込み後にJSONが`background`を持たない場合だけ、`backgroundColor`を設定し直します。
+- 読み込み後に、すべてのオブジェクトの`strokeUniform`を`true`にします。
+  リサイズしても線の太さを変えないためです。
+  保存済みのJSONに指定がなくても揃えます。
 - fabricはcanvas要素を自前のラッパーで包みます。
   そのため、canvas要素の親要素は、Reactが管理する要素(`div`など)にします。
 
