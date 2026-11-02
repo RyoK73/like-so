@@ -87,8 +87,11 @@ const useViewport = ({
       setZoom: (percent) => {
         if (!currentViewInfo) return;
         const { transform, initialZoom } = currentViewInfo;
-        const target = clampZoom(percentToZoom(percent, initialZoom), initialZoom);
-        zoomAroundCenter(target / transform.zoom);
+        const targetZoom = clampZoom(
+          percentToZoom(percent, initialZoom),
+          initialZoom,
+        );
+        zoomAroundCenter(targetZoom / transform.zoom);
       },
     };
 
