@@ -266,8 +266,21 @@ describe("useViewport", () => {
 
       act(() => result.setZoom(percent));
 
-      expect(canvas.viewportTransform[0]).toBeCloseTo(zoom);
-      expect(result.view?.transform.zoom).toBeCloseTo(zoom);
+      expect(canvas.viewportTransform[0]).toBe(zoom);
+      expect(result.view?.transform.zoom).toBe(zoom);
+    });
+
+    // The deltaY -1346 was found by searching for a wheel zoom after which `zoom * (max / zoom)` is just below the maximum (by about 4e-16).
+    // The error depends on the current zoom, so it does not happen from the initial view.
+    it("should land exactly on the maximum with setZoom after a wheel zoom", async () => {
+      const { canvas, result } = await renderFitted();
+      dispatchWheel(canvas.wrapperEl, { ctrlKey: true, deltaY: -1346 });
+      expect(result.view?.transform.zoom).toBeLessThan(INITIAL_ZOOM * 4);
+
+      act(() => result.setZoom(400));
+
+      expect(canvas.viewportTransform[0]).toBe(INITIAL_ZOOM * 4);
+      expect(result.view?.transform.zoom).toBe(INITIAL_ZOOM * 4);
     });
 
     it("should expose the initial zoom in the view", async () => {

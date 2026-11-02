@@ -64,14 +64,15 @@ const zoomToPercent = (zoom: number, initialZoom: number) =>
 const percentToZoom = (percent: number, initialZoom: number) =>
   (percent / 100) * initialZoom;
 
-// Keep the point (in frame coordinates) under the pointer at the same screen position.
-const zoomAt = (
+// Zoom to the target zoom, keeping the point (in frame coordinates) under the pointer at the same screen position.
+// It takes the target itself, not a multiplier, so that no rounding error comes from converting back and forth.
+const zoomTo = (
   transform: Transform,
   pointer: Point,
-  zoomMultiplier: number,
+  targetZoom: number,
   initialZoom: number,
 ): Transform => {
-  const zoom = clampZoom(transform.zoom * zoomMultiplier, initialZoom);
+  const zoom = clampZoom(targetZoom, initialZoom);
   if (zoom === transform.zoom) return transform;
 
   const frameX = (pointer.x - transform.tx) / transform.zoom;
@@ -82,6 +83,14 @@ const zoomAt = (
     ty: pointer.y - frameY * zoom,
   };
 };
+
+const zoomAt = (
+  transform: Transform,
+  pointer: Point,
+  zoomMultiplier: number,
+  initialZoom: number,
+): Transform =>
+  zoomTo(transform, pointer, transform.zoom * zoomMultiplier, initialZoom);
 
 const clampPanAxis = (t: number, frameOnScreen: number, element: number) => {
   const overlap = Math.min(MIN_OVERLAP, frameOnScreen);
@@ -154,6 +163,7 @@ export {
   percentToZoom,
   resolveWheelAction,
   zoomAt,
+  zoomTo,
   zoomToPercent,
 };
 export type { Point, Size, Transform, WheelAction, WheelInput };

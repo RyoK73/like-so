@@ -3,11 +3,11 @@ import type { Canvas } from "fabric";
 import {
   ZOOM_STEP,
   clampPan,
-  clampZoom,
   fitFrame,
   percentToZoom,
   resolveWheelAction,
   zoomAt,
+  zoomTo,
   type Size,
   type Transform,
 } from "@/sketch-detail/viewport/viewportMath";
@@ -76,22 +76,23 @@ const useViewport = ({
     };
 
     // Zoom around the center of the element, because the buttons have no pointer.
-    const zoomAroundCenter = (zoomMultiplier: number) => {
-      if (!currentViewInfo) return;
-      const { transform, elementSize, initialZoom } = currentViewInfo;
-      const center = { x: elementSize.width / 2, y: elementSize.height / 2 };
-      panTo(zoomAt(transform, center, zoomMultiplier, initialZoom));
-    };
+    const getCenter = ({ width, height }: Size) => ({
+      x: width / 2,
+      y: height / 2,
+    });
     zoomCommandsRef.current = {
-      zoomBy: zoomAroundCenter,
+      zoomBy: (zoomMultiplier) => {
+        if (!currentViewInfo) return;
+        const { transform, elementSize, initialZoom } = currentViewInfo;
+        const center = getCenter(elementSize);
+        panTo(zoomAt(transform, center, zoomMultiplier, initialZoom));
+      },
       setZoom: (percent) => {
         if (!currentViewInfo) return;
-        const { transform, initialZoom } = currentViewInfo;
-        const targetZoom = clampZoom(
-          percentToZoom(percent, initialZoom),
-          initialZoom,
-        );
-        zoomAroundCenter(targetZoom / transform.zoom);
+        const { transform, elementSize, initialZoom } = currentViewInfo;
+        const center = getCenter(elementSize);
+        const targetZoom = percentToZoom(percent, initialZoom);
+        panTo(zoomTo(transform, center, targetZoom, initialZoom));
       },
     };
 
@@ -124,9 +125,7 @@ const useViewport = ({
       } else if (action.type === "zoom") {
         const rect = upperEl.getBoundingClientRect();
         const pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        panTo(
-          zoomAt(transform, pointer, action.zoomMultiplier, initialZoom),
-        );
+        panTo(zoomAt(transform, pointer, action.zoomMultiplier, initialZoom));
       }
     };
     wrapperEl.addEventListener("wheel", onWheel, { passive: false });
