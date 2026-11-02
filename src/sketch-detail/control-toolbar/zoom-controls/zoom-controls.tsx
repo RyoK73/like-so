@@ -9,8 +9,8 @@ import {
 import { toast } from "@/design-system/toast";
 import { TOOLTIP_SIDE } from "@/sketch-detail/control-toolbar/constants";
 import {
-  MAX_ZOOM,
-  MIN_ZOOM,
+  MAX_PERCENT,
+  MIN_PERCENT,
   canZoomIn,
   canZoomOut,
   zoomToPercent,
@@ -26,8 +26,6 @@ type ZoomControlsProps = {
   onSetZoom: (percent: number) => void;
 };
 
-const MIN_PERCENT = zoomToPercent(MIN_ZOOM);
-const MAX_PERCENT = zoomToPercent(MAX_ZOOM);
 // The issues share an id, so that the latest one replaces the previous one.
 const ISSUE_TOAST_ID = "zoom-input-issue";
 
