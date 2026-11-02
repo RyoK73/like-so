@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ShapeNavigation } from "@/sketch-detail/shape-navigation/shape-navigation";
+import { ShapeNavigation } from "@/sketch-detail/control-toolbar/shape-navigation/shape-navigation";
 
 const RECT_LABEL = "四角形を追加";
 const CIRCLE_LABEL = "円を追加";

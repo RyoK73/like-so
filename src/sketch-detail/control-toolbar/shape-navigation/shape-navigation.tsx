@@ -2,7 +2,7 @@ import type { ComponentType } from "react";
 import { LuCircle, LuSquare } from "react-icons/lu";
 import { iconItemClassName } from "@/design-system/constants";
 import { IconButton } from "@/design-system/icon-button";
-import { TOOLTIP_SIDE } from "@/sketch-detail/shape-navigation/constants";
+import { TOOLTIP_SIDE } from "@/sketch-detail/control-toolbar/constants";
 import type { ShapeType } from "@/sketch-detail/shapes/useShapes";
 
 type ShapeNavigationProps = {

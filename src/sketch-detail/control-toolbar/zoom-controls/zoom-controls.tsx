@@ -7,7 +7,7 @@ import {
   type NumberInputIssue,
 } from "@/design-system/number-input";
 import { toast } from "@/design-system/toast";
-import { TOOLTIP_SIDE } from "@/sketch-detail/shape-navigation/constants";
+import { TOOLTIP_SIDE } from "@/sketch-detail/control-toolbar/constants";
 import {
   MAX_ZOOM,
   MIN_ZOOM,

@@ -2,7 +2,7 @@
 import { useEffect, useRef } from "react";
 import { toast } from "@/design-system/toast";
 import { ControlToolbar, ZoomControls } from "@/sketch-detail/control-toolbar";
-import { ShapeNavigation } from "@/sketch-detail/shape-navigation";
+import { ShapeNavigation } from "@/sketch-detail/control-toolbar/shape-navigation";
 import { SketchError } from "@/sketch-detail/sketch-error";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
 import { useShapes } from "@/sketch-detail/shapes/useShapes";
