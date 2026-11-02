@@ -73,10 +73,10 @@ The point under the pointer stays at the same screen position before and after t
 In other words, the frame coordinate `s` under the pointer does not change by the zoom.
 
 1. Get the frame coordinate under the pointer from its screen coordinate `p`: `s = (p − t) / z`
-2. Decide the new zoom `z'`: `z' = clamp(z × factor, 0.1, 4)`
+2. Decide the new zoom `z'`: `z' = clamp(z × zoom multiplier, 0.1, 4)`
 3. Decide `t'` so that `s` appears at the same `p`: `t' = p − s × z'`
 
-Example (current zoom 1, `t = (0, 0)`, pointer `(100, 50)`, factor 2):
+Example (current zoom 1, `t = (0, 0)`, pointer `(100, 50)`, zoom multiplier 2):
 
 - `s = (100, 50)`
 - `z' = 2`
@@ -134,12 +134,12 @@ Example (element 900×600, frame 1200×800, zoom 1): the range of `tx` is `−11
 
 | Condition              | Action                                                                             |
 | ---------------------- | ---------------------------------------------------------------------------------- |
-| Ctrl (including pinch) | Zoom. The factor is `0.999 ** deltaY`. Zoom has priority even if Shift is pressed. |
+| Ctrl (including pinch) | Zoom. The zoom multiplier is `0.999 ** deltaY`. Zoom has priority even if Shift is pressed. |
 | Shift                  | Horizontal pan. Uses the larger of `deltaX` and `deltaY` in absolute value.        |
 | No modifier key        | Horizontal pan with `deltaX`, vertical pan with `deltaY` (diagonal on a trackpad). |
 
 - The pan amount uses `delta` as screen px as it is, and subtracts it from `t` (`ty −= deltaY`).
-- The zoom factor is `0.999 ** deltaY` so that it is proportional to the amount turned and returns to the start after a round trip.
+- The zoom multiplier is `0.999 ** deltaY` so that it is proportional to the amount turned and returns to the start after a round trip.
   `deltaY = −100` (one notch up on a mouse) is about 1.105 times, and `+100` is about 0.905 times.
 - With Shift+wheel, some browsers send the value in `deltaX` instead of `deltaY`.
   So with Shift, the larger of the two is used.

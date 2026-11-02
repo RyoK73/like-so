@@ -12,7 +12,7 @@ type WheelInput = {
 // `dx` and `dy` are the amounts to add to `tx` and `ty`.
 type WheelAction =
   | { type: "pan"; dx: number; dy: number }
-  | { type: "zoom"; factor: number }
+  | { type: "zoom"; zoomMultiplier: number }
   | { type: "none" };
 
 // The range of the zoom as a ratio of the initial zoom (the fitted view, which is shown as 100%).
@@ -65,10 +65,10 @@ const percentToZoom = (percent: number, initialZoom = 1) =>
 const zoomAt = (
   transform: Transform,
   pointer: Point,
-  factor: number,
+  zoomMultiplier: number,
   initialZoom = 1,
 ): Transform => {
-  const zoom = clampZoom(transform.zoom * factor, initialZoom);
+  const zoom = clampZoom(transform.zoom * zoomMultiplier, initialZoom);
   if (zoom === transform.zoom) return transform;
 
   const frameX = (pointer.x - transform.tx) / transform.zoom;
@@ -101,7 +101,9 @@ const resolveWheelAction = ({
   shiftKey,
   ctrlKey,
 }: WheelInput): WheelAction => {
-  if (ctrlKey) return { type: "zoom", factor: WHEEL_ZOOM_BASE ** deltaY };
+  if (ctrlKey) {
+    return { type: "zoom", zoomMultiplier: WHEEL_ZOOM_BASE ** deltaY };
+  }
 
   if (shiftKey) {
     // Some browsers swap the axes while shift is pressed, so use the larger one.

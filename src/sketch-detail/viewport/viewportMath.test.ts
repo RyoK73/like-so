@@ -39,13 +39,13 @@ const expectPan = (
   expect(action.dy).toBeCloseTo(dy);
 };
 
-const expectZoomFactor = (
+const expectZoomMultiplier = (
   action: ReturnType<typeof resolveWheelAction>,
-  factor: number,
+  zoomMultiplier: number,
 ) => {
   expect(action.type).toBe("zoom");
   if (action.type !== "zoom") return;
-  expect(action.factor).toBeCloseTo(factor);
+  expect(action.zoomMultiplier).toBeCloseTo(zoomMultiplier);
 };
 
 describe("fitFrame", () => {
@@ -154,15 +154,15 @@ describe("zoomAt", () => {
     {
       name: "zoom in at the maximum",
       transform: { zoom: 4, tx: -30, ty: -20 },
-      factor: 2,
+      zoomMultiplier: 2,
     },
     {
       name: "zoom out at the minimum",
       transform: { zoom: 0.1, tx: 40, ty: 10 },
-      factor: 0.5,
+      zoomMultiplier: 0.5,
     },
-  ])("should not change anything: $name", ({ transform, factor }) => {
-    const result = zoomAt(transform, { x: 100, y: 50 }, factor);
+  ])("should not change anything: $name", ({ transform, zoomMultiplier }) => {
+    const result = zoomAt(transform, { x: 100, y: 50 }, zoomMultiplier);
 
     expect(result).toEqual(transform);
   });
@@ -307,21 +307,21 @@ describe("resolveWheelAction", () => {
   });
 
   it("should zoom in with ctrl and a negative deltaY", () => {
-    expectZoomFactor(
+    expectZoomMultiplier(
       resolveWheelAction(wheel({ ctrlKey: true, deltaY: -100 })),
       WHEEL_BASE ** -100,
     );
   });
 
   it("should zoom out with ctrl and a positive deltaY", () => {
-    expectZoomFactor(
+    expectZoomMultiplier(
       resolveWheelAction(wheel({ ctrlKey: true, deltaY: 100 })),
       WHEEL_BASE ** 100,
     );
   });
 
   it("should zoom instead of pan with ctrl and shift", () => {
-    expectZoomFactor(
+    expectZoomMultiplier(
       resolveWheelAction(wheel({ ctrlKey: true, shiftKey: true, deltaY: 100 })),
       WHEEL_BASE ** 100,
     );

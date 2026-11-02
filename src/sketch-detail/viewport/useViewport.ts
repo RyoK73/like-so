@@ -18,7 +18,7 @@ type View = { transform: Transform; elementSize: Size; initialZoom: number };
 // The zoom operations live in the effect, because they share the current view with the wheel and the pan mode.
 // The effect registers them here, and the returned functions call them.
 type ZoomCommands = {
-  zoomBy: (factor: number) => void;
+  zoomBy: (zoomMultiplier: number) => void;
   setZoom: (percent: number) => void;
 };
 
@@ -76,11 +76,11 @@ const useViewport = ({
     };
 
     // Zoom around the center of the element, because the buttons have no pointer.
-    const zoomAroundCenter = (factor: number) => {
+    const zoomAroundCenter = (zoomMultiplier: number) => {
       if (!currentViewInfo) return;
       const { transform, elementSize, initialZoom } = currentViewInfo;
       const center = { x: elementSize.width / 2, y: elementSize.height / 2 };
-      panTo(zoomAt(transform, center, factor, initialZoom));
+      panTo(zoomAt(transform, center, zoomMultiplier, initialZoom));
     };
     zoomCommandsRef.current = {
       zoomBy: zoomAroundCenter,
@@ -124,7 +124,9 @@ const useViewport = ({
       } else if (action.type === "zoom") {
         const rect = upperEl.getBoundingClientRect();
         const pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        panTo(zoomAt(transform, pointer, action.factor, initialZoom));
+        panTo(
+          zoomAt(transform, pointer, action.zoomMultiplier, initialZoom),
+        );
       }
     };
     wrapperEl.addEventListener("wheel", onWheel, { passive: false });
