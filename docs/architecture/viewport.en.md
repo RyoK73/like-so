@@ -73,7 +73,10 @@ The point under the pointer stays at the same screen position before and after t
 In other words, the frame coordinate `s` under the pointer does not change by the zoom.
 
 1. Get the frame coordinate under the pointer from its screen coordinate `p`: `s = (p − t) / z`
-2. Decide the new zoom `z'`: `z' = clamp(z × zoom multiplier, 0.1, 4)`
+2. Decide the new zoom `z'`: `z' = clamp(target zoom, 0.1, 4)`
+   - When it is given as a zoom multiplier (the wheel, + and −), the target zoom is `z × zoom multiplier`.
+   - When it is given as a percent (the input), the target zoom is used as it is.
+   - The target is not converted to a multiplier, to avoid the rounding error of converting back and forth.
 3. Decide `t'` so that `s` appears at the same `p`: `t' = p − s × z'`
 
 Example (current zoom 1, `t = (0, 0)`, pointer `(100, 50)`, zoom multiplier 2):
@@ -94,12 +97,12 @@ The frame coordinate under the center stays at the same screen position before a
 The calculation is the zoom around the pointer above, with the center of the element `(element width/2, element height/2)` as `p`.
 After the zoom, `t` is limited by the pan range (`clampPan`), as with the wheel.
 
-| Operation            | Action                                                                  |
-| -------------------- | ----------------------------------------------------------------------- |
-| +                    | Multiplies the zoom by 1.25 (`ZOOM_STEP`). Disabled at 400%.            |
-| −                    | Divides the zoom by 1.25. Disabled at 10%.                              |
-| Input (Enter / blur) | Sets the zoom to the entered % (`setZoom`).                             |
-| Input (Escape)       | Discards the text and shows the current zoom again.                     |
+| Operation            | Action                                                       |
+| -------------------- | ------------------------------------------------------------ |
+| +                    | Multiplies the zoom by 1.25 (`ZOOM_STEP`). Disabled at 400%. |
+| −                    | Divides the zoom by 1.25. Disabled at 10%.                   |
+| Input (Enter / blur) | Sets the zoom to the entered % (`setZoom`).                  |
+| Input (Escape)       | Discards the text and shows the current zoom again.          |
 
 - The input is `NumberInput` (`src/design-system/number-input.tsx`).
   It trims the spaces around the text and rounds a decimal to an integer.
@@ -132,11 +135,11 @@ Example (element 900×600, frame 1200×800, zoom 1): the range of `tx` is `−11
 
 `resolveWheelAction` sorts a wheel event into one of the following.
 
-| Condition              | Action                                                                             |
-| ---------------------- | ---------------------------------------------------------------------------------- |
+| Condition              | Action                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
 | Ctrl (including pinch) | Zoom. The zoom multiplier is `0.999 ** deltaY`. Zoom has priority even if Shift is pressed. |
-| Shift                  | Horizontal pan. Uses the larger of `deltaX` and `deltaY` in absolute value.        |
-| No modifier key        | Horizontal pan with `deltaX`, vertical pan with `deltaY` (diagonal on a trackpad). |
+| Shift                  | Horizontal pan. Uses the larger of `deltaX` and `deltaY` in absolute value.                 |
+| No modifier key        | Horizontal pan with `deltaX`, vertical pan with `deltaY` (diagonal on a trackpad).          |
 
 - The pan amount uses `delta` as screen px as it is, and subtracts it from `t` (`ty −= deltaY`).
 - The zoom multiplier is `0.999 ** deltaY` so that it is proportional to the amount turned and returns to the start after a round trip.
@@ -161,11 +164,11 @@ frame coordinate of the center of the view = ((element width/2 − tx) / z, (ele
 
 ## Files
 
-| File                                               | Role                                                                                                   |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `src/sketch-detail/viewport/viewportMath.ts`       | Pure functions for the calculations above                                                              |
-| `src/sketch-detail/viewport/viewportStyle.ts`      | Functions for the background of the grid and where the frame appears on the screen (the frame outline) |
-| `src/sketch-detail/viewport/useViewport.ts`        | Hook that applies wheel, space + drag and resize operations to the view of fabric. It also returns the zoom by the buttons and the input (`zoomIn`, `zoomOut` and `setZoom`) |
-| `src/sketch-detail/control-toolbar/zoom-controls/zoom-controls.tsx` | The zoom buttons and the zoom input |
-| `src/design-system/number-input.tsx`               | The number input. Handles committing, clamping into a range and reporting invalid text                 |
-| `src/sketch-detail/viewport/useFrameConstraint.ts` | Hook that stops the center of a shape in the frame while moving                                        |
+| File                                                                | Role                                                                                                                                                                         |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/sketch-detail/viewport/viewportMath.ts`                        | Pure functions for the calculations above                                                                                                                                    |
+| `src/sketch-detail/viewport/viewportStyle.ts`                       | Functions for the background of the grid and where the frame appears on the screen (the frame outline)                                                                       |
+| `src/sketch-detail/viewport/useViewport.ts`                         | Hook that applies wheel, space + drag and resize operations to the view of fabric. It also returns the zoom by the buttons and the input (`zoomIn`, `zoomOut` and `setZoom`) |
+| `src/sketch-detail/control-toolbar/zoom-controls/zoom-controls.tsx` | The zoom buttons and the zoom input                                                                                                                                          |
+| `src/design-system/number-input.tsx`                                | The number input. Handles committing, clamping into a range and reporting invalid text                                                                                       |
+| `src/sketch-detail/viewport/useFrameConstraint.ts`                  | Hook that stops the center of a shape in the frame while moving                                                                                                              |
