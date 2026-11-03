@@ -113,19 +113,18 @@ See [Authentication](./auth.en.md) for details.
 
 ## Sketch page (`src/sketch-detail/`)
 
-| File                | Role                                                                                                           |
-| ------------------- | -------------------------------------------------------------------------------------------------------------- |
-| `sketch-detail.tsx` | Server Component. Passes the info of one sketch got by `getSketch` to `TitleToolbar` and `SketchCanvas`        |
-| `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                     |
-| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the title, description, size and updated time                        |
-| `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`) and the zoom controls (`ZoomControls` in `zoom-controls/`) |
-| `shape-navigation/` | The buttons to add shapes (`ShapeNavigation`). Placed inside `ControlToolbar`                                  |
-| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                      |
-| `shapes/`           | Creating shapes (see the section above)                                                                        |
-| `history/`          | Undo / redo (see the section above)                                                                            |
-| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))            |
-| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                                 |
-| `index.ts`          | Exports only `SketchDetail`                                                                                    |
+| File                | Role                                                                                                                                                           |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sketch-detail.tsx` | Server Component. Passes the info of one sketch got by `getSketch` to `TitleToolbar` and `SketchCanvas`                                                        |
+| `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                     |
+| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the title, description, size and updated time                                                                        |
+| `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add shapes (`ShapeNavigation`) |
+| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                      |
+| `shapes/`           | Creating shapes (see the section above)                                                                                                                        |
+| `history/`          | Undo / redo (see the section above)                                                                                                                            |
+| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))                                                            |
+| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                                                                                 |
+| `index.ts`          | Exports only `SketchDetail`                                                                                                                                    |
 
 Details of `SketchCanvas`:
 
