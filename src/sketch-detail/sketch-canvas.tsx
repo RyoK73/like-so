@@ -1,7 +1,8 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { toast } from "@/design-system/toast";
-import { ShapeNavigation } from "@/sketch-detail/shape-navigation";
+import { ControlToolbar, ZoomControls } from "@/sketch-detail/control-toolbar";
+import { ShapeNavigation } from "@/sketch-detail/control-toolbar/shape-navigation";
 import { SketchError } from "@/sketch-detail/sketch-error";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
 import { useShapes } from "@/sketch-detail/shapes/useShapes";
@@ -30,7 +31,7 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
   );
   const frame = { width: sketch.width, height: sketch.height };
   const canvasContainerRef = useRef<HTMLDivElement>(null);
-  const { view } = useViewport({
+  const { view, zoomIn, zoomOut, setZoom } = useViewport({
     fabricCanvasRef,
     canvasContainerRef,
     frame,
@@ -104,7 +105,17 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
           style={frameOnScreen}
         />
       </div>
-      <ShapeNavigation disabled={!isLoaded} onAddShape={createShape} />
+      <ControlToolbar>
+        <ShapeNavigation disabled={!isLoaded} onAddShape={createShape} />
+        <ZoomControls
+          zoom={transform.zoom}
+          initialZoom={view?.initialZoom ?? 1}
+          disabled={!isLoaded}
+          onZoomIn={zoomIn}
+          onZoomOut={zoomOut}
+          onSetZoom={setZoom}
+        />
+      </ControlToolbar>
     </div>
   );
 };

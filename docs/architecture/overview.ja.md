@@ -112,17 +112,18 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 
 ## スケッチの個別ページ(`src/sketch-detail/`)
 
-| ファイル            | 役割                                                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件のメタ情報を`TitleToolbar`に、キャンバスの情報を`SketchCanvas`に渡します。 |
-| `sketch-canvas.tsx` | Client Component。キャンバス、図形用ナビ(`ShapeNavigation`)、自動保存を担当します。                                  |
-| `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトル、説明、サイズ、更新日時を表示します。                                 |
-| `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                 |
-| `shapes/`           | 図形の作成(前節を参照)                                                                                               |
-| `history/`          | undo/redo(前節を参照)                                                                                                |
-| `viewport/`         | 固定枠、パン、ズーム(前節と[固定枠とパン・ズーム](./viewport.ja.md)を参照)                                           |
-| `save/`             | DBへの保存に関するフックと関数([スケッチの保存](./save.ja.md)を参照)                                                 |
-| `index.ts`          | 公開するのは`SketchDetail`のみです。                                                                                 |
+| ファイル            | 役割                                                                                                                          |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件のメタ情報を`TitleToolbar`に、キャンバスの情報を`SketchCanvas`に渡します。          |
+| `sketch-canvas.tsx` | Client Component。キャンバス、操作用ツールバー(`ControlToolbar`)、自動保存を担当します。                                      |
+| `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトル、説明、サイズ、更新日時を表示します。                                          |
+| `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加ボタン(`ShapeNavigation`) |
+| `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                          |
+| `shapes/`           | 図形の作成(前節を参照)                                                                                                        |
+| `history/`          | undo/redo(前節を参照)                                                                                                         |
+| `viewport/`         | 固定枠、パン、ズーム(前節と[固定枠とパン・ズーム](./viewport.ja.md)を参照)                                                    |
+| `save/`             | DBへの保存に関するフックと関数([スケッチの保存](./save.ja.md)を参照)                                                          |
+| `index.ts`          | 公開するのは`SketchDetail`のみです。                                                                                          |
 
 `SketchCanvas`の詳細は、次の通りです。
 
@@ -137,10 +138,12 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
   `title`、`description`、`width × height`、更新日時を表示します。
   `description`は、空文字または空白だけの場合は表示せず、表示するときは2行で切り詰めます。
   操作用のUIではないので、`role="toolbar"`は付けません。
-- 図形用ナビ(`src/sketch-detail/shape-navigation/`の`ShapeNavigation`)は、キャンバスの上に重ねて、画面の下端から少し浮かせて中央に置きます。
-  ナビ自身が配置(`absolute`)を持ちます。
-  ナビのボタンは、四角形と円です。
-  `isLoaded`が`true`になるまで無効です。
+- 操作用ツールバー(`src/sketch-detail/control-toolbar/`の`ControlToolbar`)は、キャンバスの上に重ねて、画面の下端から少し浮かせて中央に置きます。
+  ツールバー自身が枠と配置(`absolute`)を持ち、中身は`children`で受け取ります。
+  中身は、図形用ナビ(`ShapeNavigation`)とズームの操作(`ZoomControls`)です。
+  図形用ナビのボタンは、四角形と円です。
+  ズームの操作は、「− 倍率の入力欄 % +」です([固定枠とパン・ズーム](./viewport.ja.md)を参照)。
+  どれも、`isLoaded`が`true`になるまで無効です。
 - 保存に失敗すると、固定の文言をtoast(`id`は固定)で表示します。
   同じ`id`のtoastは、重ねずに更新されます。
 - 読み込みに失敗した場合、または`canvas_json`がオブジェクトでない場合は、キャンバスとボタンを表示しません。

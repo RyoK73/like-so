@@ -1,15 +1,26 @@
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import type { Canvas } from "fabric";
 import {
+  ZOOM_STEP,
   clampPan,
   fitFrame,
+  percentToZoom,
   resolveWheelAction,
   zoomAt,
+  zoomTo,
   type Size,
   type Transform,
 } from "@/sketch-detail/viewport/viewportMath";
 
-type View = { transform: Transform; elementSize: Size };
+// `initialZoom` is the zoom of the fitted view. It is 100%, and the range of the zoom is relative to it.
+type View = { transform: Transform; elementSize: Size; initialZoom: number };
+
+// The zoom operations live in the effect, because they share the current view with the wheel and the pan mode.
+// The effect registers them here, and the returned functions call them.
+type ZoomCommands = {
+  zoomBy: (zoomMultiplier: number) => void;
+  setZoom: (percent: number) => void;
+};
 
 type UseViewport = {
   fabricCanvasRef: RefObject<Canvas | null>;
@@ -34,6 +45,7 @@ const useViewport = ({
   isLoaded,
 }: UseViewport) => {
   const [view, setView] = useState<View>();
+  const zoomCommandsRef = useRef<ZoomCommands | null>(null);
   const { width: frameWidth, height: frameHeight } = frame;
 
   useEffect(() => {
@@ -63,10 +75,31 @@ const useViewport = ({
       });
     };
 
+    // Zoom around the center of the element, because the buttons have no pointer.
+    const getCenter = ({ width, height }: Size) => ({
+      x: width / 2,
+      y: height / 2,
+    });
+    zoomCommandsRef.current = {
+      zoomBy: (zoomMultiplier) => {
+        if (!currentViewInfo) return;
+        const { transform, elementSize, initialZoom } = currentViewInfo;
+        const center = getCenter(elementSize);
+        panTo(zoomAt(transform, center, zoomMultiplier, initialZoom));
+      },
+      setZoom: (percent) => {
+        if (!currentViewInfo) return;
+        const { transform, elementSize, initialZoom } = currentViewInfo;
+        const center = getCenter(elementSize);
+        const targetZoom = percentToZoom(percent, initialZoom);
+        panTo(zoomTo(transform, center, targetZoom, initialZoom));
+      },
+    };
+
     const resetView = (containerSize: Size) => {
       const { elementSize, zoom, tx, ty } = fitFrame(frameSize, containerSize);
       canvas.setDimensions(elementSize);
-      apply({ transform: { zoom, tx, ty }, elementSize });
+      apply({ transform: { zoom, tx, ty }, elementSize, initialZoom: zoom });
     };
 
     const observer = new ResizeObserver(([entry]) => {
@@ -82,7 +115,7 @@ const useViewport = ({
       // Stop the browser from scrolling the page and from zooming it by pinch.
       e.preventDefault();
       const action = resolveWheelAction(e);
-      const { transform } = currentViewInfo;
+      const { transform, initialZoom } = currentViewInfo;
       if (action.type === "pan") {
         panTo({
           ...transform,
@@ -92,7 +125,7 @@ const useViewport = ({
       } else if (action.type === "zoom") {
         const rect = upperEl.getBoundingClientRect();
         const pointer = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        panTo(zoomAt(transform, pointer, action.factor));
+        panTo(zoomAt(transform, pointer, action.zoomMultiplier, initialZoom));
       }
     };
     wrapperEl.addEventListener("wheel", onWheel, { passive: false });
@@ -170,6 +203,7 @@ const useViewport = ({
     upperEl.addEventListener("pointercancel", onPointerUp);
 
     return () => {
+      zoomCommandsRef.current = null;
       observer.disconnect();
       wrapperEl.removeEventListener("wheel", onWheel);
       window.removeEventListener("keydown", onKeyDown);
@@ -182,7 +216,13 @@ const useViewport = ({
     };
   }, [fabricCanvasRef, canvasContainerRef, frameWidth, frameHeight, isLoaded]);
 
-  return { view };
+  // They do nothing until the canvas is loaded.
+  const zoomIn = () => zoomCommandsRef.current?.zoomBy(ZOOM_STEP);
+  const zoomOut = () => zoomCommandsRef.current?.zoomBy(1 / ZOOM_STEP);
+  const setZoom = (percent: number) =>
+    zoomCommandsRef.current?.setZoom(percent);
+
+  return { view, zoomIn, zoomOut, setZoom };
 };
 
 export { useViewport };

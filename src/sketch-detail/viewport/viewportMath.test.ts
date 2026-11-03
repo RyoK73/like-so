@@ -1,11 +1,18 @@
 import {
+  MAX_PERCENT,
+  MIN_PERCENT,
+  ZOOM_STEP,
+  canZoomIn,
+  canZoomOut,
   clampCenter,
   clampPan,
   clampZoom,
   fitFrame,
   getNewShapeCenter,
+  percentToZoom,
   resolveWheelAction,
   zoomAt,
+  zoomToPercent,
   type WheelInput,
 } from "@/sketch-detail/viewport/viewportMath";
 
@@ -13,6 +20,7 @@ import {
 // A transform is `{ zoom, tx, ty }`. `(tx, ty)` is where the frame origin (the top-left of the frame) appears on the element.
 
 const WHEEL_BASE = 0.999;
+const INITIAL_ZOOM = 1;
 
 const wheel = (input: Partial<WheelInput>): WheelInput => ({
   deltaX: 0,
@@ -34,13 +42,13 @@ const expectPan = (
   expect(action.dy).toBeCloseTo(dy);
 };
 
-const expectZoomFactor = (
+const expectZoomMultiplier = (
   action: ReturnType<typeof resolveWheelAction>,
-  factor: number,
+  zoomMultiplier: number,
 ) => {
   expect(action.type).toBe("zoom");
   if (action.type !== "zoom") return;
-  expect(action.factor).toBeCloseTo(factor);
+  expect(action.zoomMultiplier).toBeCloseTo(zoomMultiplier);
 };
 
 describe("fitFrame", () => {
@@ -112,7 +120,7 @@ describe("clampZoom", () => {
     [4, 4],
     [5, 4],
   ])("should clamp %f to %f", (input, expected) => {
-    expect(clampZoom(input)).toBe(expected);
+    expect(clampZoom(input, INITIAL_ZOOM)).toBe(expected);
   });
 });
 
@@ -126,7 +134,12 @@ describe("zoomAt", () => {
   });
 
   it("should zoom in around the pointer", () => {
-    const result = zoomAt({ zoom: 1, tx: 0, ty: 0 }, { x: 100, y: 50 }, 2);
+    const result = zoomAt(
+      { zoom: 1, tx: 0, ty: 0 },
+      { x: 100, y: 50 },
+      2,
+      INITIAL_ZOOM,
+    );
 
     expect(result.zoom).toBeCloseTo(2);
     expect(result.tx).toBeCloseTo(-100);
@@ -138,6 +151,7 @@ describe("zoomAt", () => {
       { zoom: 2, tx: -100, ty: -50 },
       { x: 100, y: 50 },
       0.5,
+      INITIAL_ZOOM,
     );
 
     expect(result.zoom).toBeCloseTo(1);
@@ -149,15 +163,20 @@ describe("zoomAt", () => {
     {
       name: "zoom in at the maximum",
       transform: { zoom: 4, tx: -30, ty: -20 },
-      factor: 2,
+      zoomMultiplier: 2,
     },
     {
       name: "zoom out at the minimum",
       transform: { zoom: 0.1, tx: 40, ty: 10 },
-      factor: 0.5,
+      zoomMultiplier: 0.5,
     },
-  ])("should not change anything: $name", ({ transform, factor }) => {
-    const result = zoomAt(transform, { x: 100, y: 50 }, factor);
+  ])("should not change anything: $name", ({ transform, zoomMultiplier }) => {
+    const result = zoomAt(
+      transform,
+      { x: 100, y: 50 },
+      zoomMultiplier,
+      INITIAL_ZOOM,
+    );
 
     expect(result).toEqual(transform);
   });
@@ -166,7 +185,7 @@ describe("zoomAt", () => {
     const before = { zoom: 3, tx: -30, ty: -20 };
     const pointer = { x: 100, y: 50 };
 
-    const result = zoomAt(before, pointer, 2);
+    const result = zoomAt(before, pointer, 2, INITIAL_ZOOM);
 
     expect(result.zoom).toBeCloseTo(4);
     const frameBefore = framePointAt(before, pointer);
@@ -302,21 +321,21 @@ describe("resolveWheelAction", () => {
   });
 
   it("should zoom in with ctrl and a negative deltaY", () => {
-    expectZoomFactor(
+    expectZoomMultiplier(
       resolveWheelAction(wheel({ ctrlKey: true, deltaY: -100 })),
       WHEEL_BASE ** -100,
     );
   });
 
   it("should zoom out with ctrl and a positive deltaY", () => {
-    expectZoomFactor(
+    expectZoomMultiplier(
       resolveWheelAction(wheel({ ctrlKey: true, deltaY: 100 })),
       WHEEL_BASE ** 100,
     );
   });
 
   it("should zoom instead of pan with ctrl and shift", () => {
-    expectZoomFactor(
+    expectZoomMultiplier(
       resolveWheelAction(wheel({ ctrlKey: true, shiftKey: true, deltaY: 100 })),
       WHEEL_BASE ** 100,
     );
@@ -432,5 +451,135 @@ describe("getNewShapeCenter", () => {
     });
 
     expect(result).toEqual({ x: 0, y: 300 });
+  });
+});
+
+describe("ZOOM_STEP", () => {
+  it("should be 1.25", () => {
+    expect(ZOOM_STEP).toBe(1.25);
+  });
+});
+
+describe("zoomToPercent", () => {
+  it.each([
+    [1, 100],
+    [0.835, 84],
+    [0.1, 10],
+    [4, 400],
+  ])("should convert the zoom %j to %j percent", (zoom, percent) => {
+    expect(zoomToPercent(zoom, INITIAL_ZOOM)).toBe(percent);
+  });
+});
+
+describe("percentToZoom", () => {
+  it.each([
+    [150, 1.5],
+    [10, 0.1],
+    [400, 4],
+  ])("should convert %j percent to the zoom %j", (percent, zoom) => {
+    expect(percentToZoom(percent, INITIAL_ZOOM)).toBeCloseTo(zoom);
+  });
+});
+
+describe("canZoomIn", () => {
+  it("should be true below the max zoom", () => {
+    expect(canZoomIn(3.99, INITIAL_ZOOM)).toBe(true);
+  });
+
+  it("should be false at the max zoom", () => {
+    expect(canZoomIn(4, INITIAL_ZOOM)).toBe(false);
+  });
+});
+
+describe("canZoomOut", () => {
+  it("should be true above the min zoom", () => {
+    expect(canZoomOut(0.11, INITIAL_ZOOM)).toBe(true);
+  });
+
+  it("should be false at the min zoom", () => {
+    expect(canZoomOut(0.1, INITIAL_ZOOM)).toBe(false);
+  });
+});
+
+describe("MIN_PERCENT and MAX_PERCENT", () => {
+  it("should be 10 and 400", () => {
+    expect(MIN_PERCENT).toBeCloseTo(10);
+    expect(MAX_PERCENT).toBeCloseTo(400);
+  });
+});
+
+// The initial zoom (the fitted view) is 100%, and the range is 10% to 400% of it.
+describe("with an initial zoom of 0.6", () => {
+  const INITIAL = 0.6;
+  const MIN = 0.06;
+  const MAX = 2.4;
+
+  it.each([
+    [0.6, 100],
+    [0.3, 50],
+    [0.06, 10],
+    [2.4, 400],
+    [0.5, 83],
+  ])("should convert the zoom %j to %j percent", (zoom, percent) => {
+    expect(zoomToPercent(zoom, INITIAL)).toBe(percent);
+  });
+
+  it.each([
+    [100, 0.6],
+    [10, 0.06],
+    [400, 2.4],
+    [150, 0.9],
+  ])("should convert %j percent to the zoom %j", (percent, zoom) => {
+    expect(percentToZoom(percent, INITIAL)).toBeCloseTo(zoom);
+  });
+
+  it.each([
+    [2.39, true],
+    [2.4, false],
+  ])("should return canZoomIn for the zoom %j: %j", (zoom, expected) => {
+    expect(canZoomIn(zoom, INITIAL)).toBe(expected);
+  });
+
+  it.each([
+    [0.07, true],
+    [0.06, false],
+  ])("should return canZoomOut for the zoom %j: %j", (zoom, expected) => {
+    expect(canZoomOut(zoom, INITIAL)).toBe(expected);
+  });
+
+  it.each([
+    [0.05, MIN],
+    [0.06, MIN],
+    [2.4, MAX],
+    [2.5, MAX],
+  ])("should clamp the zoom %j to %j", (zoom, expected) => {
+    expect(clampZoom(zoom, INITIAL)).toBeCloseTo(expected);
+  });
+
+  it("should clamp to the max when zooming in from 2.2 by the step", () => {
+    const result = zoomAt(
+      { zoom: 2.2, tx: 0, ty: 0 },
+      { x: 100, y: 50 },
+      ZOOM_STEP,
+      INITIAL,
+    );
+
+    expect(result.zoom).toBeCloseTo(MAX);
+  });
+
+  it("should not change anything when zooming in at the max", () => {
+    const transform = { zoom: MAX, tx: -30, ty: -20 };
+
+    expect(zoomAt(transform, { x: 100, y: 50 }, ZOOM_STEP, INITIAL)).toEqual(
+      transform,
+    );
+  });
+
+  it("should not change anything when zooming out at the min", () => {
+    const transform = { zoom: MIN, tx: 40, ty: 10 };
+
+    expect(
+      zoomAt(transform, { x: 100, y: 50 }, 1 / ZOOM_STEP, INITIAL),
+    ).toEqual(transform);
   });
 });

@@ -61,7 +61,11 @@ The zoom and the pan are not saved. A sketch always opens with the initial view.
 
 ## Zoom
 
-The zoom is limited to 10% to 400% (`clampZoom`).
+The zoom is limited to 10% to 400%, where the zoom `z0` of the initial view (the fitted view) is 100% (`clampZoom`).
+In other words, the range of the internal zoom `z` is `z0 × 0.1` to `z0 × 4`.
+`z0` is decided by `fitFrame` (`initialZoom` of `View`).
+When the view goes back to the initial one by a resize, `z0` is updated too.
+Both the wheel and the buttons are limited to the same range.
 
 ### Zoom around the pointer
 
@@ -69,10 +73,13 @@ The point under the pointer stays at the same screen position before and after t
 In other words, the frame coordinate `s` under the pointer does not change by the zoom.
 
 1. Get the frame coordinate under the pointer from its screen coordinate `p`: `s = (p − t) / z`
-2. Decide the new zoom `z'`: `z' = clamp(z × factor, 0.1, 4)`
+2. Decide the new zoom `z'`: `z' = clamp(target zoom, 0.1, 4)`
+   - When it is given as a zoom multiplier (the wheel, + and −), the target zoom is `z × zoom multiplier`.
+   - When it is given as a percent (the input), the target zoom is used as it is.
+   - The target is not converted to a multiplier, to avoid the rounding error of converting back and forth.
 3. Decide `t'` so that `s` appears at the same `p`: `t' = p − s × z'`
 
-Example (current zoom 1, `t = (0, 0)`, pointer `(100, 50)`, factor 2):
+Example (current zoom 1, `t = (0, 0)`, pointer `(100, 50)`, zoom multiplier 2):
 
 - `s = (100, 50)`
 - `z' = 2`
@@ -81,6 +88,34 @@ Example (current zoom 1, `t = (0, 0)`, pointer `(100, 50)`, factor 2):
 
 Clamp `z'` first, and then calculate `t'`.
 If `t'` is calculated first and only `z'` is clamped, the point under the pointer moves.
+
+### Zoom by the buttons and the input
+
+The toolbar at the bottom has "− zoom input % +" (`ZoomControls`).
+The buttons and the input have no pointer, so the base point is the center of the element.
+The frame coordinate under the center stays at the same screen position before and after the zoom.
+The calculation is the zoom around the pointer above, with the center of the element `(element width/2, element height/2)` as `p`.
+After the zoom, `t` is limited by the pan range (`clampPan`), as with the wheel.
+
+| Operation            | Action                                                       |
+| -------------------- | ------------------------------------------------------------ |
+| +                    | Multiplies the zoom by 1.25 (`ZOOM_STEP`). Disabled at 400%. |
+| −                    | Divides the zoom by 1.25. Disabled at 10%.                   |
+| Input (Enter / blur) | Sets the zoom to the entered % (`setZoom`).                  |
+| Input (Escape)       | Discards the text and shows the current zoom again.          |
+
+- The input is `NumberInput` (`src/design-system/number-input.tsx`).
+  It trims the spaces around the text and rounds a decimal to an integer.
+  A number outside 10 to 400 is brought into the range and then committed (`clamped`).
+  An empty text and a text that is not a number (such as `abc` and `150%`) are not committed, and the current value is shown again.
+  A text that is the same as the current value is not committed.
+- When the zoom changes by the wheel or others, the input shows the new zoom, even while editing.
+- Out-of-range, empty and non-number texts are reported by a toast (`id` is `zoom-input-issue`).
+  Out-of-range is `info`, and empty and non-number are `warning`.
+- The `%` of the display and the input is a ratio where the initial view (the fitted view) is 100%.
+  The display is the integer `Math.round(z / z0 × 100)`, and the entered `%` is converted to `% / 100 × z0`.
+  The initial view is 100%, so the range is always 10 to 400% regardless of the screen size.
+- Everything is disabled until the canvas is loaded (`isLoaded` is `false`).
 
 ## Pan range
 
@@ -100,14 +135,14 @@ Example (element 900×600, frame 1200×800, zoom 1): the range of `tx` is `−11
 
 `resolveWheelAction` sorts a wheel event into one of the following.
 
-| Condition              | Action                                                                             |
-| ---------------------- | ---------------------------------------------------------------------------------- |
-| Ctrl (including pinch) | Zoom. The factor is `0.999 ** deltaY`. Zoom has priority even if Shift is pressed. |
-| Shift                  | Horizontal pan. Uses the larger of `deltaX` and `deltaY` in absolute value.        |
-| No modifier key        | Horizontal pan with `deltaX`, vertical pan with `deltaY` (diagonal on a trackpad). |
+| Condition              | Action                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------- |
+| Ctrl (including pinch) | Zoom. The zoom multiplier is `0.999 ** deltaY`. Zoom has priority even if Shift is pressed. |
+| Shift                  | Horizontal pan. Uses the larger of `deltaX` and `deltaY` in absolute value.                 |
+| No modifier key        | Horizontal pan with `deltaX`, vertical pan with `deltaY` (diagonal on a trackpad).          |
 
 - The pan amount uses `delta` as screen px as it is, and subtracts it from `t` (`ty −= deltaY`).
-- The zoom factor is `0.999 ** deltaY` so that it is proportional to the amount turned and returns to the start after a round trip.
+- The zoom multiplier is `0.999 ** deltaY` so that it is proportional to the amount turned and returns to the start after a round trip.
   `deltaY = −100` (one notch up on a mouse) is about 1.105 times, and `+100` is about 0.905 times.
 - With Shift+wheel, some browsers send the value in `deltaX` instead of `deltaY`.
   So with Shift, the larger of the two is used.
@@ -129,9 +164,11 @@ frame coordinate of the center of the view = ((element width/2 − tx) / z, (ele
 
 ## Files
 
-| File                                               | Role                                                                                                   |
-| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| `src/sketch-detail/viewport/viewportMath.ts`       | Pure functions for the calculations above                                                              |
-| `src/sketch-detail/viewport/viewportStyle.ts`      | Functions for the background of the grid and where the frame appears on the screen (the frame outline) |
-| `src/sketch-detail/viewport/useViewport.ts`        | Hook that applies wheel, space + drag and resize operations to the view of fabric                      |
-| `src/sketch-detail/viewport/useFrameConstraint.ts` | Hook that stops the center of a shape in the frame while moving                                        |
+| File                                                                | Role                                                                                                                                                                         |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/sketch-detail/viewport/viewportMath.ts`                        | Pure functions for the calculations above                                                                                                                                    |
+| `src/sketch-detail/viewport/viewportStyle.ts`                       | Functions for the background of the grid and where the frame appears on the screen (the frame outline)                                                                       |
+| `src/sketch-detail/viewport/useViewport.ts`                         | Hook that applies wheel, space + drag and resize operations to the view of fabric. It also returns the zoom by the buttons and the input (`zoomIn`, `zoomOut` and `setZoom`) |
+| `src/sketch-detail/control-toolbar/zoom-controls/zoom-controls.tsx` | The zoom buttons and the zoom input                                                                                                                                          |
+| `src/design-system/number-input.tsx`                                | The number input. Handles committing, clamping into a range and reporting invalid text                                                                                       |
+| `src/sketch-detail/viewport/useFrameConstraint.ts`                  | Hook that stops the center of a shape in the frame while moving                                                                                                              |
