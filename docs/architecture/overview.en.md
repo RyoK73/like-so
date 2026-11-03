@@ -61,6 +61,8 @@ Details of `useFabricCanvas`:
 - When the loading finishes, `isLoaded` becomes `true`.
   When the loading fails, `isLoaded` stays `false` and the error is set in `loadError`.
 - `loadFromJSON` clears the background color of the canvas, so after loading it sets `backgroundColor` again only when the JSON has no `background`.
+- After loading, it sets `strokeUniform` to `true` for all objects, so the stroke width does not change on resize.
+  It applies even if the saved JSON does not specify it.
 - fabric wraps the canvas element in its own wrapper.
   So the parent element of the canvas element is an element managed by React (such as a `div`).
 

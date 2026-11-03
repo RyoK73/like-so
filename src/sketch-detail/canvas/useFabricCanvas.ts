@@ -36,6 +36,10 @@ const useFabricCanvas = ({
       .then(() => {
         // `loadFromJSON` clears the background color given to the constructor.
         if (!canvas.backgroundColor) canvas.backgroundColor = backgroundColor;
+        // Keep the stroke width on resize, also for objects saved without it.
+        canvas
+          .getObjects()
+          .forEach((object) => object.set("strokeUniform", true));
         canvas.requestRenderAll();
         setIsLoaded(true);
       })
