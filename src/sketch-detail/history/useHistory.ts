@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { version } from "fabric";
 
 type CanvasJson = {
@@ -36,13 +36,13 @@ const useHistory = () => {
     });
   };
 
-  const recordHistory = (newObject: CanvasJson) => {
+  const recordHistory = useCallback((newObject: CanvasJson) => {
     setHistory((prev) => ({
       future: [],
       present: newObject,
       past: [...prev.past, newObject],
     }));
-  };
+  }, []);
 
   const undo = () => {
     setHistory((prev) => {
