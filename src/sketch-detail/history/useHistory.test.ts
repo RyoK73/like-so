@@ -17,7 +17,9 @@ describe("useHistory", () => {
     test("set should return current current value", () => {
       const { result } = renderHook(() => useHistory());
       act(() => {
-        Object.values(inputValues).map((value) => result.current.set(value));
+        Object.values(inputValues).map((value) =>
+          result.current.recordHistory(value),
+        );
       });
 
       expect(result.current.history.future).toEqual([]);
@@ -34,7 +36,9 @@ describe("useHistory", () => {
     it("should return previous value", () => {
       const { result } = renderHook(() => useHistory());
       act(() => {
-        Object.values(inputValues).map((value) => result.current.set(value));
+        Object.values(inputValues).map((value) =>
+          result.current.recordHistory(value),
+        );
         result.current.undo();
       });
 
@@ -48,7 +52,7 @@ describe("useHistory", () => {
     it("should return raw value when input times < 2", () => {
       const { result } = renderHook(() => useHistory());
       act(() => {
-        result.current.set(inputValues.first);
+        result.current.recordHistory(inputValues.first);
         result.current.undo();
       });
 
@@ -61,7 +65,9 @@ describe("useHistory", () => {
       const { result } = renderHook(() => useHistory());
 
       act(() => {
-        Object.values(inputValues).map((value) => result.current.set(value));
+        Object.values(inputValues).map((value) =>
+          result.current.recordHistory(value),
+        );
         result.current.undo();
         result.current.undo();
         result.current.redo();
@@ -79,7 +85,9 @@ describe("useHistory", () => {
       const { result } = renderHook(() => useHistory());
 
       act(() => {
-        Object.values(inputValues).map((value) => result.current.set(value));
+        Object.values(inputValues).map((value) =>
+          result.current.recordHistory(value),
+        );
       });
       expect(result.current.history.present).toEqual(inputValues.third);
     });

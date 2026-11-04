@@ -36,7 +36,7 @@ const useHistory = () => {
     });
   };
 
-  const set = (newObject: CanvasJson) => {
+  const recordHistory = (newObject: CanvasJson) => {
     setHistory((prev) => ({
       future: [],
       present: newObject,
@@ -58,7 +58,7 @@ const useHistory = () => {
     });
   };
 
-  return { history, set, undo, redo };
+  return { history, recordHistory, undo, redo };
 };
 
 export { useHistory };
