@@ -26,6 +26,8 @@ fabric "object:added" / "object:modified"(読み込み完了後)
   - 第4引数の`isSketchLoaded`が`true`になるまで、イベントを購読しません。
     読み込み中の`loadFromJSON`が、オブジェクトごとに`object:added`を発火するためです。
     開いただけで保存されることを防ぎます。
+  - undo / redo の復元(`loadFromJSON`)も、オブジェクトごとに`object:added`を発火するため、復元後の状態が保存されます。
+    ただし、オブジェクトが0個の状態への復元では`object:added`が発火しないため、保存されません。
   - 最初の保存で返ったidを`sketchIdRef`に保持し、以降は同じ行をupsertします。
   - `fabricCanvasRef`、`sketchInfoRef`、`frameRef`のいずれかが未設定の場合は、保存せずに`err`を設定します。
 - `saveToDb`
