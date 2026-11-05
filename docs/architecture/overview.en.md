@@ -34,6 +34,7 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | `src/sketch-detail/`   | The sketch page (showing, drawing and saving to the DB)   |
 | `src/design-system/`   | Generic UI parts                                          |
 | `src/sketch-list/`     | Showing the sketch list (Server and Client Components)    |
+| `src/error-pages/`     | Shared parts for the 404 and error pages                  |
 | `src/supabase/`        | Supabase clients, auth, CRUD and DB tests                 |
 | `src/utils/`           | Shared types                                              |
 | `src/dev-scripts/`     | Scripts for development                                   |
@@ -103,6 +104,18 @@ It uses `useSyncExternalStore` to avoid a hydration mismatch.
 | `introduction.tsx` | Server Component. Renders the application's static introductory text. |
 | `index.ts`         | Exports `LandingPage`                                                 |
 
+## 404 and error pages (`src/error-pages/`)
+
+| File                     | Role                                                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `error-page-layout.tsx`  | The frame at the center of the screen. Renders `title` (h1), `description`, `actions` and `illustration`. `description` and `illustration` are optional |
+| `error-retry-button.tsx` | Client Component. A "再試行" button that calls `onRetry` on click                                                                                       |
+| `error-link-button.tsx`  | Renders a `Link` in the look of a button (`outline`)                                                                                                    |
+| `index.ts`               | Exports the three components                                                                                                                            |
+
+The wording and the link targets are written in `not-found.tsx` and `error.tsx` in `src/app/`.
+See [Routing](./routing.en.md) for details.
+
 ## Sign-in and guest registration (`src/auth-form/`)
 
 | File            | Role                                                                                 |
@@ -144,22 +157,21 @@ Details of `SketchCanvas`:
   `description` is hidden when it is an empty string or only whitespace, and is clamped to 2 lines when shown.
   It is not an operation UI, so it does not have `role="toolbar"`.
 - The control toolbar (`ControlToolbar` in `src/sketch-detail/control-toolbar/`) floats over the canvas, centered and slightly lifted from the bottom edge of the screen.
-<<<<<<< HEAD
-=======
+  <<<<<<< HEAD
+  =======
   The navigation has its own position (`absolute`).
->>>>>>> c4208d4 (docs(architecture): Document undo / redo wiring)
-  The toolbar has its own frame and position (`absolute`), and receives its content as `children`.
-  The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`ZoomControls`).
-  The buttons of the shape navigation are the rectangle, the circle, undo and redo.
-  The zoom controls are "− zoom input % +" (see [Fixed frame, pan and zoom](./viewport.en.md)).
-<<<<<<< HEAD
-  All of them are disabled until `isLoaded` becomes `true`.
-  The shape navigation is also disabled while the canvas is being restored by undo / redo (`isOperable` is `false`).
-=======
+  > > > > > > > c4208d4 (docs(architecture): Document undo / redo wiring)
+  > > > > > > > The toolbar has its own frame and position (`absolute`), and receives its content as `children`.
+  > > > > > > > The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`ZoomControls`).
+  > > > > > > > The buttons of the shape navigation are the rectangle, the circle, undo and redo.
+  > > > > > > > The zoom controls are "− zoom input % +" (see [Fixed frame, pan and zoom](./viewport.en.md)).
+  > > > > > > > <<<<<<< HEAD
+  > > > > > > > All of them are disabled until `isLoaded` becomes `true`.
+  # The shape navigation is also disabled while the canvas is being restored by undo / redo (`isOperable` is `false`).
   Its buttons are the rectangle, the circle, undo and redo.
   They are disabled until `isLoaded` becomes `true` and while the canvas is being restored by undo / redo (`isOperable` is `false`).
->>>>>>> c4208d4 (docs(architecture): Document undo / redo wiring)
-  Undo and redo are also disabled while there is nothing to undo or redo.
+  > > > > > > > c4208d4 (docs(architecture): Document undo / redo wiring)
+  > > > > > > > Undo and redo are also disabled while there is nothing to undo or redo.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
 - When the loading fails, or `canvas_json` is not an object, it shows neither the canvas nor the buttons.

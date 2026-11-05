@@ -91,6 +91,27 @@
 
 | 状態                           | 表示                                                                                                         |
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| `id`がuuidでない、または`null` | `notFound()`。`not-found.tsx`が「スケッチが見つかりません。」と一覧へのリンクを表示します。                  |
+| `id`がuuidでない、または`null` | `notFound()`。`not-found.tsx`が「スケッチが見つかりません」と一覧へのリンクを表示します。                    |
 | 取得失敗                       | `role="alert"`の「スケッチの取得に失敗しました。」                                                           |
 | 取得成功                       | `TitleToolbar`(`title`、`description`(ある場合)、`width × height`、更新日時)と、`SketchCanvas`を表示します。 |
+
+## 404とエラー画面
+
+画面の枠、再試行ボタン、リンクボタンは、`src/error-pages/`のコンポーネントです。
+詳細は[概要](./overview.ja.md)を参照してください。
+文言とリンク先は、各ファイルに書きます。
+
+| ファイル                              | 種類             | 見出し                   | 操作                                            |
+| ------------------------------------- | ---------------- | ------------------------ | ----------------------------------------------- |
+| `src/app/not-found.tsx`               | Server Component | ページが見つかりません   | 「トップへ戻る」(`/`)                           |
+| `src/app/sketches/[id]/not-found.tsx` | Server Component | スケッチが見つかりません | 「スケッチ一覧へ戻る」(`/sketches`)             |
+| `src/app/error.tsx`                   | Client Component | 問題が発生しました       | 「再試行」、「トップへ戻る」(`/`)               |
+| `src/app/sketches/error.tsx`          | Client Component | 問題が発生しました       | 「再試行」、「スケッチ一覧へ戻る」(`/sketches`) |
+
+- `error.tsx`は、`reset`だけを受け取ります。
+  `error`は受け取らないので、`message`、`stack`、`digest`は画面に出ません。
+- 「再試行」は、`reset`を呼んでセグメントを再描画します。
+- `src/app/sketches/error.tsx`は、`sketches/layout.tsx`の内側に描画されます。
+  そのため、エラー時も`NavigationMenu`が残ります。
+- `global-error.tsx`はありません。
+  ルート`layout.tsx`のエラーは、Next.js既定の画面が表示されます。
