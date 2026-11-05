@@ -91,6 +91,28 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
 
 | State                         | Display                                                                                                       |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `id` is not a uuid, or `null` | `notFound()`. `not-found.tsx` shows "スケッチが見つかりません。" and a link to the list                       |
+| `id` is not a uuid, or `null` | `notFound()`. `not-found.tsx` shows "スケッチが見つかりません" and a link to the list                         |
 | Error                         | "スケッチの取得に失敗しました。" with `role="alert"`                                                          |
 | Success                       | Shows `TitleToolbar` (`title`, `description` (if any), `width × height`, the updated time) and `SketchCanvas` |
+
+## 404 and error pages
+
+The frame, the retry button, the link button and the error page (`UniversalErrorPage`) are components in `src/error-pages/`.
+See [Overview](./overview.en.md) for details.
+`not-found.tsx` writes the wording and the link target in each file.
+`error.tsx` passes the link target and the button text to `UniversalErrorPage`.
+
+| File                                  | Kind             | Heading                  | Actions                                      |
+| ------------------------------------- | ---------------- | ------------------------ | -------------------------------------------- |
+| `src/app/not-found.tsx`               | Server Component | ページが見つかりません   | "トップへ戻る" (`/`)                         |
+| `src/app/sketches/[id]/not-found.tsx` | Server Component | スケッチが見つかりません | "スケッチ一覧へ戻る" (`/sketches`)           |
+| `src/app/error.tsx`                   | Client Component | 問題が発生しました       | "再試行", "トップへ戻る" (`/`)               |
+| `src/app/sketches/error.tsx`          | Client Component | 問題が発生しました       | "再試行", "スケッチ一覧へ戻る" (`/sketches`) |
+
+- `error.tsx` receives only `reset`.
+  It does not receive `error`, so `message`, `stack` and `digest` are never shown.
+- "再試行" calls `reset` to render the segment again.
+- `src/app/sketches/error.tsx` is rendered inside `sketches/layout.tsx`.
+  So `NavigationMenu` stays on an error.
+- There is no `global-error.tsx`.
+  An error in the root `layout.tsx` shows the default Next.js screen.

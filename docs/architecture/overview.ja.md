@@ -34,6 +34,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                 |
 | `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)       |
 | `src/design-system/`   | 汎用UI部品                                                   |
+| `src/error-pages/`     | 404とエラー画面の共通部品                                    |
 | `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                 |
 | `src/utils/`           | 共通の型                                                     |
 | `src/dev-scripts/`     | 開発用スクリプト                                             |
@@ -102,6 +103,20 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `landing-page.tsx` | Server Component。認証状態を取得し、状態ごとのボタンを描画します。 |
 | `introduction.tsx` | Server Component。アプリケーションの静的な紹介文を描画します。     |
 | `index.ts`         | 公開するのは`LandingPage`です。                                    |
+
+## 404とエラー画面(`src/error-pages/`)
+
+| ファイル                   | 役割                                                                                                                                                    |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `error-page-layout.tsx`    | 画面中央の枠です。`title`(h1)、`description`、`actions`、`illustration`を受け取って描画します。`description`と`illustration`は省略できます。            |
+| `error-retry-button.tsx`   | Client Component。「再試行」ボタンで、クリックすると`onRetry`を呼びます。                                                                               |
+| `error-link-button.tsx`    | `Link`を、ボタンの見た目(`outline`)で描画します。                                                                                                       |
+| `universal-error-page.tsx` | Client Component。見出し、説明、警告アイコン、「再試行」ボタン、リンクボタンを組み合わせたエラー画面です。`reset`、`href`、`buttonText`を受け取ります。 |
+| `index.ts`                 | `ErrorPageLayout`、`ErrorRetryButton`、`ErrorLinkButton`、`UniversalErrorPage`の4つを公開します。                                                       |
+
+`not-found.tsx`の文言とリンク先は、`src/app/`の各ファイルに書きます。
+エラー画面の文言は`UniversalErrorPage`に書き、`error.tsx`はリンク先とボタンの文言だけを渡します。
+詳細は[ルーティング](./routing.ja.md)を参照してください。
 
 ## サインインとゲスト登録(`src/auth-form/`)
 
