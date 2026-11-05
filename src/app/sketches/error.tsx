@@ -2,7 +2,7 @@
 
 import { UniversalErrorPage } from "@/error-pages";
 
-const Error = ({ reset }: { reset: () => void }) => {
+const ErrorPage = ({ reset }: { reset: () => void }) => {
   return (
     <UniversalErrorPage
       reset={reset}
@@ -12,4 +12,4 @@ const Error = ({ reset }: { reset: () => void }) => {
   );
 };
 
-export default Error;
+export default ErrorPage;
