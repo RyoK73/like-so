@@ -5,6 +5,7 @@ import { ControlToolbar, ZoomControls } from "@/sketch-detail/control-toolbar";
 import { ShapeNavigation } from "@/sketch-detail/control-toolbar/shape-navigation";
 import { SketchError } from "@/sketch-detail/sketch-error";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
+import { useCanvasHistory } from "@/sketch-detail/history/useCanvasHistory";
 import { useShapes } from "@/sketch-detail/shapes/useShapes";
 import { useSave } from "@/sketch-detail/save/useSave";
 import type { CanvasFrame } from "@/sketch-detail/save/saveToDb.types";
@@ -39,6 +40,10 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
   });
   useFrameConstraint(fabricCanvasRef, frame, isLoaded);
   const { createShape } = useShapes(fabricCanvasRef, frame);
+  const { undo, redo, canUndo, canRedo, isOperable } = useCanvasHistory(
+    fabricCanvasRef,
+    isLoaded,
+  );
   // Until the canvas container is measured, show the frame as it is.
   const transform = view?.transform ?? { zoom: 1, tx: 0, ty: 0 };
   const elementSize = view?.elementSize ?? frame;
@@ -106,7 +111,14 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
         />
       </div>
       <ControlToolbar>
-        <ShapeNavigation disabled={!isLoaded} onAddShape={createShape} />
+        <ShapeNavigation
+          disabled={!isLoaded || !isOperable}
+          onAddShape={createShape}
+          undo={undo}
+          redo={redo}
+          canUndo={canUndo}
+          canRedo={canRedo}
+        />
         <ZoomControls
           zoom={transform.zoom}
           initialZoom={view?.initialZoom ?? 1}

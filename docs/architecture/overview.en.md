@@ -48,12 +48,13 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | `history/`  | Undo / redo                                       |
 | `viewport/` | Fixed frame, pan and zoom                         |
 
-| File                        | Role                                                                                                        |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `canvas/useFabricCanvas.ts` | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                      |
-| `shapes/useShapes.ts`       | Adds a rect or circle to the center of the view (inside the frame)                                          |
-| `history/useHistory.ts`     | Keeps `past` / `present` / `future` and provides `set`, `undo` and `redo`                                   |
-| `viewport/`                 | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md) |
+| File                          | Role                                                                                                                                      |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `canvas/useFabricCanvas.ts`   | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                                                    |
+| `shapes/useShapes.ts`         | Adds a rect or circle to the center of the view (inside the frame)                                                                        |
+| `history/useHistory.ts`       | Keeps `past` / `present` / `future` and provides `recordHistory`, `undo` and `redo`                                                       |
+| `history/useCanvasHistory.ts` | Records the changes of the canvas (`object:added` / `object:modified`) in `useHistory` and applies `present` to the canvas on undo / redo |
+| `viewport/`                   | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md)                               |
 
 Details of `useFabricCanvas`:
 
@@ -134,6 +135,7 @@ Details of `SketchCanvas`:
   The page itself does not scroll.
 - The paper and the grid of the canvas are drawn by CSS on the canvas element, so the background of fabric is `transparent`.
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
+  <<<<<<< HEAD
   The grid continues outside the frame, and the outside of the frame is not dimmed.
   The frame is shown with a thin outline (`brush-a` and `ring-border`).
 - The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) floats over the canvas at the top center.
@@ -142,11 +144,22 @@ Details of `SketchCanvas`:
   `description` is hidden when it is an empty string or only whitespace, and is clamped to 2 lines when shown.
   It is not an operation UI, so it does not have `role="toolbar"`.
 - The control toolbar (`ControlToolbar` in `src/sketch-detail/control-toolbar/`) floats over the canvas, centered and slightly lifted from the bottom edge of the screen.
+<<<<<<< HEAD
+=======
+  The navigation has its own position (`absolute`).
+>>>>>>> c4208d4 (docs(architecture): Document undo / redo wiring)
   The toolbar has its own frame and position (`absolute`), and receives its content as `children`.
   The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`ZoomControls`).
-  The buttons of the shape navigation are the rectangle and the circle.
+  The buttons of the shape navigation are the rectangle, the circle, undo and redo.
   The zoom controls are "− zoom input % +" (see [Fixed frame, pan and zoom](./viewport.en.md)).
+<<<<<<< HEAD
   All of them are disabled until `isLoaded` becomes `true`.
+  The shape navigation is also disabled while the canvas is being restored by undo / redo (`isOperable` is `false`).
+=======
+  Its buttons are the rectangle, the circle, undo and redo.
+  They are disabled until `isLoaded` becomes `true` and while the canvas is being restored by undo / redo (`isOperable` is `false`).
+>>>>>>> c4208d4 (docs(architecture): Document undo / redo wiring)
+  Undo and redo are also disabled while there is nothing to undo or redo.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
 - When the loading fails, or `canvas_json` is not an object, it shows neither the canvas nor the buttons.
