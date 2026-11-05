@@ -38,11 +38,7 @@ const ShapeNavigation = ({
   canRedo,
 }: ShapeNavigationProps) => {
   return (
-    <div
-      role="toolbar"
-      aria-label="図形の操作"
-      className={iconItemListClassName}
-    >
+    <div role="toolbar" aria-label="図形の操作">
       {shapeItems.map(({ key, type, label, Icon }) => (
         <IconButton
           key={key}
