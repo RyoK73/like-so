@@ -106,14 +106,16 @@ It uses `useSyncExternalStore` to avoid a hydration mismatch.
 
 ## 404 and error pages (`src/error-pages/`)
 
-| File                     | Role                                                                                                                                                    |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `error-page-layout.tsx`  | The frame at the center of the screen. Renders `title` (h1), `description`, `actions` and `illustration`. `description` and `illustration` are optional |
-| `error-retry-button.tsx` | Client Component. A "再試行" button that calls `onRetry` on click                                                                                       |
-| `error-link-button.tsx`  | Renders a `Link` in the look of a button (`outline`)                                                                                                    |
-| `index.ts`               | Exports the four. components                                                                                                                            |
+| File                       | Role                                                                                                                                                                           |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `error-page-layout.tsx`    | The frame at the center of the screen. Renders `title` (h1), `description`, `actions` and `illustration`. `description` and `illustration` are optional                        |
+| `error-retry-button.tsx`   | Client Component. A "再試行" button that calls `onRetry` on click                                                                                                              |
+| `error-link-button.tsx`    | Renders a `Link` in the look of a button (`outline`)                                                                                                                           |
+| `universal-error-page.tsx` | Client Component. An error page that combines the heading, the description, a warning icon, the "再試行" button and the link button. Receives `reset`, `href` and `buttonText` |
+| `index.ts`                 | Exports `ErrorPageLayout`, `ErrorRetryButton`, `ErrorLinkButton` and `UniversalErrorPage`                                                                                      |
 
-The wording and the link targets are written in `not-found.tsx` and `error.tsx` in `src/app/`.
+The wording and the link targets of `not-found.tsx` are written in each file in `src/app/`.
+The wording of the error pages is written in `UniversalErrorPage`, and `error.tsx` passes only the link target and the button text.
 See [Routing](./routing.en.md) for details.
 
 ## Sign-in and guest registration (`src/auth-form/`)

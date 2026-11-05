@@ -97,9 +97,10 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
 
 ## 404 and error pages
 
-The frame, the retry button and the link button are components in `src/error-pages/`.
+The frame, the retry button, the link button and the error page (`UniversalErrorPage`) are components in `src/error-pages/`.
 See [Overview](./overview.en.md) for details.
-The wording and the link targets are written in each file.
+`not-found.tsx` writes the wording and the link target in each file.
+`error.tsx` passes the link target and the button text to `UniversalErrorPage`.
 
 | File                                  | Kind             | Heading                  | Actions                                      |
 | ------------------------------------- | ---------------- | ------------------------ | -------------------------------------------- |
