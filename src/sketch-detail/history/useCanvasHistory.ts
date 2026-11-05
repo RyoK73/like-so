@@ -5,14 +5,14 @@ import { CanvasJson, useHistory } from "@/sketch-detail/history/useHistory";
 
 const RESTORE_ERROR_TOAST_ID = "restore-history-error";
 
-// Connects `useHistory` to the fabric canvas: records the changes of the canvas, and applies `present` to the canvas on undo / redo.
+// Connects `useHistory` to the fabric canvas: records canvas changes, and applies `present` to the canvas on undo / redo.
 const useCanvasHistory = (
   fabricCanvasRef: RefObject<Canvas | null>,
   isLoaded: boolean,
 ) => {
   const { history, recordHistory, undo, redo } = useHistory();
-  const [isOperable, setIsOperable] = useState(true); // `true` normally. `false` while restoring, to disable the buttons.
-  const isRestoringRef = useRef(false); // To skip the record function trigger while restoring process.
+  const [isOperable, setIsOperable] = useState(true); // `true` normally. `false` while restoring, which disables the buttons.
+  const isRestoringRef = useRef(false); // Skips recording while the canvas is being restored by undo / redo.
   const currentCanvasRef = useRef<CanvasJson | null>(null);
   const isInitialRecorded = useRef(false);
 
@@ -27,7 +27,7 @@ const useCanvasHistory = (
       recordHistory(initial);
     }
 
-    // A wrapper of recordHistory
+    // Records the canvas after the current event handlers finish.
     const record = () => {
       if (isRestoringRef.current) return;
       // `createShape` adds a shape first and moves it after. Read the canvas after that.
