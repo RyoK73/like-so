@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
-import { LuCircle, LuSquare } from "react-icons/lu";
-import { iconItemClassName } from "@/design-system/constants";
+import { LuCircle, LuRedo2, LuSquare, LuUndo2 } from "react-icons/lu";
+import {
+  iconItemClassName,
+  iconItemListClassName,
+} from "@/design-system/constants";
 import { IconButton } from "@/design-system/icon-button";
 import { TOOLTIP_SIDE } from "@/sketch-detail/control-toolbar/constants";
 import type { ShapeType } from "@/sketch-detail/shapes/useShapes";
@@ -8,6 +11,10 @@ import type { ShapeType } from "@/sketch-detail/shapes/useShapes";
 type ShapeNavigationProps = {
   disabled: boolean;
   onAddShape: (type: ShapeType) => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
 };
 
 type ShapeItem = {
@@ -22,9 +29,20 @@ const shapeItems: ShapeItem[] = [
   { key: "circle", type: "circle", label: "円", Icon: LuCircle },
 ];
 
-const ShapeNavigation = ({ disabled, onAddShape }: ShapeNavigationProps) => {
+const ShapeNavigation = ({
+  disabled,
+  onAddShape,
+  undo,
+  redo,
+  canUndo,
+  canRedo,
+}: ShapeNavigationProps) => {
   return (
-    <>
+    <div
+      role="toolbar"
+      aria-label="図形の操作"
+      className={iconItemListClassName}
+    >
       {shapeItems.map(({ key, type, label, Icon }) => (
         <IconButton
           key={key}
@@ -37,7 +55,25 @@ const ShapeNavigation = ({ disabled, onAddShape }: ShapeNavigationProps) => {
           <Icon />
         </IconButton>
       ))}
-    </>
+      <IconButton
+        label="元に戻す"
+        side={TOOLTIP_SIDE}
+        className={iconItemClassName}
+        disabled={disabled || !canUndo}
+        onClick={undo}
+      >
+        <LuUndo2 />
+      </IconButton>
+      <IconButton
+        label="やり直し"
+        side={TOOLTIP_SIDE}
+        className={iconItemClassName}
+        disabled={disabled || !canRedo}
+        onClick={redo}
+      >
+        <LuRedo2 />
+      </IconButton>
+    </div>
   );
 };
 

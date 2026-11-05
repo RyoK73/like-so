@@ -5,11 +5,85 @@ import { ShapeNavigation } from "@/sketch-detail/control-toolbar/shape-navigatio
 const RECT_LABEL = "四角形を追加";
 const CIRCLE_LABEL = "円を追加";
 
-const renderNavigation = (disabled = false) => {
+const UNDO_LABEL = "元に戻す";
+const REDO_LABEL = "やり直し";
+
+type History = { canUndo: boolean; canRedo: boolean };
+
+const renderNavigation = (
+  disabled = false,
+  { canUndo, canRedo }: History = { canUndo: true, canRedo: true },
+) => {
   const onAddShape = vi.fn();
-  render(<ShapeNavigation disabled={disabled} onAddShape={onAddShape} />);
-  return { onAddShape };
+  const undo = vi.fn();
+  const redo = vi.fn();
+  render(
+    <ShapeNavigation
+      disabled={disabled}
+      onAddShape={onAddShape}
+      undo={undo}
+      redo={redo}
+      canUndo={canUndo}
+      canRedo={canRedo}
+    />,
+  );
+  return { onAddShape, undo, redo };
 };
+
+it("should render a toolbar named `図形の操作`", () => {
+  renderNavigation();
+
+  expect(
+    screen.getByRole("toolbar", { name: "図形の操作" }),
+  ).toBeInTheDocument();
+});
+
+it("should render the undo and redo buttons", () => {
+  renderNavigation();
+
+  expect(screen.getByRole("button", { name: UNDO_LABEL })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: REDO_LABEL })).toBeInTheDocument();
+});
+
+it("should call `undo` once when the undo button is clicked", async () => {
+  const user = userEvent.setup();
+  const { undo } = renderNavigation();
+
+  await user.click(screen.getByRole("button", { name: UNDO_LABEL }));
+
+  expect(undo).toHaveBeenCalledOnce();
+});
+
+it("should call `redo` once when the redo button is clicked", async () => {
+  const user = userEvent.setup();
+  const { redo } = renderNavigation();
+
+  await user.click(screen.getByRole("button", { name: REDO_LABEL }));
+
+  expect(redo).toHaveBeenCalledOnce();
+});
+
+it("should disable only the undo button when `canUndo` is false", () => {
+  renderNavigation(false, { canUndo: false, canRedo: true });
+
+  expect(screen.getByRole("button", { name: UNDO_LABEL })).toBeDisabled();
+  expect(screen.getByRole("button", { name: REDO_LABEL })).toBeEnabled();
+});
+
+it("should disable only the redo button when `canRedo` is false", () => {
+  renderNavigation(false, { canUndo: true, canRedo: false });
+
+  expect(screen.getByRole("button", { name: UNDO_LABEL })).toBeEnabled();
+  expect(screen.getByRole("button", { name: REDO_LABEL })).toBeDisabled();
+});
+
+it("should disable all the buttons when `disabled` is true", () => {
+  renderNavigation(true);
+
+  for (const name of [RECT_LABEL, CIRCLE_LABEL, UNDO_LABEL, REDO_LABEL]) {
+    expect(screen.getByRole("button", { name })).toBeDisabled();
+  }
+});
 
 it("should call `onAddShape` with `rect` once when the rectangle button is clicked", async () => {
   const user = userEvent.setup();
