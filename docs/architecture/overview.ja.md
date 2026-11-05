@@ -34,7 +34,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `src/sketch-detail/`   | スケッチの個別ページ(表示、描画、DBへの保存)                 |
 | `src/sketch-list/`     | スケッチ一覧の表示(Server ComponentとClient Component)       |
 | `src/design-system/`   | 汎用UI部品                                                   |
-| `src/error-pages/`     | 404とエラー画面の共通部品(枠、再試行ボタン、リンクボタン)    |
+| `src/error-pages/`     | 404とエラー画面の共通部品                                    |
 | `src/supabase/`        | Supabaseのクライアント、認証、CRUD、DBテスト                 |
 | `src/utils/`           | 共通の型                                                     |
 | `src/dev-scripts/`     | 開発用スクリプト                                             |
@@ -111,7 +111,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `error-page-layout.tsx`  | 画面中央の枠です。`title`(h1)、`description`、`actions`、`illustration`を受け取って描画します。`description`と`illustration`は省略できます。 |
 | `error-retry-button.tsx` | Client Component。「再試行」ボタンで、クリックすると`onRetry`を呼びます。                                                                    |
 | `error-link-button.tsx`  | `Link`を、ボタンの見た目(`outline`)で描画します。                                                                                            |
-| `index.ts`               | 3つのコンポーネントを公開します。                                                                                                            |
+| `index.ts`               | 4つのコンポーネントを公開します。                                                                                                            |
 
 文言とリンク先は、`src/app/`の`not-found.tsx`と`error.tsx`に書きます。
 詳細は[ルーティング](./routing.ja.md)を参照してください。
