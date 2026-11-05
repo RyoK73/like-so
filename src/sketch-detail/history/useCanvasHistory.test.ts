@@ -215,6 +215,25 @@ describe("useCanvasHistory", () => {
           title: "履歴の復元に失敗しました。",
         }),
       );
+      expect(result.current.canUndo).toBe(true);
+      expect(result.current.canRedo).toBe(false);
+      // The rollback must not restore the canvas again.
+      expect(fakeCanvas.canvas.loadFromJSON).toHaveBeenCalledTimes(1);
+    });
+
+    it("should put the history position back when `loadFromJSON` fails on redo", async () => {
+      vi.spyOn(toast, "add").mockReturnValue("toast-id");
+      const { fakeCanvas, result } = setup();
+      await changeCanvas(fakeCanvas, json.first);
+      await act(async () => result.current.undo());
+      fakeCanvas.canvas.loadFromJSON.mockRejectedValueOnce(new Error("failed"));
+
+      await act(async () => result.current.redo());
+
+      expect(result.current.canUndo).toBe(false);
+      expect(result.current.canRedo).toBe(true);
+      // One call for the undo, and one for the failed redo.
+      expect(fakeCanvas.canvas.loadFromJSON).toHaveBeenCalledTimes(2);
     });
   });
 });

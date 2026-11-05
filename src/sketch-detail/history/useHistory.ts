@@ -22,7 +22,7 @@ const useHistory = () => {
     past: [],
   });
 
-  const redo = () => {
+  const redo = useCallback(() => {
     setHistory((prev) => {
       if (prev.future.length === 0) return prev;
       const lastFutureValue = prev.future.at(-1);
@@ -34,7 +34,7 @@ const useHistory = () => {
         past: [...prev.past, lastFutureValue],
       };
     });
-  };
+  }, []);
 
   const recordHistory = useCallback((newObject: CanvasJson) => {
     setHistory((prev) => ({
@@ -44,7 +44,7 @@ const useHistory = () => {
     }));
   }, []);
 
-  const undo = () => {
+  const undo = useCallback(() => {
     setHistory((prev) => {
       if (prev.past.length < 2) return prev;
       const pastWithoutLastValue = prev.past.slice(0, prev.past.length - 1);
@@ -56,7 +56,7 @@ const useHistory = () => {
         past: pastWithoutLastValue,
       };
     });
-  };
+  }, []);
 
   return { history, recordHistory, undo, redo };
 };

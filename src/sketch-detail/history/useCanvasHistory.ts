@@ -15,6 +15,16 @@ const useCanvasHistory = (
   const isRestoringRef = useRef(false); // Skips recording while the canvas is being restored by undo / redo.
   const currentCanvasRef = useRef<CanvasJson | null>(null);
   const isInitialRecorded = useRef(false);
+  const lastOperationRef = useRef<"undo" | "redo" | null>(null); // Used to move the history back when the restore fails.
+
+  const undoWithRecord = () => {
+    lastOperationRef.current = "undo";
+    undo();
+  };
+  const redoWithRecord = () => {
+    lastOperationRef.current = "redo";
+    redo();
+  };
 
   useEffect(() => {
     const canvas = fabricCanvasRef.current;
@@ -54,7 +64,8 @@ const useCanvasHistory = (
     if (history.present === currentCanvasRef.current) return;
 
     const targetCanvas = history.present;
-    currentCanvasRef.current = targetCanvas;
+    const operation = lastOperationRef.current;
+    lastOperationRef.current = null;
     isRestoringRef.current = true;
     setIsOperable(false);
     // `loadFromJSON` clears the background color.
@@ -62,6 +73,8 @@ const useCanvasHistory = (
     canvas
       .loadFromJSON(targetCanvas)
       .then(() => {
+        // Updated only on success, so that the canvas and the history stay in sync when the restore fails.
+        currentCanvasRef.current = targetCanvas;
         if (!canvas.backgroundColor) canvas.backgroundColor = backgroundColor;
         canvas.requestRenderAll();
       })
@@ -72,16 +85,27 @@ const useCanvasHistory = (
           title: "履歴の復元に失敗しました。",
           id: RESTORE_ERROR_TOAST_ID,
         });
+        // The canvas was not changed. Move the history back with the opposite operation.
+        // `currentCanvasRef` is unchanged, so the early return above prevents restoring again.
+        if (operation === "undo") redo();
+        if (operation === "redo") undo();
       })
       .finally(() => {
         isRestoringRef.current = false;
         setIsOperable(true);
       });
-  }, [fabricCanvasRef, isLoaded, history.past.length, history.present]);
-
-  return {
+  }, [
+    fabricCanvasRef,
+    isLoaded,
+    history.past.length,
+    history.present,
     undo,
     redo,
+  ]);
+
+  return {
+    undo: undoWithRecord,
+    redo: redoWithRecord,
     canUndo: history.past.length >= 2,
     canRedo: history.future.length > 0,
     isOperable,
