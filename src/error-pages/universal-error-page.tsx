@@ -1,11 +1,9 @@
 "use client";
 
 import { TriangleAlert } from "lucide-react";
-import {
-  ErrorLinkButton,
-  ErrorPageLayout,
-  ErrorRetryButton,
-} from "@/error-pages";
+import { ErrorPageLayout } from "@/error-pages/error-page-layout";
+import { ErrorRetryButton } from "@/error-pages/error-retry-button";
+import { ErrorLinkButton } from "@/error-pages/error-link-button";
 
 const UniversalErrorPage = ({
   reset,
