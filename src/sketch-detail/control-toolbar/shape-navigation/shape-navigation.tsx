@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
 import { LuCircle, LuRedo2, LuSquare, LuUndo2 } from "react-icons/lu";
-import { iconItemClassName } from "@/design-system/constants";
+import {
+  iconItemClassName,
+  iconItemListClassName,
+} from "@/design-system/constants";
 import { IconButton } from "@/design-system/icon-button";
 import { TOOLTIP_SIDE } from "@/sketch-detail/control-toolbar/constants";
 import type { ShapeType } from "@/sketch-detail/shapes/useShapes";
@@ -35,7 +38,11 @@ const ShapeNavigation = ({
   canRedo,
 }: ShapeNavigationProps) => {
   return (
-    <>
+    <div
+      role="toolbar"
+      aria-label="図形の操作"
+      className={iconItemListClassName}
+    >
       {shapeItems.map(({ key, type, label, Icon }) => (
         <IconButton
           key={key}
@@ -66,7 +73,7 @@ const ShapeNavigation = ({
       >
         <LuRedo2 />
       </IconButton>
-    </>
+    </div>
   );
 };
 
