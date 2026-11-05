@@ -17,11 +17,11 @@ const useCanvasHistory = (
   const isInitialRecorded = useRef(false);
   const lastOperationRef = useRef<"undo" | "redo" | null>(null); // Used to move the history back when the restore fails.
 
-  const undoWithRecord = () => {
+  const undoAndRecordOperation = () => {
     lastOperationRef.current = "undo";
     undo();
   };
-  const redoWithRecord = () => {
+  const redoAndRecordOperation = () => {
     lastOperationRef.current = "redo";
     redo();
   };
@@ -104,8 +104,8 @@ const useCanvasHistory = (
   ]);
 
   return {
-    undo: undoWithRecord,
-    redo: redoWithRecord,
+    undo: undoAndRecordOperation,
+    redo: redoAndRecordOperation,
     canUndo: history.past.length >= 2,
     canRedo: history.future.length > 0,
     isOperable,
