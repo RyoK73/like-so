@@ -135,6 +135,7 @@ Details of `SketchCanvas`:
   The page itself does not scroll.
 - The paper and the grid of the canvas are drawn by CSS on the canvas element, so the background of fabric is `transparent`.
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
+  <<<<<<< HEAD
   The grid continues outside the frame, and the outside of the frame is not dimmed.
   The frame is shown with a thin outline (`brush-a` and `ring-border`).
 - The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) floats over the canvas at the top center.
@@ -143,12 +144,21 @@ Details of `SketchCanvas`:
   `description` is hidden when it is an empty string or only whitespace, and is clamped to 2 lines when shown.
   It is not an operation UI, so it does not have `role="toolbar"`.
 - The control toolbar (`ControlToolbar` in `src/sketch-detail/control-toolbar/`) floats over the canvas, centered and slightly lifted from the bottom edge of the screen.
+<<<<<<< HEAD
+=======
+  The navigation has its own position (`absolute`).
+>>>>>>> c4208d4 (docs(architecture): Document undo / redo wiring)
   The toolbar has its own frame and position (`absolute`), and receives its content as `children`.
   The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`ZoomControls`).
   The buttons of the shape navigation are the rectangle, the circle, undo and redo.
   The zoom controls are "− zoom input % +" (see [Fixed frame, pan and zoom](./viewport.en.md)).
+<<<<<<< HEAD
   All of them are disabled until `isLoaded` becomes `true`.
   The shape navigation is also disabled while the canvas is being restored by undo / redo (`isOperable` is `false`).
+=======
+  Its buttons are the rectangle, the circle, undo and redo.
+  They are disabled until `isLoaded` becomes `true` and while the canvas is being restored by undo / redo (`isOperable` is `false`).
+>>>>>>> c4208d4 (docs(architecture): Document undo / redo wiring)
   Undo and redo are also disabled while there is nothing to undo or redo.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
