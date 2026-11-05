@@ -1,14 +1,15 @@
-import Link from "next/link";
+import { ErrorLinkButton, ErrorPageLayout } from "@/error-pages";
 
-const notFound = () => {
+const NotFound = () => {
   return (
-    <div className="flex flex-col gap-2">
-      <p>スケッチが見つかりません。</p>
-      <Link href="/sketches" className="underline">
-        スケッチ一覧へ戻る
-      </Link>
-    </div>
+    <ErrorPageLayout
+      title="スケッチが見つかりません"
+      description="既に削除された可能性があります"
+      actions={
+        <ErrorLinkButton href="/sketches">スケッチ一覧へ戻る</ErrorLinkButton>
+      }
+    />
   );
 };
 
-export default notFound;
+export default NotFound;
