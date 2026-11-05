@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import { LuCircle, LuRedo2, LuSquare, LuUndo2 } from "react-icons/lu";
+import { cn } from "cn";
 import {
   iconItemClassName,
   iconItemListClassName,
@@ -40,8 +41,11 @@ const ShapeNavigation = ({
   return (
     <div
       role="toolbar"
-      aria-label="図形の操作"
-      className={iconItemListClassName}
+      aria-label="図形の追加"
+      className={cn(
+        iconItemListClassName,
+        "absolute bottom-4 left-1/2 z-10 -translate-x-1/2",
+      )}
     >
       {shapeItems.map(({ key, type, label, Icon }) => (
         <IconButton
