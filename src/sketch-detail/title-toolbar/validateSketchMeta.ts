@@ -1,6 +1,6 @@
 import type { SketchMeta } from "@/supabase/sketch-crud/updateSketchMeta.types";
 
-// This constants must be checked in #132.
+// These constants must be checked in #132.
 const TITLE_MAX_LENGTH = 100;
 const DESCRIPTION_MAX_LENGTH = 500;
 
