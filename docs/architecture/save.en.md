@@ -8,6 +8,7 @@ fabric "object:added" / "object:modified" (after loading)
   -> saveToDb
   -> upsertSketch (browser Supabase client)
   -> sketches table (RLS: own rows only)
+  -> on success, revalidateSketchList (Server Action; not awaited)
 ```
 
 The title and the description are saved by a separate flow from drawing.
@@ -18,6 +19,7 @@ Input of TitleToolbar
   -> useSaveMeta (debounce 500 ms, serialized)
   -> updateSketchMeta (browser Supabase client)
   -> sketches table (RLS: own rows only)
+  -> on success, revalidateSketchList (Server Action; not awaited)
 ```
 
 ## Files
@@ -28,6 +30,7 @@ Input of TitleToolbar
 | `src/sketch-detail/save/saveToDb.ts`                    | Builds the row from the canvas and calls `upsertSketch`                                     |
 | `src/sketch-detail/save/useSaveMeta.ts`                 | Hook that validates the input of the title and the description and saves it with a debounce |
 | `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | Pure function that validates the title and the description                                  |
+| `src/sketch-detail/save/revalidateSketchList.ts`        | Server Action that discards the client cache of `/sketches` after a save succeeds           |
 | `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`, `upsertSketch`                                                              |
 | `src/supabase/sketch-crud/updateSketchMeta.ts`          | Updates only `title` and `description`                                                      |
 
@@ -47,6 +50,19 @@ Input of TitleToolbar
   - Creates a browser Supabase client and passes it to `upsertSketch`.
   - Takes the canvas JSON (`canvas.toJSON()`) and the fabric version.
   - Combines them with the sketch info (`title`, `description`, `cell_size`) and the frame (`width`, `height`, `frame_id`).
+- `revalidateSketchList`
+  - A Server Action that only calls `revalidatePath("/sketches")`.
+  - Saving is done directly from the browser, so the server does not know about the update.
+    As it is, going back to `/sketches` with the browser back button shows the old list from the client cache.
+    So it is called after a save succeeds, to discard the cache.
+  - `useSave` calls it inside the debounced function.
+    When several `save()` calls are merged into one save, the call is also made once.
+    It is also called for the first save of a new sketch.
+  - `useSaveMeta` calls it after a save succeeds (after it updates the last saved value).
+    It is not called when the save is skipped because the value is the same, nor when the save fails.
+  - Neither awaits it.
+    The save has already succeeded, so a failure of the call is ignored.
+    It is not part of the serialization of saves either.
 - `handleDb`
   - Every function returns `Result<T>` (`src/utils/utility.types.ts`).
   - These are the pure CRUD functions.

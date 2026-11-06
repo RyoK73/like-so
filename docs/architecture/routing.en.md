@@ -47,6 +47,9 @@ See [Navigation menu](./navigation-menu.en.md) for details.
   The RLS of the `sketches` table (`auth.uid() = user_id`) returns only the rows of the signed-in user.
   See [Database](./database.en.md).
 - `getSketchList` returns `Result<T>` (`src/utils/utility.types.ts`).
+- The browser back button reuses the client cache of Next.js.
+  To show the latest list after a save on the sketch page, the cache of `/sketches` is discarded after a save succeeds.
+  See `revalidateSketchList` in [Saving sketches](./save.en.md).
 
 ### Display
 

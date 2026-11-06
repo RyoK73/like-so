@@ -8,6 +8,7 @@ fabric "object:added" / "object:modified"(読み込み完了後)
   -> saveToDb
   -> upsertSketch (ブラウザのSupabaseクライアント)
   -> sketchesテーブル (RLS: 自分の行のみ)
+  -> 成功したら revalidateSketchList (Server Action。待たない)
 ```
 
 タイトルと説明は、描画とは別の流れで保存します。
@@ -18,18 +19,20 @@ TitleToolbarの入力
   -> useSaveMeta (500msのdebounce、直列化)
   -> updateSketchMeta (ブラウザのSupabaseクライアント)
   -> sketchesテーブル (RLS: 自分の行のみ)
+  -> 成功したら revalidateSketchList (Server Action。待たない)
 ```
 
 ## ファイル
 
-| ファイル                                                | 役割                                                                          |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `src/sketch-detail/save/useSave.ts`                     | 自動保存がオンのとき、`object:added`と`object:modified`で保存するフックです。 |
-| `src/sketch-detail/save/saveToDb.ts`                    | キャンバスから行を組み立て、`upsertSketch`を呼びます。                        |
-| `src/sketch-detail/save/useSaveMeta.ts`                 | タイトルと説明の入力を検証し、debounceして保存するフックです。                |
-| `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | タイトルと説明を検証する純粋関数です。                                        |
-| `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`、`upsertSketch`                                                |
-| `src/supabase/sketch-crud/updateSketchMeta.ts`          | `title`と`description`だけを更新します。                                      |
+| ファイル                                                | 役割                                                                             |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `src/sketch-detail/save/useSave.ts`                     | 自動保存がオンのとき、`object:added`と`object:modified`で保存するフックです。    |
+| `src/sketch-detail/save/saveToDb.ts`                    | キャンバスから行を組み立て、`upsertSketch`を呼びます。                           |
+| `src/sketch-detail/save/useSaveMeta.ts`                 | タイトルと説明の入力を検証し、debounceして保存するフックです。                   |
+| `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | タイトルと説明を検証する純粋関数です。                                           |
+| `src/sketch-detail/save/revalidateSketchList.ts`        | 保存の成功後に、`/sketches`のクライアントキャッシュを破棄するServer Actionです。 |
+| `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`、`upsertSketch`                                                   |
+| `src/supabase/sketch-crud/updateSketchMeta.ts`          | `title`と`description`だけを更新します。                                         |
 
 ## 詳細
 
@@ -47,6 +50,19 @@ TitleToolbarの入力
   - ブラウザのSupabaseクライアントを作成し、`upsertSketch`に渡します。
   - キャンバスのJSON(`canvas.toJSON()`)とfabricのバージョンを取得します。
   - スケッチ情報(`title`、`description`、`cell_size`)と、フレーム(`width`、`height`、`frame_id`)を合成します。
+- `revalidateSketchList`
+  - `revalidatePath("/sketches")`だけを呼ぶServer Actionです。
+  - 保存はブラウザから直接行うため、サーバーは更新を知りません。
+    そのままでは、ブラウザの戻る操作で`/sketches`に戻ったときに、クライアントキャッシュの古い一覧が表示されます。
+    このため、保存の成功後に呼んでキャッシュを破棄します。
+  - `useSave`は、debounceする関数の内側で呼びます。
+    連続した`save()`が1回の保存にまとまるときに、呼び出しも1回になります。
+    新規スケッチの最初の保存でも呼びます。
+  - `useSaveMeta`は、保存の成功後(最後に保存した値を更新した後)に呼びます。
+    値が同じためスキップした場合と、失敗した場合は呼びません。
+  - どちらも待ちません。
+    保存はすでに成功しているため、呼び出しの失敗は無視します。
+    保存の直列化にも含めません。
 - `handleDb`
   - すべての関数が`Result<T>`(`src/utils/utility.types.ts`)を返します。
   - これらは純粋なCRUD関数です。

@@ -47,6 +47,9 @@
   `sketches`テーブルのRLS(`auth.uid() = user_id`)により、ログイン中のユーザーの行だけが返ります。
   詳細は[データベース](./database.ja.md)を参照してください。
 - `getSketchList`は`Result<T>`を返します(`src/utils/utility.types.ts`)。
+- ブラウザの戻る操作では、Next.jsのクライアントキャッシュが再利用されます。
+  詳細ページでの保存後に最新の一覧を表示するため、保存の成功後に`/sketches`のキャッシュを破棄します。
+  詳細は[スケッチの保存](./save.ja.md)の`revalidateSketchList`を参照してください。
 
 ### 表示
 
