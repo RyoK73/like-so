@@ -54,7 +54,8 @@ const useSaveMeta = ({ sketchId, initial, onSaved }: UseSaveMetaParams) => {
       }
       lastSavedMeta = meta;
       // Not awaited, so that it does not hold back the next save. The save already succeeded, so a failure here is ignored.
-      void revalidateSketchList();
+      // TODO(#70): Log the failure according to the policy decided in #70.
+      void revalidateSketchList().catch(() => {});
 
       return { ok: true };
     };
