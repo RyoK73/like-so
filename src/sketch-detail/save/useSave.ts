@@ -11,9 +11,7 @@ const SAVE_DELAY: number = 250;
 const saveToDbAndRevalidate = async (...args: Parameters<typeof saveToDb>) => {
   const saveResult = await saveToDb(...args);
   if (saveResult.ok) {
-    // Not awaited. The save already succeeded, so a failure here is ignored.
-    // TODO(#70): Log the failure according to the policy decided in #70.
-    void revalidateSketchList().catch(() => {});
+    void revalidateSketchList();
   }
   return saveResult;
 };
