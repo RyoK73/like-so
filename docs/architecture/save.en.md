@@ -78,10 +78,12 @@ Input of TitleToolbar
     So the inputs do not have the `maxLength` attribute, and an invalid input is shown as a validation error.
 - `useSaveMeta`
   - Holds the input values (`title`, `description`) and the validation errors (`errors`).
-  - A valid input is notified by `onValidChange` right away, without waiting for the save.
+  - After a save succeeds, it notifies the saved value (trimmed) by `onSaved`.
     `SketchEditor` holds it, and it is reflected in `sketchInfoRef` of `SketchCanvas`.
     This keeps the auto-save of drawing from overwriting them with the old title and description.
-  - If either of them is invalid, it does not schedule a new save and does not call `onValidChange`.
+    If the save fails, the canvas is not updated.
+    It is not called either when the save is skipped because the value is the same as the last saved one.
+  - If either of them is invalid, it does not schedule a new save and does not call `onSaved`.
     The value in the input is not reverted.
     If a valid input just before it is not saved yet, that value is saved as scheduled.
   - It saves 500 ms after the last input, using `p-debounce`.
@@ -89,6 +91,7 @@ Input of TitleToolbar
   - It never runs two requests at the same time, using `after: true` of `pDebounce.promise`.
     While a save is in flight, only the latest valid value is kept, and it is saved once after the save finishes.
   - On failure, it shows a toast with its own id (`save-sketch-meta-error`).
+    `onSaved` is not called.
     It does not revert the input.
     If a newer value was kept during the save, it tries to save it even after the failure.
     Otherwise, it tries to save again at the next input.
