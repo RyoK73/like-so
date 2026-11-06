@@ -131,18 +131,19 @@ See [Authentication](./auth.en.md) for details.
 
 ## Sketch page (`src/sketch-detail/`)
 
-| File                | Role                                                                                                                                                           |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sketch-detail.tsx` | Server Component. Passes the info of one sketch got by `getSketch` to `TitleToolbar` and `SketchCanvas`                                                        |
-| `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                     |
-| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the title, description, size and updated time                                                                        |
-| `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add shapes (`ShapeNavigation`) |
-| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                      |
-| `shapes/`           | Creating shapes (see the section above)                                                                                                                        |
-| `history/`          | Undo / redo (see the section above)                                                                                                                            |
-| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))                                                            |
-| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                                                                                 |
-| `index.ts`          | Exports only `SketchDetail`                                                                                                                                    |
+| File                | Role                                                                                                                                                                 |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sketch-detail.tsx` | Server Component. Passes the sketch got by `getSketch` to `SketchEditor`                                                                                             |
+| `sketch-editor.tsx` | Client Component. Holds the title and description that `TitleToolbar` has validated, and passes them to `SketchCanvas`                                               |
+| `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                           |
+| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the inputs for the title and description, the size and the updated time. It also has the validation (`validateSketchMeta`) |
+| `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add shapes (`ShapeNavigation`)       |
+| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                            |
+| `shapes/`           | Creating shapes (see the section above)                                                                                                                              |
+| `history/`          | Undo / redo (see the section above)                                                                                                                                  |
+| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))                                                                  |
+| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                                                                                       |
+| `index.ts`          | Exports only `SketchDetail`                                                                                                                                          |
 
 Details of `SketchCanvas`:
 
@@ -154,8 +155,11 @@ Details of `SketchCanvas`:
   The frame is shown with a thin outline (`brush-a` and `ring-border`).
 - The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) floats over the canvas at the top center.
   The toolbar has its own position (`absolute`), so pointer events reach the canvas outside the toolbar.
-  It shows `title`, `description`, `width × height` and the updated time.
-  `description` is hidden when it is an empty string or only whitespace, and is clamped to 2 lines when shown.
+  `title` and `description` are always shown as inputs.
+  The inputs have no border until they are focused.
+  The input for `description` grows with the number of lines (with a maximum height).
+  See [Saving sketches](./save.en.md) for the validation and the saving of the input.
+  `width × height` and the updated time are display only.
   It is not an operation UI, so it does not have `role="toolbar"`.
 - The control toolbar (`ControlToolbar` in `src/sketch-detail/control-toolbar/`) floats over the canvas, centered and slightly lifted from the bottom edge of the screen.
   The toolbar has its own frame and position (`absolute`), and receives its content as `children`.

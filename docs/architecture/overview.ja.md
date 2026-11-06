@@ -131,18 +131,19 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 
 ## スケッチの個別ページ(`src/sketch-detail/`)
 
-| ファイル            | 役割                                                                                                                          |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件のメタ情報を`TitleToolbar`に、キャンバスの情報を`SketchCanvas`に渡します。          |
-| `sketch-canvas.tsx` | Client Component。キャンバス、操作用ツールバー(`ControlToolbar`)、自動保存を担当します。                                      |
-| `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトル、説明、サイズ、更新日時を表示します。                                          |
-| `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加ボタン(`ShapeNavigation`) |
-| `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                          |
-| `shapes/`           | 図形の作成(前節を参照)                                                                                                        |
-| `history/`          | undo/redo(前節を参照)                                                                                                         |
-| `viewport/`         | 固定枠、パン、ズーム(前節と[固定枠とパン・ズーム](./viewport.ja.md)を参照)                                                    |
-| `save/`             | DBへの保存に関するフックと関数([スケッチの保存](./save.ja.md)を参照)                                                          |
-| `index.ts`          | 公開するのは`SketchDetail`のみです。                                                                                          |
+| ファイル            | 役割                                                                                                                                       |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sketch-detail.tsx` | Server Component。`getSketch`で取得した1件を`SketchEditor`に渡します。                                                                     |
+| `sketch-editor.tsx` | Client Component。`TitleToolbar`で検証を通ったタイトルと説明を保持し、`SketchCanvas`に渡します。                                           |
+| `sketch-canvas.tsx` | Client Component。キャンバス、操作用ツールバー(`ControlToolbar`)、自動保存を担当します。                                                   |
+| `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトルと説明の入力欄、サイズ、更新日時を表示します。入力値の検証(`validateSketchMeta`)もあります。 |
+| `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加ボタン(`ShapeNavigation`)              |
+| `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                                       |
+| `shapes/`           | 図形の作成(前節を参照)                                                                                                                     |
+| `history/`          | undo/redo(前節を参照)                                                                                                                      |
+| `viewport/`         | 固定枠、パン、ズーム(前節と[固定枠とパン・ズーム](./viewport.ja.md)を参照)                                                                 |
+| `save/`             | DBへの保存に関するフックと関数([スケッチの保存](./save.ja.md)を参照)                                                                       |
+| `index.ts`          | 公開するのは`SketchDetail`のみです。                                                                                                       |
 
 `SketchCanvas`の詳細は、次の通りです。
 
@@ -154,8 +155,11 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
   枠は、細い枠線(`brush-a`と`ring-border`)で示します。
 - タイトル用ツールバー(`src/sketch-detail/title-toolbar/`の`TitleToolbar`)は、キャンバスの上に重ねて、上部中央に浮かせます。
   ツールバー自身が配置(`absolute`)を持つので、ツールバーの外側ではキャンバスにポインターイベントが届きます。
-  `title`、`description`、`width × height`、更新日時を表示します。
-  `description`は、空文字または空白だけの場合は表示せず、表示するときは2行で切り詰めます。
+  `title`と`description`は、常に入力欄として表示します。
+  入力欄は、フォーカスされるまで枠を出しません。
+  `description`の入力欄は、行数に応じて伸びます(高さの上限あり)。
+  入力の検証と保存は、[スケッチの保存](./save.ja.md)を参照してください。
+  `width × height`と更新日時は、表示のみです。
   操作用のUIではないので、`role="toolbar"`は付けません。
 - 操作用ツールバー(`src/sketch-detail/control-toolbar/`の`ControlToolbar`)は、キャンバスの上に重ねて、画面の下端から少し浮かせて中央に置きます。
   ツールバー自身が枠と配置(`absolute`)を持ち、中身は`children`で受け取ります。
