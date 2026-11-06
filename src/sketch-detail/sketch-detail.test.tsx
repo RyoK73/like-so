@@ -32,7 +32,7 @@ describe("SketchDetail", () => {
     );
   });
 
-  test("should pass the title, description, size and updated_at to TitleToolbar", async () => {
+  test("should pass the id, title, description, size and updated_at to TitleToolbar", async () => {
     vi.mocked(getSketch).mockResolvedValue({
       ok: true,
       value: {
@@ -54,6 +54,8 @@ describe("SketchDetail", () => {
 
     expect(screen.getByTestId("title-toolbar")).toBeInTheDocument();
     expect(vi.mocked(TitleToolbar).mock.calls[0][0]).toEqual({
+      sketchId: validId,
+      onSaved: expect.any(Function),
       title: "my sketch",
       description: "my description",
       width: 1920,

@@ -47,6 +47,9 @@ See [Navigation menu](./navigation-menu.en.md) for details.
   The RLS of the `sketches` table (`auth.uid() = user_id`) returns only the rows of the signed-in user.
   See [Database](./database.en.md).
 - `getSketchList` returns `Result<T>` (`src/utils/utility.types.ts`).
+- The browser back button reuses the client cache of Next.js.
+  To show the latest list after a save on the sketch page, the cache of `/sketches` is discarded after a save succeeds.
+  See `revalidateSketchList` in [Saving sketches](./save.en.md).
 
 ### Display
 
@@ -89,11 +92,11 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
   It also gets `fabric_version`, but the app does not use it.
 - By the RLS, both a nonexistent `id` and an `id` of another user give `null`.
 
-| State                         | Display                                                                                                       |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `id` is not a uuid, or `null` | `notFound()`. `not-found.tsx` shows "スケッチが見つかりません" and a link to the list                         |
-| Error                         | "スケッチの取得に失敗しました。" with `role="alert"`                                                          |
-| Success                       | Shows `TitleToolbar` (`title`, `description` (if any), `width × height`, the updated time) and `SketchCanvas` |
+| State                         | Display                                                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `id` is not a uuid, or `null` | `notFound()`. `not-found.tsx` shows "スケッチが見つかりません。" and a link to the list                            |
+| Error                         | "スケッチの取得に失敗しました。" with `role="alert"`                                                               |
+| Success                       | Shows `TitleToolbar` (inputs for `title` and `description`, `width × height`, the updated time) and `SketchCanvas` |
 
 ## 404 and error pages
 
