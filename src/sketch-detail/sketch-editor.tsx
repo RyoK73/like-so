@@ -22,7 +22,7 @@ const SketchEditor = ({ sketch }: { sketch: GetSketch }) => {
         width={sketch.width}
         height={sketch.height}
         updatedAt={sketch.updated_at}
-        onValidChange={setMeta}
+        onSaved={setMeta}
       />
       <SketchCanvas sketch={{ ...sketch, ...meta }} />
     </>

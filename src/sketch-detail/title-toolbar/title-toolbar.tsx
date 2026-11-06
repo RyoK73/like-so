@@ -12,8 +12,7 @@ type TitleToolbarProps = {
   width: number;
   height: number;
   updatedAt: string;
-  // Called as soon as the input is valid, without waiting for the save.
-  onValidChange: (meta: SketchMeta) => void;
+  onSaved: (meta: SketchMeta) => void;
 };
 
 // The fields have no border until they are focused, so the toolbar looks like a plain title.
@@ -27,7 +26,7 @@ const TitleToolbar = ({
   width,
   height,
   updatedAt,
-  onValidChange,
+  onSaved,
 }: TitleToolbarProps) => {
   const {
     title: titleInput,
@@ -38,7 +37,7 @@ const TitleToolbar = ({
   } = useSaveMeta({
     sketchId,
     initial: { title, description },
-    onValidChange,
+    onSaved,
   });
 
   return (

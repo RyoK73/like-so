@@ -19,17 +19,12 @@ const isSameAsSavedMeta = (meta: SketchMeta, savedMeta: SketchMeta) =>
 type UseSaveMetaParams = {
   sketchId: string;
   initial: SketchMeta;
-  // Called as soon as the input is valid, without waiting for the save.
-  onValidChange: (meta: SketchMeta) => void;
+  onSaved: (meta: SketchMeta) => void;
 };
 
 // Save the title and the description with a debounce.
 // Saves never run at the same time: while a save is in flight, only the latest valid value is kept and saved after it.
-const useSaveMeta = ({
-  sketchId,
-  initial,
-  onValidChange,
-}: UseSaveMetaParams) => {
+const useSaveMeta = ({ sketchId, initial, onSaved }: UseSaveMetaParams) => {
   const [title, setTitleState] = useState(initial.title);
   const [description, setDescriptionState] = useState(initial.description);
   const [errors, setErrors] = useState<SketchMetaErrors>({});
@@ -39,8 +34,10 @@ const useSaveMeta = ({
     let lastSavedMeta = initial;
 
     // Skipping a value that is already saved makes a value that returns to the saved one cause no request.
-    const saveUnlessSaved = async (meta: SketchMeta) => {
-      if (isSameAsSavedMeta(meta, lastSavedMeta)) return;
+    const saveUnlessSaved = async (
+      meta: SketchMeta,
+    ): Promise<{ ok: boolean }> => {
+      if (isSameAsSavedMeta(meta, lastSavedMeta)) return { ok: false };
       const result = await updateSketchMeta(
         createSupabaseBrowserClient(),
         sketchId,
@@ -53,27 +50,31 @@ const useSaveMeta = ({
           title: "タイトルと説明の保存に失敗しました。",
           id: SAVE_META_ERROR_TOAST_ID,
         });
-        return;
+        return { ok: false };
       }
       lastSavedMeta = meta;
       // Not awaited, so that it does not hold back the next save. The save already succeeded, so a failure here is ignored.
       void revalidateSketchList();
+
+      return { ok: true };
     };
 
     // `after: true` keeps only the latest call during a save, and runs it after the save finishes.
-    const saveOneByOne = pDebounce.promise(saveUnlessSaved, { after: true });
+    const saveOneByOne = pDebounce.promise(saveUnlessSaved, {
+      after: true,
+    });
     return pDebounce(saveOneByOne, SAVE_DELAY);
   });
 
-  const handleChange = (next: SketchMeta) => {
+  const handleChange = async (next: SketchMeta) => {
     const result = validateSketchMeta(next);
     if (!result.ok) {
       setErrors(result.errors);
       return;
     }
     setErrors({});
-    onValidChange(result.value);
-    void debouncedSave(result.value);
+    const saveResult = await debouncedSave(result.value);
+    if (saveResult.ok) onSaved(result.value);
   };
 
   const setTitle = (value: string) => {

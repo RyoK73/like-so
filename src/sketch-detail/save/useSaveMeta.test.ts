@@ -27,11 +27,11 @@ const okResult = { ok: true, value: {} } as Awaited<
 >;
 
 const renderUseSaveMeta = () => {
-  const onValidChange = vi.fn();
+  const onSaved = vi.fn();
   const hook = renderHook(() =>
-    useSaveMeta({ sketchId: SKETCH_ID, initial: INITIAL, onValidChange }),
+    useSaveMeta({ sketchId: SKETCH_ID, initial: INITIAL, onSaved }),
   );
-  return { ...hook, onValidChange };
+  return { ...hook, onSaved };
 };
 
 const advance = async (ms: number) => {
@@ -60,8 +60,8 @@ describe("useSaveMeta", () => {
     expect(updateSketchMeta).not.toHaveBeenCalled();
   });
 
-  it("should save once with the trimmed title after the delay when a valid title is input", async () => {
-    const { result } = renderUseSaveMeta();
+  it("should save once with the trimmed title after the delay and onSaved is called with the input value when a valid title is input", async () => {
+    const { result, onSaved } = renderUseSaveMeta();
 
     act(() => result.current.setTitle("  new title  "));
     await advance(SAVE_DELAY - 1);
@@ -74,6 +74,10 @@ describe("useSaveMeta", () => {
       SKETCH_ID,
       { title: "new title", description: INITIAL.description },
     );
+    expect(onSaved).toHaveBeenCalledWith({
+      title: "new title",
+      description: INITIAL.description,
+    });
   });
 
   it("should save only the last value once when inputs are made in a row within the delay", async () => {
@@ -92,36 +96,24 @@ describe("useSaveMeta", () => {
     );
   });
 
-  it("should call onValidChange immediately, without waiting for the save", async () => {
-    const { result, onValidChange } = renderUseSaveMeta();
-
-    act(() => result.current.setTitle("new title"));
-
-    expect(onValidChange).toHaveBeenCalledWith({
-      title: "new title",
-      description: INITIAL.description,
-    });
-    expect(updateSketchMeta).not.toHaveBeenCalled();
-  });
-
-  it("should not save, not call onValidChange and return an error when the title is empty", async () => {
-    const { result, onValidChange } = renderUseSaveMeta();
+  it("should not save, not call onSaved and return an error when the title is empty", async () => {
+    const { result, onSaved } = renderUseSaveMeta();
 
     act(() => result.current.setTitle(""));
     await advance(SAVE_DELAY * 2);
 
     expect(updateSketchMeta).not.toHaveBeenCalled();
-    expect(onValidChange).not.toHaveBeenCalled();
+    expect(onSaved).not.toHaveBeenCalled();
     expect(result.current.errors.title).toBeDefined();
   });
 
   it("should save and clear the error when an invalid title is fixed", async () => {
-    const { result, onValidChange } = renderUseSaveMeta();
+    const { result, onSaved } = renderUseSaveMeta();
 
     act(() => result.current.setTitle(""));
     await advance(SAVE_DELAY);
     expect(updateSketchMeta).not.toHaveBeenCalled();
-    expect(onValidChange).not.toHaveBeenCalled();
+    expect(onSaved).not.toHaveBeenCalled();
     expect(result.current.errors.title).toBeDefined();
 
     act(() => result.current.setTitle("fixed title"));
@@ -237,8 +229,8 @@ describe("useSaveMeta", () => {
       expect(revalidateSketchList).not.toHaveBeenCalled();
     });
 
-    it("should show the toast of the meta error and keep the input value and onValidChange", async () => {
-      const { result, onValidChange } = renderUseSaveMeta();
+    it("should show the toast of the meta error and onSaved is not called", async () => {
+      const { result, onSaved } = renderUseSaveMeta();
 
       act(() => result.current.setTitle("new title"));
       await advance(SAVE_DELAY);
@@ -250,10 +242,7 @@ describe("useSaveMeta", () => {
         }),
       );
       expect(result.current.title).toBe("new title");
-      expect(onValidChange).toHaveBeenLastCalledWith({
-        title: "new title",
-        description: INITIAL.description,
-      });
+      expect(onSaved).not.toHaveBeenCalled();
     });
 
     it("should try to save again at the next input", async () => {

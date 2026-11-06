@@ -55,7 +55,7 @@ describe("SketchDetail", () => {
     expect(screen.getByTestId("title-toolbar")).toBeInTheDocument();
     expect(vi.mocked(TitleToolbar).mock.calls[0][0]).toEqual({
       sketchId: validId,
-      onValidChange: expect.any(Function),
+      onSaved: expect.any(Function),
       title: "my sketch",
       description: "my description",
       width: 1920,

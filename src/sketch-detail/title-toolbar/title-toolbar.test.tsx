@@ -1,8 +1,9 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type { ComponentProps } from "react";
 import { TitleToolbar } from "@/sketch-detail/title-toolbar/title-toolbar";
 import { dateTimeTestHelper } from "@/sketch-list/testUtility";
+import { updateSketchMeta } from "@/supabase/sketch-crud/updateSketchMeta";
 
 vi.mock("@/supabase/sketch-crud/updateSketchMeta", () => ({
   updateSketchMeta: vi.fn(),
@@ -25,7 +26,7 @@ const renderToolbar = (
       width={1920}
       height={1080}
       updatedAt={UPDATED_AT}
-      onValidChange={vi.fn()}
+      onSaved={vi.fn()}
       {...props}
     />,
   );
@@ -57,17 +58,24 @@ it("should render the minimum size 320 × 320", () => {
   expect(screen.getByText("320 × 320")).toBeInTheDocument();
 });
 
-it("should call onValidChange with the trimmed title when a valid title is typed", async () => {
-  const onValidChange = vi.fn();
-  renderToolbar({ onValidChange });
+it("should call onSaved with the trimmed title when a valid title is typed", async () => {
+  vi.mocked(updateSketchMeta).mockResolvedValue({
+    ok: true,
+    value: {},
+  } as Awaited<ReturnType<typeof updateSketchMeta>>);
+
+  const onSaved = vi.fn();
+  renderToolbar({ onSaved });
   const titleInput = screen.getByRole("textbox", { name: "タイトル" });
 
   await userEvent.clear(titleInput);
   await userEvent.type(titleInput, "new");
 
-  expect(onValidChange).toHaveBeenLastCalledWith({
-    title: "new",
-    description: "my description",
+  await waitFor(() => {
+    expect(onSaved).toHaveBeenLastCalledWith({
+      title: "new",
+      description: "my description",
+    });
   });
 });
 
