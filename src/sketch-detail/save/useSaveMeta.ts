@@ -1,6 +1,7 @@
 import { useState } from "react";
 import pDebounce from "p-debounce";
 import { toast } from "@/design-system/toast";
+import { revalidateSketchList } from "@/sketch-detail/save/revalidateSketchList";
 import { updateSketchMeta } from "@/supabase/sketch-crud/updateSketchMeta";
 import type { SketchMeta } from "@/supabase/sketch-crud/updateSketchMeta.types";
 import { createSupabaseBrowserClient } from "@/supabase/utils/browserClient";
@@ -55,6 +56,9 @@ const useSaveMeta = ({
         return;
       }
       lastSavedMeta = meta;
+      // Not awaited, so that it does not hold back the next save. The save already succeeded, so a failure here is ignored.
+      // TODO(#70): Log the failure according to the policy decided in #70.
+      void revalidateSketchList().catch(() => {});
     };
 
     // `after: true` keeps only the latest call during a save, and runs it after the save finishes.

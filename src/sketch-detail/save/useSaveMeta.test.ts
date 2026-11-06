@@ -2,9 +2,13 @@ import { act, renderHook } from "@testing-library/react";
 import { useSaveMeta } from "@/sketch-detail/save/useSaveMeta";
 import { updateSketchMeta } from "@/supabase/sketch-crud/updateSketchMeta";
 import { toast } from "@/design-system/toast";
+import { revalidateSketchList } from "@/sketch-detail/save/revalidateSketchList";
 
 vi.mock("@/supabase/sketch-crud/updateSketchMeta", () => ({
   updateSketchMeta: vi.fn(),
+}));
+vi.mock("@/sketch-detail/save/revalidateSketchList", () => ({
+  revalidateSketchList: vi.fn(),
 }));
 vi.mock("@/supabase/utils/browserClient", () => ({
   createSupabaseBrowserClient: vi.fn(() => ({ client: "test client" })),
@@ -40,6 +44,7 @@ beforeEach(() => {
   vi.useFakeTimers();
   vi.clearAllMocks();
   vi.mocked(updateSketchMeta).mockResolvedValue(okResult);
+  vi.mocked(revalidateSketchList).mockResolvedValue(undefined);
 });
 
 afterEach(() => {
@@ -156,12 +161,80 @@ describe("useSaveMeta", () => {
     expect(toast.add).not.toHaveBeenCalled();
   });
 
+  describe("revalidateSketchList", () => {
+    it("should be called once after the save succeeds", async () => {
+      const { result } = renderUseSaveMeta();
+
+      act(() => result.current.setTitle("new title"));
+      await advance(SAVE_DELAY);
+
+      expect(revalidateSketchList).toHaveBeenCalledOnce();
+    });
+
+    it("should not be called when the value returns to the last saved value", async () => {
+      const { result } = renderUseSaveMeta();
+
+      act(() => result.current.setTitle("changed"));
+      await advance(200);
+      act(() => result.current.setTitle(INITIAL.title));
+      await advance(SAVE_DELAY * 2);
+
+      expect(revalidateSketchList).not.toHaveBeenCalled();
+    });
+
+    it("should not be called when the input is invalid", async () => {
+      const { result } = renderUseSaveMeta();
+
+      act(() => result.current.setTitle(""));
+      await advance(SAVE_DELAY * 2);
+
+      expect(revalidateSketchList).not.toHaveBeenCalled();
+    });
+
+    it("should be called once when inputs are made in a row within the delay", async () => {
+      const { result } = renderUseSaveMeta();
+
+      act(() => result.current.setTitle("a"));
+      await advance(200);
+      act(() => result.current.setTitle("ab"));
+      await advance(SAVE_DELAY);
+
+      expect(updateSketchMeta).toHaveBeenCalledOnce();
+      expect(revalidateSketchList).toHaveBeenCalledOnce();
+    });
+
+    it("should neither throw nor show a toast, and should remember the saved value, even so revalidateSketchList rejects", async () => {
+      vi.mocked(revalidateSketchList).mockRejectedValue(new Error("test"));
+      const { result } = renderUseSaveMeta();
+
+      act(() => result.current.setTitle("new title"));
+      await advance(SAVE_DELAY);
+      // The same value as the saved one is skipped, so the save is not called again.
+      act(() => result.current.setTitle("other"));
+      await advance(200);
+      act(() => result.current.setTitle("new title"));
+      await advance(SAVE_DELAY * 2);
+
+      expect(toast.add).not.toHaveBeenCalled();
+      expect(updateSketchMeta).toHaveBeenCalledOnce();
+    });
+  });
+
   describe("when the save fails", () => {
     beforeEach(() => {
       vi.mocked(updateSketchMeta).mockResolvedValue({
         ok: false,
         error: new Error("test error"),
       });
+    });
+
+    it("should not call revalidateSketchList", async () => {
+      const { result } = renderUseSaveMeta();
+
+      act(() => result.current.setTitle("new title"));
+      await advance(SAVE_DELAY);
+
+      expect(revalidateSketchList).not.toHaveBeenCalled();
     });
 
     it("should show the toast of the meta error and keep the input value and onValidChange", async () => {
@@ -234,6 +307,7 @@ describe("useSaveMeta", () => {
         SKETCH_ID,
         { title: "ab", description: INITIAL.description },
       );
+      expect(revalidateSketchList).toHaveBeenCalledTimes(2);
     });
 
     it("should save only the last value once after the first save when inputs are made several times", async () => {

@@ -3,9 +3,13 @@ import { useSave } from "@/sketch-detail/save/useSave";
 import { Canvas, Rect } from "fabric";
 import { saveToDb } from "@/sketch-detail/save/saveToDb";
 import { CanvasFrame } from "@/sketch-detail/save/saveToDb.types";
+import { revalidateSketchList } from "@/sketch-detail/save/revalidateSketchList";
 
 vi.mock("@/sketch-detail/save/saveToDb", () => ({
   saveToDb: vi.fn(),
+}));
+vi.mock("@/sketch-detail/save/revalidateSketchList", () => ({
+  revalidateSketchList: vi.fn(),
 }));
 
 describe("useSave", () => {
@@ -24,6 +28,7 @@ describe("useSave", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     frameTestRef.current = testFrame;
+    vi.mocked(revalidateSketchList).mockResolvedValue(undefined);
     vi.mocked(saveToDb).mockResolvedValue({
       ok: true,
       value: {
@@ -253,6 +258,83 @@ describe("useSave", () => {
       testId,
     );
   });
+  describe("revalidateSketchList", () => {
+    const renderUseSave = (idRef: { current: string | undefined }) => {
+      const hook = renderHook(() =>
+        useSave(fabricCanvasTestRef, idRef, frameTestRef, true),
+      );
+      act(() => {
+        hook.result.current.sketchInfoRef.current = { title: "test title" };
+      });
+      return hook;
+    };
+
+    it("should be called once after the save succeeds", async () => {
+      const { result } = renderUseSave(canvasIdTestRef);
+
+      await act(async () => {
+        await result.current.save();
+      });
+
+      expect(revalidateSketchList).toHaveBeenCalledOnce();
+    });
+
+    it("should be called after the first save of a new sketch, which has no id yet", async () => {
+      const { result } = renderUseSave({ current: undefined });
+
+      await act(async () => {
+        await result.current.save();
+      });
+
+      expect(revalidateSketchList).toHaveBeenCalledOnce();
+    });
+
+    it("should not be called when the save fails, and err is set as before", async () => {
+      vi.mocked(saveToDb).mockResolvedValue({ ok: false, error: testError });
+      const { result } = renderUseSave(canvasIdTestRef);
+
+      await act(async () => {
+        await result.current.save();
+      });
+
+      expect(revalidateSketchList).not.toHaveBeenCalled();
+      expect(result.current.err).toEqual(testError);
+    });
+
+    it("should not set err and should update the id, even so revalidateSketchList rejects", async () => {
+      vi.mocked(revalidateSketchList).mockRejectedValue(new Error("test"));
+      // Only `id` matters here, so the other columns are omitted.
+      vi.mocked(saveToDb).mockResolvedValue({
+        ok: true,
+        value: { id: "returned-id" } as never,
+      });
+      const idRef: { current: string | undefined } = { current: undefined };
+      const { result } = renderUseSave(idRef);
+
+      await act(async () => {
+        await result.current.save();
+      });
+
+      expect(result.current.err).toBeUndefined();
+      expect(idRef.current).toBe("returned-id");
+    });
+
+    it("should be called once when save() is called in a row", async () => {
+      const { result } = renderUseSave(canvasIdTestRef);
+
+      const promises: Promise<void>[] = [];
+      await act(async () => {
+        for (let ct = 0; ct < 4; ct++) {
+          promises.push(result.current.save());
+        }
+      });
+      await Promise.all(promises);
+
+      expect(saveToDb).toHaveBeenCalledOnce();
+      expect(revalidateSketchList).toHaveBeenCalledOnce();
+    });
+  });
+
   describe("isLoaded and object:added", () => {
     const renderUseSave = (isLoaded: boolean) => {
       const hook = renderHook(
