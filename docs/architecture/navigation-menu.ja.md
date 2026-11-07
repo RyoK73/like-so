@@ -62,6 +62,60 @@
   失敗すると「サインアウトに失敗しました」を返し、toast(`error`)で表示します。
 - 各項目の`className`は、`NavigationMenu`が共通の値(`iconItemClassName`)を渡します。
 
+## 受け渡し用ツールバー
+
+スケッチを、LLMなど外部へ渡すためのボタンを持ちます。
+`SketchCanvas`が表示するので、`/sketches/[id]`にだけ出ます。
+キャンバスの上に重ねて、画面の右端から`right-4`の位置に固定し(`absolute`)、縦中央に表示します。
+表示のオン/オフは切り替えず、常時表示します。
+`role="toolbar"`(`aria-label`は「受け渡し」)を持ち、ボタンは縦に並びます。
+`index.ts`が公開するのは`HandoffToolbar`のみです。
+
+| ボタン       | コンポーネント        | アイコン     | tooltip            |
+| ------------ | --------------------- | ------------ | ------------------ |
+| コピー       | `CopyImageButton`     | `LuCopy`     | 画像をコピー       |
+| ダウンロード | `DownloadImageButton` | `LuDownload` | 画像をダウンロード |
+
+どちらも`IconButton`で表示します。
+キャンバスの読み込み前(`isLoaded`が`false`)は、無効です。
+tooltipは、項目の左側に出します(`handoff-toolbar/constants.ts`の`TOOLTIP_SIDE`)。
+
+### PNGの作り方
+
+`exportFramePng`(`handoff-toolbar/exportFramePng.ts`)が、`Promise<Blob>`を返します。
+
+- 範囲は枠(`sketch.width` × `sketch.height`)全体です。
+  パンとズームに関係なく、倍率1(枠のpxそのまま)で出力します。
+  枠の外にはみ出した部分は、切り取ります。
+- fabricの背景は`transparent`なので、書き出す間だけ、`backgroundColor`を紙の色にします。
+  紙の色は、CSS変数`--canvas`を、クリック時に`getComputedStyle`で読みます(`getPaperColor`)。
+  グリッドは含めません。
+- 書き出す間だけ、`viewportTransform`を単位行列にします。
+  描画は同期で行い、直後に`viewportTransform`と`backgroundColor`を元に戻します。
+  例外が起きても元に戻すので、画面のパンとズームは変わりません。
+- 図形が1つもなくても、そのまま出力します。
+
+### コピー
+
+`copyImage`(`handoff-toolbar/copy-image-button/copyImage.ts`)は、`navigator.clipboard.write`に`ClipboardItem({ "image/png": Promise<Blob> })`を渡します。
+Safariでは、ユーザーの操作の中で書き込みを始める必要があるため、`Blob`ではなく`Promise<Blob>`を渡します。
+成功するとtoast(`success`)で「コピーしました」、失敗するとtoast(`error`)で知らせます。
+Clipboard APIが使えない環境用の代替は、ありません。
+
+### ダウンロード
+
+`downloadImage`(`handoff-toolbar/download-image-button/downloadImage.ts`)は、タイトルを検査してから、PNGを作って保存します。
+ファイル名は、`buildPngFileName`が`{タイトル}-{YYYYMMDD-HHmmss}.png`の形(ローカル時刻)で作ります。
+タイトルの前後の空白は除き、ファイル名に使えない文字(`/ \ : * ? " < > |`)は`_`に置き換えます。
+次の場合は、PNGを作らず、保存もせず、toast(`error`)で知らせます。
+
+| 条件                                  | toastの文言                                                      |
+| ------------------------------------- | ---------------------------------------------------------------- |
+| trimして空のタイトル                  | タイトルが空のためダウンロードできません                         |
+| 使えない文字だけのタイトル(`///`など) | タイトルにファイル名に使える文字がないためダウンロードできません |
+
+成功するとtoast(`success`)で「ダウンロードしました」と知らせ、作ったObject URLは解放します。
+
 ## tooltip
 
 アイコンだけの項目は、`IconButton`(`src/design-system/icon-button.tsx`)または`MyToolTip`(`src/design-system/tool-tip.tsx`)で名前を表示します。

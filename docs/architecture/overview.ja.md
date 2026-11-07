@@ -138,6 +138,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `sketch-canvas.tsx` | Client Component。キャンバス、操作用ツールバー(`ControlToolbar`)、自動保存を担当します。                                                   |
 | `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトルと説明の入力欄、サイズ、更新日時を表示します。入力値の検証(`validateSketchMeta`)もあります。 |
 | `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加ボタン(`ShapeNavigation`)              |
+| `handoff-toolbar/`  | 受け渡し用ツールバー(`HandoffToolbar`)。スケッチの画像をコピーまたはダウンロードするボタンを持ちます                                       |
 | `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                                       |
 | `shapes/`           | 図形の作成(前節を参照)                                                                                                                     |
 | `history/`          | undo/redo(前節を参照)                                                                                                                      |
@@ -169,7 +170,9 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
   どれも、`isLoaded`が`true`になるまで無効です。
   図形用ナビは、undo / redoでキャンバスを復元している間(`isOperable`が`false`)も無効です。
   元に戻す、やり直しは、戻せる履歴ややり直せる履歴がないときも無効です。
-
+- 受け渡し用ツールバー(`src/sketch-detail/handoff-toolbar/`の`HandoffToolbar`)は、キャンバスの上に重ねて、画面の右端の縦中央に浮かせます。
+  `role="toolbar"`を持ち、ボタンは縦に並びます。
+  詳細は[ナビゲーションメニュー](./navigation-menu.ja.md)を参照してください。
 - 保存に失敗すると、固定の文言をtoast(`id`は固定)で表示します。
   同じ`id`のtoastは、重ねずに更新されます。
 - 読み込みに失敗した場合、または`canvas_json`がオブジェクトでない場合は、キャンバスとボタンを表示しません。

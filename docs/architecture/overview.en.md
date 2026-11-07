@@ -138,6 +138,7 @@ See [Authentication](./auth.en.md) for details.
 | `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                           |
 | `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the inputs for the title and description, the size and the updated time. It also has the validation (`validateSketchMeta`) |
 | `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add shapes (`ShapeNavigation`)       |
+| `handoff-toolbar/`  | The handoff toolbar (`HandoffToolbar`). Has the buttons to copy or download the image of the sketch                                                                  |
 | `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                            |
 | `shapes/`           | Creating shapes (see the section above)                                                                                                                              |
 | `history/`          | Undo / redo (see the section above)                                                                                                                                  |
@@ -170,6 +171,9 @@ Details of `SketchCanvas`:
   The zoom controls are disabled until `isLoaded` becomes `true`.
   The shape navigation is disabled until `isLoaded` becomes `true` and while the canvas is being restored by undo / redo (`isOperable` is `false`).
   Undo and redo are also disabled while there is nothing to undo or redo.
+- The handoff toolbar (`HandoffToolbar` in `src/sketch-detail/handoff-toolbar/`) floats over the canvas, at the right edge of the screen and vertically centered.
+  It has `role="toolbar"`, and its buttons are lined up vertically.
+  See [Navigation menu](./navigation-menu.en.md) for details.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
 - When the loading fails, or `canvas_json` is not an object, it shows neither the canvas nor the buttons.
