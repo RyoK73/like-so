@@ -34,7 +34,7 @@
 コンポーネントの構成は[概要](./overview.ja.md)を参照してください。
 
 `src/app/sketches/layout.tsx`は、`/sketches`配下のすべてのページ(`/sketches/[id]`を含む)に、`NavigationMenu`を表示します。
-詳細は[ナビゲーションメニュー](./navigation-menu.ja.md)を参照してください。
+詳細は[ツールバー](./toolbar.ja.md)を参照してください。
 
 ### 取得
 

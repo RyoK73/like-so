@@ -34,7 +34,7 @@ It is always shown, whether the user is signed out or signed in.
 See [Overview](./overview.en.md) for the components.
 
 `src/app/sketches/layout.tsx` renders `NavigationMenu` on every page under `/sketches` (including `/sketches/[id]`).
-See [Navigation menu](./navigation-menu.en.md) for details.
+See [Toolbars](./toolbar.en.md) for details.
 
 ### Fetching
 
