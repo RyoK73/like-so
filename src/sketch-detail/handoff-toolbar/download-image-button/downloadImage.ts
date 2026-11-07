@@ -16,6 +16,8 @@ type DownloadImageParams = {
   getBlob: () => Promise<Blob>;
 };
 
+const REVOKE_DELAY_MS = 1000;
+
 const saveBlob = (blob: Blob, fileName: string) => {
   const url = URL.createObjectURL(blob);
   try {
@@ -24,7 +26,8 @@ const saveBlob = (blob: Blob, fileName: string) => {
     anchor.download = fileName;
     anchor.click();
   } finally {
-    URL.revokeObjectURL(url);
+    // Revoking right after click() may cancel the download in some browsers.
+    setTimeout(() => URL.revokeObjectURL(url), REVOKE_DELAY_MS);
   }
 };
 
