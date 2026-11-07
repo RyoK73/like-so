@@ -36,6 +36,9 @@
 - tooltipの表示位置は、ツールバーが画面のどこにあるかで決め、ツールバーごとの`constants.ts`の`TOOLTIP_SIDE`で持ちます。
   外部には公開しません。
 - tooltipの見た目は、`DESIGN.md`の`tooltip`を参照してください。
+- `IconButton`は、任意の`tooltipHint`(ショートカットキーなどの補足)を受け取ります。
+  tooltipには「名前(`tooltipHint`)」と表示します。
+  `aria-label`は、名前のままです。
 
 ### `role`と`aria-label`
 
@@ -136,11 +139,23 @@ tooltipは、項目の上側に出します(`control-toolbar/constants.ts`の`TO
 
 中身は、図形用ナビ(`ShapeNavigation`)とズームの操作(`ZoomControls`)です。
 
-- 図形用ナビのボタンは、四角形、円、元に戻す、やり直しです。
+- 図形用ナビのボタンは、四角形、円、元に戻す、やり直し、削除です。
 - ズームの操作は、「− 倍率の入力欄 % +」です([固定枠とパン・ズーム](./viewport.ja.md)を参照)。
 - どれも、`isLoaded`が`true`になるまで無効です。
 - 図形用ナビは、undo / redoでキャンバスを復元している間(`isOperable`が`false`)も無効です。
 - 元に戻す、やり直しは、戻せる履歴ややり直せる履歴がないときも無効です。
+- 削除ボタン(`LuTrash2`)は、選択中の図形を削除します。
+  tooltipは「削除(Deleteキー)」で、`IconButton`の`tooltipHint`で表示します。
+  選択を購読しないので、図形が選択されていなくても有効で、そのときは何もしません。
+  複数選択(ドラッグ選択)しているときは、すべて削除します。
+- Deleteキーでも、同じ削除ができます。
+  削除の処理とキーの受け付けは、どちらも`useDeleteSelectedShape`(`src/sketch-detail/selection/`)が持ちます。
+  次のときは、Deleteキーで削除しません。
+  - Ctrl、Meta、Alt、Shiftのいずれかを押しているとき。
+  - input、textarea、`contenteditable`の中で押したとき。
+  - IMEで変換中のとき。
+  - ボタンが無効のとき(`isLoaded`が`false`、または`isOperable`が`false`)。
+  - Backspaceは、対象外です。
 
 ## 受け渡し用ツールバー
 

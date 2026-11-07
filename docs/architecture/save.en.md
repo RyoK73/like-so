@@ -3,7 +3,7 @@
 ## Flow
 
 ```
-fabric "object:added" / "object:modified" (after loading)
+fabric "object:added" / "object:modified" / "object:removed" (after loading)
   -> useSave (debounce 250 ms)
   -> saveToDb
   -> upsertSketch (browser Supabase client)
@@ -24,15 +24,15 @@ Input of TitleToolbar
 
 ## Files
 
-| File                                                    | Role                                                                                        |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
-| `src/sketch-detail/save/useSave.ts`                     | Hook that saves on `object:added` and `object:modified` when auto-save is on                |
-| `src/sketch-detail/save/saveToDb.ts`                    | Builds the row from the canvas and calls `upsertSketch`                                     |
-| `src/sketch-detail/save/useSaveMeta.ts`                 | Hook that validates the input of the title and the description and saves it with a debounce |
-| `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | Pure function that validates the title and the description                                  |
-| `src/sketch-detail/save/revalidateSketchList.ts`        | Server Action that discards the client cache of `/sketches` after a save succeeds           |
-| `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`, `upsertSketch`                                                              |
-| `src/supabase/sketch-crud/updateSketchMeta.ts`          | Updates only `title` and `description`                                                      |
+| File                                                    | Role                                                                                           |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `src/sketch-detail/save/useSave.ts`                     | Hook that saves on `object:added`, `object:modified` and `object:removed` when auto-save is on |
+| `src/sketch-detail/save/saveToDb.ts`                    | Builds the row from the canvas and calls `upsertSketch`                                        |
+| `src/sketch-detail/save/useSaveMeta.ts`                 | Hook that validates the input of the title and the description and saves it with a debounce    |
+| `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | Pure function that validates the title and the description                                     |
+| `src/sketch-detail/save/revalidateSketchList.ts`        | Server Action that discards the client cache of `/sketches` after a save succeeds              |
+| `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`, `upsertSketch`                                                                 |
+| `src/supabase/sketch-crud/updateSketchMeta.ts`          | Updates only `title` and `description`                                                         |
 
 ## Details
 
@@ -42,8 +42,10 @@ Input of TitleToolbar
   - It does not subscribe to the events until the fourth argument `isSketchLoaded` becomes `true`.
     This is because `loadFromJSON` fires `object:added` for each object while loading.
     It keeps a sketch from being saved just by opening it.
-  - Restoring by undo / redo (`loadFromJSON`) also fires `object:added` for each object, so the restored state is saved.
-    However, restoring to a state with zero objects fires no `object:added`, so it is not saved.
+  - Deleting shapes fires `object:removed` for each shape.
+    Even when several shapes are deleted at once, the debounce makes it a single save.
+  - Restoring by undo / redo (`loadFromJSON`) fires `object:removed` for each object when it clears the canvas, and `object:added` for each object when it puts the objects back, so the restored state is saved.
+    Restoring to a state with zero objects is also saved, as long as there were shapes before the restore, because `object:removed` is fired.
   - The id returned by the first save is kept in `sketchIdRef`, and later saves upsert the same row.
   - If any of `fabricCanvasRef`, `sketchInfoRef` and `frameRef` is not set, it sets `err` instead of saving.
 - `saveToDb`

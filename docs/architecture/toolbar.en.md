@@ -36,6 +36,9 @@ See [Overview](./overview.en.md) for the details of `SketchCanvas`.
 - The side where the tooltip opens depends on where the toolbar is on the screen. Each toolbar holds it as `TOOLTIP_SIDE` in its own `constants.ts`.
   It is not exported outside.
 - See `tooltip` in `DESIGN.md` for the look of the tooltip.
+- `IconButton` accepts an optional `tooltipHint` (a supplement such as a shortcut key).
+  The tooltip shows "name (`tooltipHint`)".
+  `aria-label` stays as the name.
 
 ### `role` and `aria-label`
 
@@ -136,11 +139,23 @@ The tooltip opens above the item (`TOOLTIP_SIDE` in `control-toolbar/constants.t
 
 The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`ZoomControls`).
 
-- The buttons of the shape navigation are the rectangle, the circle, undo and redo.
+- The buttons of the shape navigation are the rectangle, the circle, undo, redo and delete.
 - The zoom controls are "− zoom input % +" (see [Fixed frame, pan and zoom](./viewport.en.md)).
 - All of them are disabled until `isLoaded` becomes `true`.
 - The shape navigation is also disabled while the canvas is being restored by undo / redo (`isOperable` is `false`).
 - Undo and redo are also disabled while there is nothing to undo or redo.
+- The delete button (`LuTrash2`) deletes the selected shapes.
+  Its tooltip is "削除(Deleteキー)", shown with `tooltipHint` of `IconButton`.
+  It does not subscribe to the selection, so it is enabled even when no shape is selected, and then it does nothing.
+  When several shapes are selected (drag selection), it deletes all of them.
+- The Delete key does the same deletion.
+  Both the deletion and the key handling are in `useDeleteSelectedShape` (`src/sketch-detail/selection/`).
+  The Delete key does not delete in these cases:
+  - Any of Ctrl, Meta, Alt and Shift is held.
+  - The key is pressed in an input, a textarea or a `contenteditable` element.
+  - The IME is composing text.
+  - The button is disabled (`isLoaded` is `false`, or `isOperable` is `false`).
+  - Backspace is not a target.
 
 ## Handoff toolbar
 

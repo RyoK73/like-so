@@ -40,22 +40,24 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | `src/dev-scripts/`     | Scripts for development                                   |
 | `src/test/`            | Pure helpers for tests                                    |
 
-## Drawing (`canvas/`, `shapes/`, `history/` and `viewport/` in `src/sketch-detail/`)
+## Drawing (`canvas/`, `shapes/`, `selection/`, `history/` and `viewport/` in `src/sketch-detail/`)
 
-| Directory   | Responsibility                                    |
-| ----------- | ------------------------------------------------- |
-| `canvas/`   | Creating, disposing and loading the fabric canvas |
-| `shapes/`   | Creating shapes                                   |
-| `history/`  | Undo / redo                                       |
-| `viewport/` | Fixed frame, pan and zoom                         |
+| Directory    | Responsibility                                    |
+| ------------ | ------------------------------------------------- |
+| `canvas/`    | Creating, disposing and loading the fabric canvas |
+| `shapes/`    | Creating shapes                                   |
+| `selection/` | Deleting the selected shapes                      |
+| `history/`   | Undo / redo                                       |
+| `viewport/`  | Fixed frame, pan and zoom                         |
 
-| File                          | Role                                                                                                                                      |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `canvas/useFabricCanvas.ts`   | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                                                    |
-| `shapes/useShapes.ts`         | Adds a rect or circle to the center of the view (inside the frame)                                                                        |
-| `history/useHistory.ts`       | Keeps `past` / `present` / `future` and provides `recordHistory`, `undo` and `redo`                                                       |
-| `history/useCanvasHistory.ts` | Records the changes of the canvas (`object:added` / `object:modified`) in `useHistory` and applies `present` to the canvas on undo / redo |
-| `viewport/`                   | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md)                               |
+| File                                  | Role                                                                                                                                                                                                               |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `canvas/useFabricCanvas.ts`           | Creates a fabric canvas, loads `canvasJson` and disposes it on unmount                                                                                                                                             |
+| `shapes/useShapes.ts`                 | Adds a rect or circle to the center of the view (inside the frame)                                                                                                                                                 |
+| `selection/useDeleteSelectedShape.ts` | Returns `deleteSelectedShape`, which deletes the selected shapes, and also handles the Delete key                                                                                                                  |
+| `history/useHistory.ts`               | Keeps `past` / `present` / `future` and provides `recordHistory`, `undo` and `redo`                                                                                                                                |
+| `history/useCanvasHistory.ts`         | Records the changes of the canvas (`object:added` / `object:modified` / `object:removed`) in `useHistory` and applies `present` to the canvas on undo / redo. Events fired at the same timing make a single record |
+| `viewport/`                           | Calculations and hooks for the fixed frame, pan and zoom. See [Fixed frame, pan and zoom](./viewport.en.md)                                                                                                        |
 
 Details of `useFabricCanvas`:
 
@@ -131,20 +133,21 @@ See [Authentication](./auth.en.md) for details.
 
 ## Sketch page (`src/sketch-detail/`)
 
-| File                | Role                                                                                                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sketch-detail.tsx` | Server Component. Passes the sketch got by `getSketch` to `SketchEditor`                                                                                             |
-| `sketch-editor.tsx` | Client Component. Holds the title and description that `TitleToolbar` has validated, and passes them to `SketchCanvas`                                               |
-| `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                           |
-| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the inputs for the title and description, the size and the updated time. It also has the validation (`validateSketchMeta`) |
-| `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add shapes (`ShapeNavigation`)       |
-| `handoff-toolbar/`  | The handoff toolbar (`HandoffToolbar`). Has the buttons to copy or download the image of the sketch                                                                  |
-| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                            |
-| `shapes/`           | Creating shapes (see the section above)                                                                                                                              |
-| `history/`          | Undo / redo (see the section above)                                                                                                                                  |
-| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))                                                                  |
-| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                                                                                       |
-| `index.ts`          | Exports only `SketchDetail`                                                                                                                                          |
+| File                | Role                                                                                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sketch-detail.tsx` | Server Component. Passes the sketch got by `getSketch` to `SketchEditor`                                                                                                  |
+| `sketch-editor.tsx` | Client Component. Holds the title and description that `TitleToolbar` has validated, and passes them to `SketchCanvas`                                                    |
+| `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                                |
+| `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the inputs for the title and description, the size and the updated time. It also has the validation (`validateSketchMeta`)      |
+| `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add and delete shapes (`ShapeNavigation`) |
+| `handoff-toolbar/`  | The handoff toolbar (`HandoffToolbar`). Has the buttons to copy or download the image of the sketch                                                                       |
+| `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                                 |
+| `selection/`        | Deleting the selected shapes (see the section above)                                                                                                                      |
+| `shapes/`           | Creating shapes (see the section above)                                                                                                                                   |
+| `history/`          | Undo / redo (see the section above)                                                                                                                                       |
+| `viewport/`         | Fixed frame, pan and zoom (see the section above and [Fixed frame, pan and zoom](./viewport.en.md))                                                                       |
+| `save/`             | Hooks and functions for saving to the DB (see [Saving sketches](./save.en.md))                                                                                            |
+| `index.ts`          | Exports only `SketchDetail`                                                                                                                                               |
 
 Details of `SketchCanvas`:
 
