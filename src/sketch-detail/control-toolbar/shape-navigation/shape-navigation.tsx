@@ -1,5 +1,5 @@
 import type { ComponentType } from "react";
-import { LuCircle, LuRedo2, LuSquare, LuUndo2 } from "react-icons/lu";
+import { LuCircle, LuRedo2, LuSquare, LuTrash2, LuUndo2 } from "react-icons/lu";
 import { iconItemClassName } from "@/design-system/constants";
 import { IconButton } from "@/design-system/icon-button";
 import { TOOLTIP_SIDE } from "@/sketch-detail/control-toolbar/constants";
@@ -8,6 +8,7 @@ import type { ShapeType } from "@/sketch-detail/shapes/useShapes";
 type ShapeNavigationProps = {
   disabled: boolean;
   onAddShape: (type: ShapeType) => void;
+  onDelete: () => void;
   undo: () => void;
   redo: () => void;
   canUndo: boolean;
@@ -29,6 +30,7 @@ const shapeItems: ShapeItem[] = [
 const ShapeNavigation = ({
   disabled,
   onAddShape,
+  onDelete,
   undo,
   redo,
   canUndo,
@@ -65,6 +67,16 @@ const ShapeNavigation = ({
         onClick={redo}
       >
         <LuRedo2 />
+      </IconButton>
+      <IconButton
+        label="削除"
+        tooltipHint="Deleteキー"
+        side={TOOLTIP_SIDE}
+        className={iconItemClassName}
+        disabled={disabled}
+        onClick={onDelete}
+      >
+        <LuTrash2 />
       </IconButton>
     </div>
   );

@@ -15,12 +15,14 @@ const renderNavigation = (
   { canUndo, canRedo }: History = { canUndo: true, canRedo: true },
 ) => {
   const onAddShape = vi.fn();
+  const onDelete = vi.fn();
   const undo = vi.fn();
   const redo = vi.fn();
   render(
     <ShapeNavigation
       disabled={disabled}
       onAddShape={onAddShape}
+      onDelete={onDelete}
       undo={undo}
       redo={redo}
       canUndo={canUndo}

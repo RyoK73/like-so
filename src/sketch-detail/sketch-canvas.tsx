@@ -7,6 +7,7 @@ import { SketchError } from "@/sketch-detail/sketch-error";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
 import { HandoffToolbar } from "@/sketch-detail/handoff-toolbar";
 import { useCanvasHistory } from "@/sketch-detail/history/useCanvasHistory";
+import { useDeleteSelectedShape } from "@/sketch-detail/selection/useDeleteSelectedShape";
 import { useShapes } from "@/sketch-detail/shapes/useShapes";
 import { useSave } from "@/sketch-detail/save/useSave";
 import type { CanvasFrame } from "@/sketch-detail/save/saveToDb.types";
@@ -44,6 +45,10 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
   const { undo, redo, canUndo, canRedo, isOperable } = useCanvasHistory(
     fabricCanvasRef,
     isLoaded,
+  );
+  const { deleteSelectedShape } = useDeleteSelectedShape(
+    fabricCanvasRef,
+    !isLoaded || !isOperable,
   );
   // Until the canvas container is measured, show the frame as it is.
   const transform = view?.transform ?? { zoom: 1, tx: 0, ty: 0 };
@@ -115,6 +120,7 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
         <ShapeNavigation
           disabled={!isLoaded || !isOperable}
           onAddShape={createShape}
+          onDelete={deleteSelectedShape}
           undo={undo}
           redo={redo}
           canUndo={canUndo}
