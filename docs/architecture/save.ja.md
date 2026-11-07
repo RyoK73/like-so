@@ -3,7 +3,7 @@
 ## 流れ
 
 ```
-fabric "object:added" / "object:modified"(読み込み完了後)
+fabric "object:added" / "object:modified" / "object:removed"(読み込み完了後)
   -> useSave (250msのdebounce)
   -> saveToDb
   -> upsertSketch (ブラウザのSupabaseクライアント)
@@ -24,15 +24,15 @@ TitleToolbarの入力
 
 ## ファイル
 
-| ファイル                                                | 役割                                                                             |
-| ------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| `src/sketch-detail/save/useSave.ts`                     | 自動保存がオンのとき、`object:added`と`object:modified`で保存するフックです。    |
-| `src/sketch-detail/save/saveToDb.ts`                    | キャンバスから行を組み立て、`upsertSketch`を呼びます。                           |
-| `src/sketch-detail/save/useSaveMeta.ts`                 | タイトルと説明の入力を検証し、debounceして保存するフックです。                   |
-| `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | タイトルと説明を検証する純粋関数です。                                           |
-| `src/sketch-detail/save/revalidateSketchList.ts`        | 保存の成功後に、`/sketches`のクライアントキャッシュを破棄するServer Actionです。 |
-| `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`、`upsertSketch`                                                   |
-| `src/supabase/sketch-crud/updateSketchMeta.ts`          | `title`と`description`だけを更新します。                                         |
+| ファイル                                                | 役割                                                                                            |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `src/sketch-detail/save/useSave.ts`                     | 自動保存がオンのとき、`object:added`、`object:modified`、`object:removed`で保存するフックです。 |
+| `src/sketch-detail/save/saveToDb.ts`                    | キャンバスから行を組み立て、`upsertSketch`を呼びます。                                          |
+| `src/sketch-detail/save/useSaveMeta.ts`                 | タイトルと説明の入力を検証し、debounceして保存するフックです。                                  |
+| `src/sketch-detail/title-toolbar/validateSketchMeta.ts` | タイトルと説明を検証する純粋関数です。                                                          |
+| `src/sketch-detail/save/revalidateSketchList.ts`        | 保存の成功後に、`/sketches`のクライアントキャッシュを破棄するServer Actionです。                |
+| `src/supabase/sketch-crud/handleDb.ts`                  | `insertSketch`、`upsertSketch`                                                                  |
+| `src/supabase/sketch-crud/updateSketchMeta.ts`          | `title`と`description`だけを更新します。                                                        |
 
 ## 詳細
 
@@ -42,8 +42,10 @@ TitleToolbarの入力
   - 第4引数の`isSketchLoaded`が`true`になるまで、イベントを購読しません。
     読み込み中の`loadFromJSON`が、オブジェクトごとに`object:added`を発火するためです。
     開いただけで保存されることを防ぎます。
-  - undo / redo の復元(`loadFromJSON`)も、オブジェクトごとに`object:added`を発火するため、復元後の状態が保存されます。
-    ただし、オブジェクトが0個の状態への復元では`object:added`が発火しないため、保存されません。
+  - 図形を削除すると、図形ごとに`object:removed`が発火します。
+    複数の図形を一度に削除しても、debounceにより保存は1回です。
+  - undo / redo の復元(`loadFromJSON`)は、キャンバスを空にするときに`object:removed`を、オブジェクトを戻すときに`object:added`を、オブジェクトごとに発火するため、復元後の状態が保存されます。
+    オブジェクトが0個の状態への復元も、復元前に図形があれば`object:removed`が発火するため、保存されます。
   - 最初の保存で返ったidを`sketchIdRef`に保持し、以降は同じ行をupsertします。
   - `fabricCanvasRef`、`sketchInfoRef`、`frameRef`のいずれかが未設定の場合は、保存せずに`err`を設定します。
 - `saveToDb`

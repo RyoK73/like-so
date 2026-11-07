@@ -13,6 +13,7 @@ const useCanvasHistory = (
   const { history, recordHistory, undo, redo } = useHistory();
   const [isOperable, setIsOperable] = useState(true); // `true` normally. `false` while restoring, which disables the buttons.
   const isRestoringRef = useRef(false); // Skips recording while the canvas is being restored by undo / redo.
+  const isRecordScheduledRef = useRef(false); // `true` until the scheduled record runs. Merges events fired in the same tick into one record.
   const currentCanvasRef = useRef<CanvasJson | null>(null);
   const isInitialRecorded = useRef(false);
   const lastOperationRef = useRef<"undo" | "redo" | null>(null); // Used to move the history back when the restore fails.
@@ -40,8 +41,12 @@ const useCanvasHistory = (
     // Records the canvas after the current event handlers finish.
     const record = () => {
       if (isRestoringRef.current) return;
+      // Removing a multiple selection fires `object:removed` for each shape. Record the canvas once for them.
+      if (isRecordScheduledRef.current) return;
+      isRecordScheduledRef.current = true;
       // `createShape` adds a shape first and moves it after. Read the canvas after that.
       queueMicrotask(() => {
+        isRecordScheduledRef.current = false;
         const recordedCanvas: CanvasJson = canvas.toJSON();
         currentCanvasRef.current = recordedCanvas;
         recordHistory(recordedCanvas);
@@ -49,10 +54,12 @@ const useCanvasHistory = (
     };
     canvas.on("object:added", record);
     canvas.on("object:modified", record);
+    canvas.on("object:removed", record);
 
     return () => {
       canvas.off("object:added", record);
       canvas.off("object:modified", record);
+      canvas.off("object:removed", record);
     };
   }, [fabricCanvasRef, isLoaded, recordHistory]);
 

@@ -385,6 +385,66 @@ describe("useSave", () => {
     });
   });
 
+  describe("isLoaded and object:removed", () => {
+    const SAVE_DELAY_WAIT = 400; // Longer than SAVE_DELAY(250ms).
+
+    const renderUseSave = (isLoaded: boolean) => {
+      const hook = renderHook(
+        ({ loaded }) =>
+          useSave(fabricCanvasTestRef, canvasIdTestRef, frameTestRef, loaded),
+        { initialProps: { loaded: isLoaded } },
+      );
+      act(() => {
+        hook.result.current.sketchInfoRef.current = { title: "test title" };
+      });
+      return hook;
+    };
+
+    // Adds the shapes before `useSave` subscribes, so that only the removal triggers a save.
+    const addShapes = (count: number) => {
+      const shapes = Array.from({ length: count }, () => new Rect());
+      fabricCanvasTestRef.current.add(...shapes);
+      return shapes;
+    };
+
+    it("should not call saveToDb when an object is removed while isLoaded is false", async () => {
+      const [rect] = addShapes(1);
+      renderUseSave(false);
+
+      await act(async () => {
+        fabricCanvasTestRef.current.remove(rect);
+        await new Promise((resolve) => setTimeout(resolve, SAVE_DELAY_WAIT));
+      });
+
+      expect(saveToDb).not.toHaveBeenCalled();
+    });
+
+    it("should call saveToDb when an object is removed after isLoaded is true", async () => {
+      const [rect] = addShapes(1);
+      renderUseSave(true);
+
+      await act(async () => {
+        fabricCanvasTestRef.current.remove(rect);
+      });
+
+      await waitFor(() => {
+        expect(saveToDb).toHaveBeenCalled();
+      });
+    });
+
+    it("should call saveToDb once when several objects are removed in a row", async () => {
+      const shapes = addShapes(3);
+      renderUseSave(true);
+
+      await act(async () => {
+        fabricCanvasTestRef.current.remove(...shapes);
+        await new Promise((resolve) => setTimeout(resolve, SAVE_DELAY_WAIT));
+      });
+
+      expect(saveToDb).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe("Error pattern", () => {
     it("should return an error as err when saveToDb returns an error", async () => {
       vi.mocked(saveToDb).mockResolvedValue({

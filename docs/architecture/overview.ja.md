@@ -40,22 +40,24 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `src/dev-scripts/`     | 開発用スクリプト                                             |
 | `src/test/`            | テスト用のヘルパー                                           |
 
-## 描画(`src/sketch-detail/`の`canvas/`・`shapes/`・`history/`・`viewport/`)
+## 描画(`src/sketch-detail/`の`canvas/`・`shapes/`・`selection/`・`history/`・`viewport/`)
 
 | ディレクトリ | 責務                                     |
 | ------------ | ---------------------------------------- |
 | `canvas/`    | fabricのキャンバスの生成・破棄・読み込み |
 | `shapes/`    | 図形の作成                               |
+| `selection/` | 選択した図形の削除                       |
 | `history/`   | undo/redo                                |
 | `viewport/`  | 固定枠、パン、ズーム                     |
 
-| ファイル                      | 役割                                                                                                                           |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `canvas/useFabricCanvas.ts`   | fabricのキャンバスを作成して`canvasJson`を読み込み、アンマウント時に破棄します。                                               |
-| `shapes/useShapes.ts`         | 四角形、円を、表示中のビューの中央(枠内)に追加します。                                                                         |
-| `history/useHistory.ts`       | `past` / `present` / `future`を保持し、`recordHistory`、`undo`、`redo`を提供します。                                           |
-| `history/useCanvasHistory.ts` | キャンバスの変更(`object:added` / `object:modified`)を`useHistory`に記録し、undo / redo時に`present`をキャンバスへ反映します。 |
-| `viewport/`                   | 固定枠、パン、ズームの計算とフック。詳細は[固定枠とパン・ズーム](./viewport.ja.md)を参照してください。                         |
+| ファイル                              | 役割                                                                                                                                                                                                         |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `canvas/useFabricCanvas.ts`           | fabricのキャンバスを作成して`canvasJson`を読み込み、アンマウント時に破棄します。                                                                                                                             |
+| `shapes/useShapes.ts`                 | 四角形、円を、表示中のビューの中央(枠内)に追加します。                                                                                                                                                       |
+| `selection/useDeleteSelectedShape.ts` | 選択した図形を削除する`deleteSelectedShape`を返し、Delete、Backspaceキーも受け付けます。                                                                                                                     |
+| `history/useHistory.ts`               | `past` / `present` / `future`を保持し、`recordHistory`、`undo`、`redo`を提供します。                                                                                                                         |
+| `history/useCanvasHistory.ts`         | キャンバスの変更(`object:added` / `object:modified` / `object:removed`)を`useHistory`に記録し、undo / redo時に`present`をキャンバスへ反映します。同じタイミングで複数のイベントが発火しても、記録は1件です。 |
+| `viewport/`                           | 固定枠、パン、ズームの計算とフック。詳細は[固定枠とパン・ズーム](./viewport.ja.md)を参照してください。                                                                                                       |
 
 `useFabricCanvas`の詳細は、次の通りです。
 
@@ -137,9 +139,10 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `sketch-editor.tsx` | Client Component。`TitleToolbar`で検証を通ったタイトルと説明を保持し、`SketchCanvas`に渡します。                                           |
 | `sketch-canvas.tsx` | Client Component。キャンバス、操作用ツールバー(`ControlToolbar`)、自動保存を担当します。                                                   |
 | `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトルと説明の入力欄、サイズ、更新日時を表示します。入力値の検証(`validateSketchMeta`)もあります。 |
-| `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加ボタン(`ShapeNavigation`)              |
+| `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加・削除ボタンなど(`ShapeNavigation`)    |
 | `handoff-toolbar/`  | 受け渡し用ツールバー(`HandoffToolbar`)。スケッチの画像をコピーまたはダウンロードするボタンを持ちます                                       |
 | `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                                       |
+| `selection/`        | 選択した図形の削除(前節を参照)                                                                                                             |
 | `shapes/`           | 図形の作成(前節を参照)                                                                                                                     |
 | `history/`          | undo/redo(前節を参照)                                                                                                                      |
 | `viewport/`         | 固定枠、パン、ズーム(前節と[固定枠とパン・ズーム](./viewport.ja.md)を参照)                                                                 |

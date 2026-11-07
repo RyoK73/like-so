@@ -8,12 +8,19 @@ type IconButtonProps = Omit<
   "variant" | "size"
 > & {
   label: string;
+  tooltipHint?: string; // Shown after `label` in the tooltip only, such as a shortcut key. The accessible name stays `label`.
   side: Side;
 };
 
-const IconButton = ({ label, side, ...props }: IconButtonProps) => {
+const IconButton = ({
+  label,
+  tooltipHint,
+  side,
+  ...props
+}: IconButtonProps) => {
+  const tooltipMessage = tooltipHint ? `${label}(${tooltipHint})` : label;
   return (
-    <MyToolTip message={label} side={side}>
+    <MyToolTip message={tooltipMessage} side={side}>
       <Button variant="icon" aria-label={label} {...props} />
     </MyToolTip>
   );

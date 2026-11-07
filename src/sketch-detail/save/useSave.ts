@@ -70,10 +70,12 @@ const useSave = (
     };
     canvas.on("object:added", handler);
     canvas.on("object:modified", handler);
+    canvas.on("object:removed", handler);
 
     return () => {
       canvas.off("object:added", handler);
       canvas.off("object:modified", handler);
+      canvas.off("object:removed", handler);
     };
   }, [sketchInfoRef, fabricCanvasRef, isAutoSave, isSketchLoaded, save]);
 
