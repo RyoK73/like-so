@@ -8,7 +8,7 @@ const EDITABLE_SELECTOR =
 const isEditableTarget = (target: EventTarget | null) =>
   target instanceof Element && target.closest(EDITABLE_SELECTOR) !== null;
 
-// delete key process is required disabled or not.
+// The Delete key process needs to know whether it is disabled or not.
 const useDeleteSelectedShape = (
   fabricCanvasRef: RefObject<Canvas | null>,
   disabled: boolean,
