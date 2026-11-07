@@ -18,7 +18,6 @@ const json = {
 };
 
 // A minimal stand-in for `fabric.Canvas`. `change` mimics a user operation: the canvas changes first, then the event fires.
-
 const createFakeCanvas = (initial: CanvasJson) => {
   let current = initial;
   const handlers = new Map<string, Set<Handler>>();
@@ -76,6 +75,15 @@ const loadedJson = (
   fakeCanvas: ReturnType<typeof createFakeCanvas>,
   call: number,
 ) => fakeCanvas.canvas.loadFromJSON.mock.calls[call]?.[0];
+
+// Keeps the next `loadFromJSON` pending, so that the restoring process keeps running until the returned `finish` is called.
+const holdRestoring = (fakeCanvas: ReturnType<typeof createFakeCanvas>) => {
+  let finish: () => void = () => {};
+  fakeCanvas.canvas.loadFromJSON.mockImplementationOnce(
+    () => new Promise<void>((resolve) => (finish = resolve)),
+  );
+  return () => finish();
+};
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -183,17 +191,27 @@ describe("useCanvasHistory", () => {
       );
     });
 
-    it("should not record history on `object:removed` while restoring process is running", async () => {
-      const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
-      const recorded = fakeCanvas.canvas.toJSON.mock.calls.length;
+    it.each(["object:added", "object:removed"])(
+      "should not record history on `%s` while restoring process is running, and should record it after the restoring finishes",
+      async (event) => {
+        const { fakeCanvas, result } = setup();
+        await changeCanvas(fakeCanvas, json.first);
+        const finish = holdRestoring(fakeCanvas);
 
-      // The fake `loadFromJSON` fires `object:removed` while restoring.
-      await act(async () => result.current.undo());
+        await act(async () => result.current.undo());
+        expect(result.current.isOperable).toBe(false); // The restoring process is running.
 
-      expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(recorded);
-      expect(result.current.canRedo).toBe(true);
-    });
+        const recorded = fakeCanvas.canvas.toJSON.mock.calls.length;
+
+        await changeCanvas(fakeCanvas, json.second, event);
+        expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(recorded);
+
+        await act(async () => finish());
+        expect(result.current.isOperable).toBe(true);
+        await changeCanvas(fakeCanvas, json.second, event);
+        expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(recorded + 1);
+      },
+    );
 
     it("should not be able to redo after a new change following undo", async () => {
       const { fakeCanvas, result } = setup();
@@ -204,17 +222,6 @@ describe("useCanvasHistory", () => {
       await changeCanvas(fakeCanvas, json.second);
 
       expect(result.current.canRedo).toBe(false);
-    });
-
-    it("should not record history on `object:added` while restoring process is running", async () => {
-      const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
-      const recorded = fakeCanvas.canvas.toJSON.mock.calls.length;
-
-      await act(async () => result.current.undo());
-
-      expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(recorded);
-      expect(result.current.canRedo).toBe(true);
     });
   });
 
