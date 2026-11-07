@@ -41,7 +41,7 @@ const createFakeCanvas = (initial: CanvasJson) => {
     }),
   };
 
-  const change = (next: CanvasJson, event = "object:added") => {
+  const change = (next: CanvasJson, event: string) => {
     current = next;
     emit(event);
   };
@@ -64,7 +64,7 @@ const setup = ({ isLoaded = true }: { isLoaded?: boolean } = {}) => {
 const changeCanvas = async (
   fakeCanvas: ReturnType<typeof createFakeCanvas>,
   next: CanvasJson,
-  event?: string,
+  event: string,
 ) => {
   await act(async () => {
     fakeCanvas.change(next, event);
@@ -94,7 +94,7 @@ describe("useCanvasHistory", () => {
     it("should not record changes while the canvas is not loaded", async () => {
       const { fakeCanvas } = setup({ isLoaded: false });
 
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
 
       expect(fakeCanvas.canvas.on).not.toHaveBeenCalled();
       expect(fakeCanvas.canvas.toJSON).not.toHaveBeenCalled();
@@ -103,7 +103,7 @@ describe("useCanvasHistory", () => {
     it("should record the loaded canvas as the first entry", async () => {
       const { fakeCanvas, result } = setup();
 
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
       await act(async () => result.current.undo());
 
       expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(2);
@@ -195,7 +195,7 @@ describe("useCanvasHistory", () => {
       "should not record history on `%s` while restoring process is running, and should record it after the restoring finishes",
       async (event) => {
         const { fakeCanvas, result } = setup();
-        await changeCanvas(fakeCanvas, json.first);
+        await changeCanvas(fakeCanvas, json.first, "object:added");
         const finish = holdRestoring(fakeCanvas);
 
         await act(async () => result.current.undo());
@@ -215,11 +215,11 @@ describe("useCanvasHistory", () => {
 
     it("should not be able to redo after a new change following undo", async () => {
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
       await act(async () => result.current.undo());
       expect(result.current.canRedo).toBe(true);
 
-      await changeCanvas(fakeCanvas, json.second);
+      await changeCanvas(fakeCanvas, json.second, "object:added");
 
       expect(result.current.canRedo).toBe(false);
     });
@@ -228,7 +228,7 @@ describe("useCanvasHistory", () => {
   describe("restoring", () => {
     it("should call `loadFromJSON` with the previous value on undo", async () => {
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
 
       await act(async () => result.current.undo());
 
@@ -238,7 +238,7 @@ describe("useCanvasHistory", () => {
 
     it("should call `loadFromJSON` with the next value on redo", async () => {
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
       await act(async () => result.current.undo());
 
       await act(async () => result.current.redo());
@@ -249,7 +249,7 @@ describe("useCanvasHistory", () => {
 
     it("should disable operations while restoring and enable them again after it finishes", async () => {
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
       let finish: () => void = () => {};
       fakeCanvas.canvas.loadFromJSON.mockImplementationOnce(
         () => new Promise<void>((resolve) => (finish = resolve)),
@@ -272,7 +272,7 @@ describe("useCanvasHistory", () => {
 
     it("should not restore on redo when there is nothing to redo", async () => {
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
 
       await act(async () => result.current.redo());
 
@@ -282,7 +282,7 @@ describe("useCanvasHistory", () => {
     it("should stop restoring and show an error toast when `loadFromJSON` fails", async () => {
       const add = vi.spyOn(toast, "add").mockReturnValue("toast-id");
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
       fakeCanvas.canvas.loadFromJSON.mockRejectedValueOnce(new Error("failed"));
 
       await act(async () => result.current.undo());
@@ -303,7 +303,7 @@ describe("useCanvasHistory", () => {
     it("should put the history position back when `loadFromJSON` fails on redo", async () => {
       vi.spyOn(toast, "add").mockReturnValue("toast-id");
       const { fakeCanvas, result } = setup();
-      await changeCanvas(fakeCanvas, json.first);
+      await changeCanvas(fakeCanvas, json.first, "object:added");
       await act(async () => result.current.undo());
       fakeCanvas.canvas.loadFromJSON.mockRejectedValueOnce(new Error("failed"));
 
