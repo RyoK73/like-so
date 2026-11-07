@@ -18,6 +18,7 @@ const json = {
 };
 
 // A minimal stand-in for `fabric.Canvas`. `change` mimics a user operation: the canvas changes first, then the event fires.
+
 const createFakeCanvas = (initial: CanvasJson) => {
   let current = initial;
   const handlers = new Map<string, Set<Handler>>();
@@ -33,8 +34,9 @@ const createFakeCanvas = (initial: CanvasJson) => {
       handlers.get(name)?.delete(handler);
     }),
     toJSON: vi.fn(() => current),
-    // `loadFromJSON` of fabric fires `object:added` for each restored object.
+    // `loadFromJSON` of fabric clears the canvas first (`object:removed` for each object), then fires `object:added` for each restored object.
     loadFromJSON: vi.fn(async (next: CanvasJson) => {
+      emit("object:removed");
       emit("object:added");
       current = next;
     }),
@@ -121,6 +123,76 @@ describe("useCanvasHistory", () => {
       await changeCanvas(fakeCanvas, json.first, "object:modified");
 
       expect(result.current.canUndo).toBe(true);
+    });
+
+    it("should be able to undo after `object:removed`", async () => {
+      const { fakeCanvas, result } = setup();
+
+      await changeCanvas(fakeCanvas, json.first, "object:removed");
+
+      expect(result.current.canUndo).toBe(true);
+    });
+
+    it("should restore the previous canvas on undo after `object:removed`", async () => {
+      const { fakeCanvas, result } = setup();
+      await changeCanvas(fakeCanvas, json.first, "object:added");
+      await changeCanvas(fakeCanvas, json.second, "object:removed");
+
+      await act(async () => result.current.undo());
+
+      expect(loadedJson(fakeCanvas, 0)).toEqual(json.first);
+    });
+
+    it("should restore the removed state again on redo after undo", async () => {
+      const { fakeCanvas, result } = setup();
+      await changeCanvas(fakeCanvas, json.first, "object:added");
+      await changeCanvas(fakeCanvas, json.second, "object:removed");
+      await act(async () => result.current.undo());
+
+      await act(async () => result.current.redo());
+
+      expect(loadedJson(fakeCanvas, 1)).toEqual(json.second);
+    });
+
+    it("should record one entry when `object:removed` fires several times at once", async () => {
+      const { fakeCanvas, result } = setup();
+
+      // Deleting a multiple selection fires `object:removed` for each shape in the same tick.
+      await act(async () => {
+        fakeCanvas.change(json.first, "object:removed");
+        fakeCanvas.emit("object:removed");
+      });
+      await act(async () => result.current.undo());
+
+      expect(result.current.canUndo).toBe(false);
+      expect(loadedJson(fakeCanvas, 0)).toEqual(json.initial);
+    });
+
+    it("should record one entry when events fire several times in the same tick", async () => {
+      const { fakeCanvas } = setup();
+      const recordedBefore = fakeCanvas.canvas.toJSON.mock.calls.length;
+
+      await act(async () => {
+        fakeCanvas.change(json.first, "object:added");
+        fakeCanvas.emit("object:modified");
+        fakeCanvas.emit("object:removed");
+      });
+
+      expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(
+        recordedBefore + 1,
+      );
+    });
+
+    it("should not record history on `object:removed` while restoring process is running", async () => {
+      const { fakeCanvas, result } = setup();
+      await changeCanvas(fakeCanvas, json.first);
+      const recorded = fakeCanvas.canvas.toJSON.mock.calls.length;
+
+      // The fake `loadFromJSON` fires `object:removed` while restoring.
+      await act(async () => result.current.undo());
+
+      expect(fakeCanvas.canvas.toJSON).toHaveBeenCalledTimes(recorded);
+      expect(result.current.canRedo).toBe(true);
     });
 
     it("should not be able to redo after a new change following undo", async () => {
