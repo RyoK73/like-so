@@ -6,6 +6,7 @@ const copyImage = async (blob: Promise<Blob>): Promise<void> => {
     await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
     toast.add({ type: "success", title: "コピーしました" });
   } catch {
+    // TODO(#70): Log the error according to the policy decided in #70.
     toast.add({ type: "error", title: "コピーに失敗しました" });
   }
 };
