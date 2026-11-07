@@ -55,7 +55,7 @@ _Like-so_ は、機能の数で競いません。
   - [認証](./docs/architecture/auth.ja.md)
   - [データベース](./docs/architecture/database.ja.md)
   - [スケッチの保存](./docs/architecture/save.ja.md)
-  - [ナビゲーションメニュー](./docs/architecture/navigation-menu.ja.md)
+  - [ツールバー](./docs/architecture/toolbar.ja.md)
   - [固定枠とパン・ズーム](./docs/architecture/viewport.ja.md)
 - 規約
   - [ディレクトリ構成](./docs/rules/directory-structure.ja.md)

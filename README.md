@@ -56,7 +56,7 @@ Setup, architecture and coding rules are in [`docs/`](./docs).
   - [Authentication](./docs/architecture/auth.en.md)
   - [Database](./docs/architecture/database.en.md)
   - [Saving sketches](./docs/architecture/save.en.md)
-  - [Navigation menu](./docs/architecture/navigation-menu.en.md)
+  - [Toolbars](./docs/architecture/toolbar.en.md)
   - [Fixed frame, pan and zoom](./docs/architecture/viewport.en.md)
 - Rules
   - [Directory structure](./docs/rules/directory-structure.en.md)

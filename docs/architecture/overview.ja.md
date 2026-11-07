@@ -138,6 +138,7 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 | `sketch-canvas.tsx` | Client Component。キャンバス、操作用ツールバー(`ControlToolbar`)、自動保存を担当します。                                                   |
 | `title-toolbar/`    | タイトル用ツールバー(`TitleToolbar`)。タイトルと説明の入力欄、サイズ、更新日時を表示します。入力値の検証(`validateSketchMeta`)もあります。 |
 | `control-toolbar/`  | 操作用ツールバー(`ControlToolbar`)の枠と、ズームの操作(`zoom-controls/`の`ZoomControls`)、図形の追加ボタン(`ShapeNavigation`)              |
+| `handoff-toolbar/`  | 受け渡し用ツールバー(`HandoffToolbar`)。スケッチの画像をコピーまたはダウンロードするボタンを持ちます                                       |
 | `canvas/`           | fabricのキャンバスの生成・破棄・読み込み(前節を参照)                                                                                       |
 | `shapes/`           | 図形の作成(前節を参照)                                                                                                                     |
 | `history/`          | undo/redo(前節を参照)                                                                                                                      |
@@ -153,23 +154,8 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
   グリッドの間隔は、スケッチの`cell_size`で、ズームとパンに追従します。
   グリッドは枠の外側にも続き、枠の外側を暗くすることはしません。
   枠は、細い枠線(`brush-a`と`ring-border`)で示します。
-- タイトル用ツールバー(`src/sketch-detail/title-toolbar/`の`TitleToolbar`)は、キャンバスの上に重ねて、上部中央に浮かせます。
-  ツールバー自身が配置(`absolute`)を持つので、ツールバーの外側ではキャンバスにポインターイベントが届きます。
-  `title`と`description`は、常に入力欄として表示します。
-  入力欄は、フォーカスされるまで枠を出しません。
-  `description`の入力欄は、行数に応じて伸びます(高さの上限あり)。
-  入力の検証と保存は、[スケッチの保存](./save.ja.md)を参照してください。
-  `width × height`と更新日時は、表示のみです。
-  操作用のUIではないので、`role="toolbar"`は付けません。
-- 操作用ツールバー(`src/sketch-detail/control-toolbar/`の`ControlToolbar`)は、キャンバスの上に重ねて、画面の下端から少し浮かせて中央に置きます。
-  ツールバー自身が枠と配置(`absolute`)を持ち、中身は`children`で受け取ります。
-  中身は、図形用ナビ(`ShapeNavigation`)とズームの操作(`ZoomControls`)です。
-  図形用ナビのボタンは、四角形、円、元に戻す、やり直しです。
-  ズームの操作は、「− 倍率の入力欄 % +」です([固定枠とパン・ズーム](./viewport.ja.md)を参照)。
-  どれも、`isLoaded`が`true`になるまで無効です。
-  図形用ナビは、undo / redoでキャンバスを復元している間(`isOperable`が`false`)も無効です。
-  元に戻す、やり直しは、戻せる履歴ややり直せる履歴がないときも無効です。
-
+- キャンバスの上には、タイトル用、操作用、受け渡し用のツールバーを重ねて浮かせます。
+  配置と仕様は、[ツールバー](./toolbar.ja.md)を参照してください。
 - 保存に失敗すると、固定の文言をtoast(`id`は固定)で表示します。
   同じ`id`のtoastは、重ねずに更新されます。
 - 読み込みに失敗した場合、または`canvas_json`がオブジェクトでない場合は、キャンバスとボタンを表示しません。
@@ -182,4 +168,4 @@ fabric.jsだけは、`^`を付けずにバージョンを固定しています�
 - [認証](./auth.ja.md)
 - [データベース](./database.ja.md)
 - [スケッチの保存](./save.ja.md)
-- [ナビゲーションメニュー](./navigation-menu.ja.md)
+- [ツールバー](./toolbar.ja.md)

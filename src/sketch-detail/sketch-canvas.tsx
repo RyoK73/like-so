@@ -5,6 +5,7 @@ import { ControlToolbar, ZoomControls } from "@/sketch-detail/control-toolbar";
 import { ShapeNavigation } from "@/sketch-detail/control-toolbar/shape-navigation";
 import { SketchError } from "@/sketch-detail/sketch-error";
 import { useFabricCanvas } from "@/sketch-detail/canvas/useFabricCanvas";
+import { HandoffToolbar } from "@/sketch-detail/handoff-toolbar";
 import { useCanvasHistory } from "@/sketch-detail/history/useCanvasHistory";
 import { useShapes } from "@/sketch-detail/shapes/useShapes";
 import { useSave } from "@/sketch-detail/save/useSave";
@@ -128,6 +129,12 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
           onSetZoom={setZoom}
         />
       </ControlToolbar>
+      <HandoffToolbar
+        fabricCanvasRef={fabricCanvasRef}
+        frame={frame}
+        title={sketch.title}
+        isLoaded={isLoaded}
+      />
     </div>
   );
 };

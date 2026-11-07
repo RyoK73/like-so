@@ -138,6 +138,7 @@ See [Authentication](./auth.en.md) for details.
 | `sketch-canvas.tsx` | Client Component. Handles the canvas, the control toolbar (`ControlToolbar`) and auto-save                                                                           |
 | `title-toolbar/`    | The title toolbar (`TitleToolbar`). Shows the inputs for the title and description, the size and the updated time. It also has the validation (`validateSketchMeta`) |
 | `control-toolbar/`  | The frame of the control toolbar (`ControlToolbar`), the zoom controls (`ZoomControls` in `zoom-controls/`), and the buttons to add shapes (`ShapeNavigation`)       |
+| `handoff-toolbar/`  | The handoff toolbar (`HandoffToolbar`). Has the buttons to copy or download the image of the sketch                                                                  |
 | `canvas/`           | Creating, disposing and loading the fabric canvas (see the section above)                                                                                            |
 | `shapes/`           | Creating shapes (see the section above)                                                                                                                              |
 | `history/`          | Undo / redo (see the section above)                                                                                                                                  |
@@ -153,23 +154,8 @@ Details of `SketchCanvas`:
   The interval of the grid is `cell_size` of the sketch, and it follows the zoom and the pan.
   The grid continues outside the frame, and the outside of the frame is not dimmed.
   The frame is shown with a thin outline (`brush-a` and `ring-border`).
-- The title toolbar (`TitleToolbar` in `src/sketch-detail/title-toolbar/`) floats over the canvas at the top center.
-  The toolbar has its own position (`absolute`), so pointer events reach the canvas outside the toolbar.
-  `title` and `description` are always shown as inputs.
-  The inputs have no border until they are focused.
-  The input for `description` grows with the number of lines (with a maximum height).
-  See [Saving sketches](./save.en.md) for the validation and the saving of the input.
-  `width × height` and the updated time are display only.
-  It is not an operation UI, so it does not have `role="toolbar"`.
-- The control toolbar (`ControlToolbar` in `src/sketch-detail/control-toolbar/`) floats over the canvas, centered and slightly lifted from the bottom edge of the screen.
-  The toolbar has its own frame and position (`absolute`), and receives its content as `children`.
-  It has `role="toolbar"`.
-  The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`ZoomControls`).
-  The buttons of the shape navigation are the rectangle, the circle, undo and redo.
-  The zoom controls are "− zoom input % +" (see [Fixed frame, pan and zoom](./viewport.en.md)).
-  The zoom controls are disabled until `isLoaded` becomes `true`.
-  The shape navigation is disabled until `isLoaded` becomes `true` and while the canvas is being restored by undo / redo (`isOperable` is `false`).
-  Undo and redo are also disabled while there is nothing to undo or redo.
+- The title toolbar, the control toolbar and the handoff toolbar float over the canvas.
+  See [Toolbars](./toolbar.en.md) for their positions and specifications.
 - When saving fails, it shows a fixed message as a toast with a fixed `id`.
   A toast with the same `id` is updated instead of stacking.
 - When the loading fails, or `canvas_json` is not an object, it shows neither the canvas nor the buttons.
@@ -182,4 +168,4 @@ Details of `SketchCanvas`:
 - [Authentication](./auth.en.md)
 - [Database](./database.en.md)
 - [Saving sketches](./save.en.md)
-- [Navigation menu](./navigation-menu.en.md)
+- [Toolbars](./toolbar.en.md)
