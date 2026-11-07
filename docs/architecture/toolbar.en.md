@@ -145,17 +145,17 @@ The content is the shape navigation (`ShapeNavigation`) and the zoom controls (`
 - The shape navigation is also disabled while the canvas is being restored by undo / redo (`isOperable` is `false`).
 - Undo and redo are also disabled while there is nothing to undo or redo.
 - The delete button (`LuTrash2`) deletes the selected shapes.
-  Its tooltip is "削除(Deleteキー)", shown with `tooltipHint` of `IconButton`.
+  Its tooltip is "削除(Delete / Backspaceキー)", shown with `tooltipHint` of `IconButton`.
   It does not subscribe to the selection, so it is enabled even when no shape is selected, and then it does nothing.
   When several shapes are selected (drag selection), it deletes all of them.
-- The Delete key does the same deletion.
+- The Delete and Backspace keys do the same deletion.
+  This is because the "delete" key on a Mac is reported as Backspace.
   Both the deletion and the key handling are in `useDeleteSelectedShape` (`src/sketch-detail/selection/`).
-  The Delete key does not delete in these cases:
+  The Delete and Backspace keys do not delete in these cases:
   - Any of Ctrl, Meta, Alt and Shift is held.
   - The key is pressed in an input, a textarea or a `contenteditable` element.
   - The IME is composing text.
   - The button is disabled (`isLoaded` is `false`, or `isOperable` is `false`).
-  - Backspace is not a target.
 
 ## Handoff toolbar
 

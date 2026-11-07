@@ -145,17 +145,17 @@ tooltipは、項目の上側に出します(`control-toolbar/constants.ts`の`TO
 - 図形用ナビは、undo / redoでキャンバスを復元している間(`isOperable`が`false`)も無効です。
 - 元に戻す、やり直しは、戻せる履歴ややり直せる履歴がないときも無効です。
 - 削除ボタン(`LuTrash2`)は、選択中の図形を削除します。
-  tooltipは「削除(Deleteキー)」で、`IconButton`の`tooltipHint`で表示します。
+  tooltipは「削除(Delete / Backspaceキー)」で、`IconButton`の`tooltipHint`で表示します。
   選択を購読しないので、図形が選択されていなくても有効で、そのときは何もしません。
   複数選択(ドラッグ選択)しているときは、すべて削除します。
-- Deleteキーでも、同じ削除ができます。
+- Delete、Backspaceキーでも、同じ削除ができます。
+  Macの「delete」キーは、Backspaceとして届くためです。
   削除の処理とキーの受け付けは、どちらも`useDeleteSelectedShape`(`src/sketch-detail/selection/`)が持ちます。
-  次のときは、Deleteキーで削除しません。
+  次のときは、Delete、Backspaceキーで削除しません。
   - Ctrl、Meta、Alt、Shiftのいずれかを押しているとき。
   - input、textarea、`contenteditable`の中で押したとき。
   - IMEで変換中のとき。
   - ボタンが無効のとき(`isLoaded`が`false`、または`isOperable`が`false`)。
-  - Backspaceは、対象外です。
 
 ## 受け渡し用ツールバー
 

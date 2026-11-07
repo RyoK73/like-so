@@ -70,7 +70,7 @@ const ShapeNavigation = ({
       </IconButton>
       <IconButton
         label="削除"
-        tooltipHint="Deleteキー"
+        tooltipHint="Delete / Backspaceキー"
         side={TOOLTIP_SIDE}
         className={iconItemClassName}
         disabled={disabled}

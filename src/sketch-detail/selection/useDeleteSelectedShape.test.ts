@@ -34,6 +34,7 @@ const pressKey = (
 };
 
 // Deletes through the given entry point: calling the returned function directly, or pressing the Delete key.
+// (Backspace is covered in "Delete / Backspace keys".)
 const deleteBy = (
   trigger: Trigger,
   result: { current: ReturnType<typeof useDeleteSelectedShape> },
@@ -144,7 +145,7 @@ describe("useDeleteSelectedShape", () => {
     });
   });
 
-  describe("Delete key only", () => {
+  describe.each(["Delete", "Backspace"])("%s key", (key) => {
     const setupSelected = (options?: { disabled?: boolean }) => {
       const hook = setup(options);
       const a = createRect();
@@ -153,20 +154,20 @@ describe("useDeleteSelectedShape", () => {
       return { ...hook, a };
     };
 
-    it("should not delete with Backspace", () => {
-      const { canvas, a } = setupSelected();
+    it("should delete the selected shape", () => {
+      const { canvas } = setupSelected();
 
-      pressKey({ key: "Backspace" });
+      pressKey({ key });
 
-      expect(canvas.getObjects()).toEqual([a]);
+      expect(canvas.getObjects()).toEqual([]);
     });
 
     it.each(["ctrlKey", "metaKey", "altKey", "shiftKey"] as const)(
-      "should not delete when Delete is pressed with %s",
+      "should not delete when the key is pressed with %s",
       (modifier) => {
         const { canvas, a } = setupSelected();
 
-        pressKey({ key: "Delete", [modifier]: true });
+        pressKey({ key, [modifier]: true });
 
         expect(canvas.getObjects()).toEqual([a]);
       },
@@ -188,7 +189,7 @@ describe("useDeleteSelectedShape", () => {
       const target = createTarget();
       document.body.append(target);
 
-      pressKey({ key: "Delete" }, target);
+      pressKey({ key }, target);
 
       expect(canvas.getObjects()).toEqual([a]);
     });
@@ -196,7 +197,7 @@ describe("useDeleteSelectedShape", () => {
     it("should not delete while the IME is composing", () => {
       const { canvas, a } = setupSelected();
 
-      pressKey({ key: "Delete", isComposing: true });
+      pressKey({ key, isComposing: true });
 
       expect(canvas.getObjects()).toEqual([a]);
     });
@@ -205,7 +206,7 @@ describe("useDeleteSelectedShape", () => {
       const { canvas, a, unmount } = setupSelected();
       unmount();
 
-      pressKey({ key: "Delete" });
+      pressKey({ key });
 
       expect(canvas.getObjects()).toEqual([a]);
     });

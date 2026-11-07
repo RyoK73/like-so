@@ -1,14 +1,17 @@
 import type { Canvas } from "fabric";
 import { RefObject, useCallback, useEffect } from "react";
 
-// While the user types in these elements, the Delete key must not delete a shape.
+// The Mac "delete" key reports `Backspace`, so both keys delete a shape.
+const DELETE_KEYS = ["Delete", "Backspace"];
+
+// While the user types in these elements, the Delete / Backspace key must not delete a shape.
 const EDITABLE_SELECTOR =
   "input, textarea, [contenteditable]:not([contenteditable='false'])";
 
 const isEditableTarget = (target: EventTarget | null) =>
   target instanceof Element && target.closest(EDITABLE_SELECTOR) !== null;
 
-// The Delete key process needs to know whether it is disabled or not.
+// When `disabled` is true, neither the delete button nor the Delete / Backspace key does anything.
 const useDeleteSelectedShape = (
   fabricCanvasRef: RefObject<Canvas | null>,
   disabled: boolean,
@@ -25,7 +28,7 @@ const useDeleteSelectedShape = (
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Delete") return;
+      if (!DELETE_KEYS.includes(event.key)) return;
       if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
         return;
       }
