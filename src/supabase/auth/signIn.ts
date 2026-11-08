@@ -37,17 +37,6 @@ const verifyOTP = async (
   return { ok: true, value: undefined };
 };
 
-const signInAnonymously = async (
-  supabaseClient: SupabaseClient<DatabaseModified>,
-): Promise<Result<void>> => {
-  const { error: anonymouslySignInError } =
-    await supabaseClient.auth.signInAnonymously();
-
-  if (anonymouslySignInError)
-    return { ok: false, error: anonymouslySignInError };
-  return { ok: true, value: undefined };
-};
-
 const convertAnonymousUserToPermanentUser = async (
   supabaseClient: SupabaseClient<DatabaseModified>,
   email: string,
@@ -55,10 +44,5 @@ const convertAnonymousUserToPermanentUser = async (
   return await updateUser(supabaseClient, email);
 };
 
-export {
-  signInWithOTP,
-  verifyOTP,
-  signInAnonymously,
-  convertAnonymousUserToPermanentUser,
-};
+export { signInWithOTP, verifyOTP, convertAnonymousUserToPermanentUser };
 export type { VerifyOTPType };

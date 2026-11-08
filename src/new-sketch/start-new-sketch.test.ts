@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { startNewSketch } from "@/new-sketch/start-new-sketch";
 import { createSupabaseAnonActionClient } from "@/supabase/utils/anonActionClient";
 import { getAuthState } from "@/supabase/auth/getAuthState";
-import { signInAnonymously } from "@/supabase/auth/signIn";
+import { signInAnonymouslyWithForwardedIp } from "@/supabase/auth/anonymousSignIn/signInAnonymouslyWithForwardedIp";
 import { upsertSketch } from "@/supabase/sketch-crud/handleDb";
 
 vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
@@ -10,18 +10,27 @@ vi.mock("@/supabase/utils/anonActionClient", () => ({
   createSupabaseAnonActionClient: vi.fn(),
 }));
 vi.mock("@/supabase/auth/getAuthState", () => ({ getAuthState: vi.fn() }));
-vi.mock("@/supabase/auth/signIn", () => ({ signInAnonymously: vi.fn() }));
+vi.mock(
+  "@/supabase/auth/anonymousSignIn/signInAnonymouslyWithForwardedIp",
+  () => ({ signInAnonymouslyWithForwardedIp: vi.fn() }),
+);
 vi.mock("@/supabase/sketch-crud/handleDb", () => ({ upsertSketch: vi.fn() }));
 
-const clientStub = {} as Awaited<
+type AnonActionClient = Awaited<
   ReturnType<typeof createSupabaseAnonActionClient>
 >;
+
+// Two distinct stubs, so that the test can tell which client `upsertSketch` received.
+const clientBeforeSignIn = { name: "before" } as unknown as AnonActionClient;
+const clientAfterSignIn = { name: "after" } as unknown as AnonActionClient;
 
 describe("startNewSketch", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    vi.mocked(createSupabaseAnonActionClient).mockResolvedValue(clientStub);
-    vi.mocked(signInAnonymously).mockResolvedValue({
+    vi.mocked(createSupabaseAnonActionClient)
+      .mockResolvedValueOnce(clientBeforeSignIn)
+      .mockResolvedValueOnce(clientAfterSignIn);
+    vi.mocked(signInAnonymouslyWithForwardedIp).mockResolvedValue({
       ok: true,
       value: undefined,
     });
@@ -31,24 +40,35 @@ describe("startNewSketch", () => {
     });
   });
 
-  test("should sign in anonymously before creating when signed out", async () => {
+  test("should sign in anonymously and recreate the client before creating when signed out", async () => {
     vi.mocked(getAuthState).mockResolvedValue("signedOut");
 
     await startNewSketch(null);
 
-    expect(signInAnonymously).toHaveBeenCalledWith(clientStub);
+    expect(signInAnonymouslyWithForwardedIp).toHaveBeenCalledTimes(1);
+    expect(signInAnonymouslyWithForwardedIp).toHaveBeenCalledWith();
+    expect(createSupabaseAnonActionClient).toHaveBeenCalledTimes(2);
     expect(upsertSketch).toHaveBeenCalledTimes(1);
+    expect(upsertSketch).toHaveBeenCalledWith(
+      clientAfterSignIn,
+      expect.anything(),
+    );
   });
 
   test.each(["guest", "registered"] as const)(
-    "should not sign in when the state is %s",
+    "should not sign in anonymously and keep the first client when the state is %s",
     async (state) => {
       vi.mocked(getAuthState).mockResolvedValue(state);
 
       await startNewSketch(null);
 
-      expect(signInAnonymously).not.toHaveBeenCalled();
+      expect(signInAnonymouslyWithForwardedIp).not.toHaveBeenCalled();
+      expect(createSupabaseAnonActionClient).toHaveBeenCalledTimes(1);
       expect(upsertSketch).toHaveBeenCalledTimes(1);
+      expect(upsertSketch).toHaveBeenCalledWith(
+        clientBeforeSignIn,
+        expect.anything(),
+      );
     },
   );
 
@@ -58,7 +78,7 @@ describe("startNewSketch", () => {
     await startNewSketch(null);
 
     expect(upsertSketch).toHaveBeenCalledWith(
-      clientStub,
+      clientBeforeSignIn,
       expect.not.objectContaining({ id: expect.anything() }),
     );
     expect(redirect).toHaveBeenCalledWith("/sketches/new-id");
@@ -66,7 +86,7 @@ describe("startNewSketch", () => {
 
   test("should return an error and not create when signing in fails", async () => {
     vi.mocked(getAuthState).mockResolvedValue("signedOut");
-    vi.mocked(signInAnonymously).mockResolvedValue({
+    vi.mocked(signInAnonymouslyWithForwardedIp).mockResolvedValue({
       ok: false,
       error: new Error("test error"),
     });
