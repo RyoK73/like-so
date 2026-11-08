@@ -13,6 +13,11 @@ const publicEnvSchema = z.object({
   ),
 });
 
+// Server only. Never add the `NEXT_PUBLIC_` prefix, which would expose the key to the browser.
+const serverEnvSchema = z.object({
+  SUPABASE_SECRET_KEY: requiredString("SUPABASE_SECRET_KEY"),
+});
+
 const supabaseRemoteEnvSchema = z.object({
   PROJECTID: requiredString("PROJECTID"),
   SUPABASE_ACCESS_TOKEN: requiredString("SUPABASE_ACCESS_TOKEN"),
@@ -31,6 +36,11 @@ const parsePublicEnv = () =>
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   });
 
+const parseServerEnv = () =>
+  serverEnvSchema.parse({
+    SUPABASE_SECRET_KEY: process.env.SUPABASE_SECRET_KEY,
+  });
+
 const parseSupabaseRemoteEnv = () =>
   supabaseRemoteEnvSchema.parse({
     PROJECTID: process.env.PROJECTID,
@@ -45,4 +55,9 @@ const parseSupabaseLocalEnv = () =>
     SUPABASE_LOCAL_DB_URL: process.env.SUPABASE_LOCAL_DB_URL,
   });
 
-export { parsePublicEnv, parseSupabaseRemoteEnv, parseSupabaseLocalEnv };
+export {
+  parsePublicEnv,
+  parseServerEnv,
+  parseSupabaseRemoteEnv,
+  parseSupabaseLocalEnv,
+};
