@@ -120,7 +120,7 @@ OTP(6桁のコード)で認証するため、メールにコードを載せま�
 新規作成の`startNewSketch`は、`signedOut`の場合に、Server Actionの中で匿名サインインします。
 詳細は[ルーティング](./routing.ja.md)を参照してください。
 
-- 新しいセッションのCookieをレスポンスに載せるため、`createSupabaseActionClient`(`src/supabase/utils/actionClient.ts`)を使います。
+- 新しいセッションのCookieをレスポンスに載せるため、`createSupabaseAnonActionClient`(`src/supabase/utils/anonActionClient.ts`)を使います。
   このクライアントは、Cookieを読み書きできます。
 - `createSupabaseServerClient`(`src/supabase/utils/serverClient.ts`)は、Cookieの読み取り専用です。
   Server Componentで使用します。

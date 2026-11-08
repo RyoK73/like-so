@@ -70,7 +70,7 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
 - `NewSketchButton` is a Client Component.
   It calls the Server Action `startNewSketch` through `useActionState`.
 - `startNewSketch` works as follows.
-  1. It creates a client for Server Actions (`createSupabaseActionClient`).
+  1. It creates a client for Server Actions (`createSupabaseAnonActionClient`).
   2. Only when `getAuthState` returns `signedOut`, it signs in anonymously by `signInAnonymously`.
   3. It creates an empty sketch by `upsertSketch` with only `fabric_version`.
      It does not pass `id`.

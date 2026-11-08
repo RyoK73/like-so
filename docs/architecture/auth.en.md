@@ -120,7 +120,7 @@ The app authenticates with an OTP (a 6-digit code), so the emails contain the co
 `startNewSketch` for creating a sketch signs in anonymously inside a Server Action when the state is `signedOut`.
 See [Routing](./routing.en.md).
 
-- To put the cookies of the new session in the response, it uses `createSupabaseActionClient` (`src/supabase/utils/actionClient.ts`).
+- To put the cookies of the new session in the response, it uses `createSupabaseAnonActionClient` (`src/supabase/utils/anonActionClient.ts`).
   This client can read and write cookies.
 - `createSupabaseServerClient` (`src/supabase/utils/serverClient.ts`) only reads cookies.
   Use it in Server Components.

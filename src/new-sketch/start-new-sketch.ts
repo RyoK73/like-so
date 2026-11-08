@@ -1,7 +1,7 @@
 "use server";
 import { redirect } from "next/navigation";
 import { version } from "fabric";
-import { createSupabaseActionClient } from "@/supabase/utils/actionClient";
+import { createSupabaseAnonActionClient } from "@/supabase/utils/anonActionClient";
 import { getAuthState } from "@/supabase/auth/getAuthState";
 import { signInAnonymously } from "@/supabase/auth/signIn";
 import { upsertSketch } from "@/supabase/sketch-crud/handleDb";
@@ -15,7 +15,7 @@ const startNewSketch = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _prevState: NewSketchState,
 ): Promise<NewSketchState> => {
-  const supabaseClient = await createSupabaseActionClient();
+  const supabaseClient = await createSupabaseAnonActionClient();
 
   if ((await getAuthState(supabaseClient)) === "signedOut") {
     const signInResult = await signInAnonymously(supabaseClient);

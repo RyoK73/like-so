@@ -2,8 +2,8 @@ import { signOut } from "@/supabase/auth/signOut";
 import { signOutAction } from "@/navigation-menu/sign-out/signOutAction";
 import { redirect } from "next/navigation";
 
-vi.mock("@/supabase/utils/actionClient", () => ({
-  createSupabaseActionClient: vi.fn(),
+vi.mock("@/supabase/utils/anonActionClient", () => ({
+  createSupabaseAnonActionClient: vi.fn(),
 }));
 vi.mock("@/supabase/auth/signOut", () => ({
   signOut: vi.fn(),

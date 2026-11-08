@@ -1,24 +1,26 @@
 import { redirect } from "next/navigation";
 import { startNewSketch } from "@/new-sketch/start-new-sketch";
-import { createSupabaseActionClient } from "@/supabase/utils/actionClient";
+import { createSupabaseAnonActionClient } from "@/supabase/utils/anonActionClient";
 import { getAuthState } from "@/supabase/auth/getAuthState";
 import { signInAnonymously } from "@/supabase/auth/signIn";
 import { upsertSketch } from "@/supabase/sketch-crud/handleDb";
 
 vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
-vi.mock("@/supabase/utils/actionClient", () => ({
-  createSupabaseActionClient: vi.fn(),
+vi.mock("@/supabase/utils/anonActionClient", () => ({
+  createSupabaseAnonActionClient: vi.fn(),
 }));
 vi.mock("@/supabase/auth/getAuthState", () => ({ getAuthState: vi.fn() }));
 vi.mock("@/supabase/auth/signIn", () => ({ signInAnonymously: vi.fn() }));
 vi.mock("@/supabase/sketch-crud/handleDb", () => ({ upsertSketch: vi.fn() }));
 
-const clientStub = {} as Awaited<ReturnType<typeof createSupabaseActionClient>>;
+const clientStub = {} as Awaited<
+  ReturnType<typeof createSupabaseAnonActionClient>
+>;
 
 describe("startNewSketch", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    vi.mocked(createSupabaseActionClient).mockResolvedValue(clientStub);
+    vi.mocked(createSupabaseAnonActionClient).mockResolvedValue(clientStub);
     vi.mocked(signInAnonymously).mockResolvedValue({
       ok: true,
       value: undefined,
