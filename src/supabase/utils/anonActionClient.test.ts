@@ -27,8 +27,8 @@ describe("createSupabaseAnonActionClient", () => {
     const [url, key] = vi.mocked(createServerClient).mock.calls[0];
     expect(url).toBe("http://localhost:54321");
     expect(key).toBe("test-anon-key");
-    expect(JSON.stringify(vi.mocked(createServerClient).mock.calls)).not.toContain(
-      "test-secret-key",
-    );
+    expect(
+      JSON.stringify(vi.mocked(createServerClient).mock.calls),
+    ).not.toContain("test-secret-key");
   });
 });
