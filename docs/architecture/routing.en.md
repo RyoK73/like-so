@@ -71,7 +71,9 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
   It calls the Server Action `startNewSketch` through `useActionState`.
 - `startNewSketch` works as follows.
   1. It creates a client for Server Actions (`createSupabaseAnonActionClient`).
-  2. Only when `getAuthState` returns `signedOut`, it signs in anonymously by `signInAnonymously`.
+  2. Only when `getAuthState` returns `signedOut`, it signs in anonymously by `signInAnonymouslyWithForwardedIp`.
+     After signing in, it creates `createSupabaseAnonActionClient` again.
+     See [Authentication](./auth.en.md).
   3. It creates an empty sketch by `upsertSketch` with only `fabric_version`.
      It does not pass `id`.
      `title`, `canvas_json`, `width`, `height` and so on are filled in by the DB defaults and the trigger.

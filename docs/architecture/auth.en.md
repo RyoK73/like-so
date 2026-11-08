@@ -49,7 +49,6 @@ The `/signin` and `/signup` form passes the browser client (`createSupabaseBrows
 | ------------------------------------- | ------------------------------------------------------- |
 | `signInWithOTP`                       | Sends a one-time password to the email address          |
 | `verifyOTP`                           | Verifies the one-time password. Takes a `type`          |
-| `signInAnonymously`                   | Signs in as an anonymous user                           |
 | `convertAnonymousUserToPermanentUser` | Adds an email to an anonymous user to make it permanent |
 | `signOut`                             | Signs out. Called from `signOutAction` (Server Action)  |
 
@@ -120,8 +119,30 @@ The app authenticates with an OTP (a 6-digit code), so the emails contain the co
 `startNewSketch` for creating a sketch signs in anonymously inside a Server Action when the state is `signedOut`.
 See [Routing](./routing.en.md).
 
-- To put the cookies of the new session in the response, it uses `createSupabaseAnonActionClient` (`src/supabase/utils/anonActionClient.ts`).
+- Anonymous sign-in is done only by `signInAnonymouslyWithForwardedIp` (`src/supabase/auth/anonymousSignIn/`).
+  It is server only and returns `Result<void>`.
+- If a Server Action signs in as is, the rate limit of anonymous sign-ins in Supabase Auth is counted by the IP of the server, not of the user.
+  To prevent this, it passes the IP of the user with the [IP address forwarding](https://supabase.com/docs/guides/auth/rate-limits#ip-address-forwarding) of Supabase.
+  1. It reads `x-forwarded-for` from `headers()`.
+     On Vercel, this value is overwritten with the IP of the client.
+  2. When there are multiple IPs (`a, b`), it uses the first one without surrounding spaces (`parseForwardedIp`).
+     It does not validate the format of the IP.
+  3. It creates the client only for sign-in (`createSupabaseSecretActionClient`, `secretActionClient.ts`).
+     This client uses the secret key (`SUPABASE_SECRET_KEY`) and puts the IP on the `sb-forwarded-for` header.
+     Without the secret key, Supabase does not accept this header.
+  4. It calls `signInAnonymously` with that client.
+- When `x-forwarded-for` is missing, the behavior depends on the environment.
+  - Production (`NODE_ENV` is `production`): On Vercel the header is always set, so a missing header is abnormal.
+    To not silently go back to counting by the IP of the server, it returns `ok: false` and does not sign in.
+  - Outside production (local development and tests): It signs in without `sb-forwarded-for`.
+- When `SUPABASE_SECRET_KEY` is not set, the zod validation throws.
+- Only this sign-in client uses the secret key.
+  The secret key bypasses RLS, so it is not used for DB operations after signing in.
+- For DB operations after signing in, it uses `createSupabaseAnonActionClient` (`src/supabase/utils/anonActionClient.ts`).
+  It uses the anon key, so RLS is enabled.
   This client can read and write cookies.
+  The sign-in is done by another client, so a client created before signing in does not know the new session.
+  So when it signs in, it creates `createSupabaseAnonActionClient` again after signing in.
 - `createSupabaseServerClient` (`src/supabase/utils/serverClient.ts`) only reads cookies.
   Use it in Server Components.
   `proxy.ts` refreshes the tokens.
