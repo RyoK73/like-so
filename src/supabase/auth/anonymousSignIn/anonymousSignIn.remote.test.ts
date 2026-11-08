@@ -1,4 +1,4 @@
-import { authConfigSchema } from "@/supabase/auth/anonymousSignIn.remote.types";
+import { authConfigSchema } from "@/supabase/auth/anonymousSignIn/anonymousSignIn.remote.types";
 import { parseSupabaseRemoteEnv } from "@/supabase/utils/env";
 import consola from "consola";
 
