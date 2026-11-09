@@ -62,6 +62,16 @@ The `sketches_apply_frame` trigger runs before an insert, or before an update of
 - If `width` and `height` are specified, they take priority. If they do not match the frame, `frame_id` is set to `NULL`.
 - On insert, specifying only one of `width` and `height` is an error.
 
+## Sketch count limit
+
+A user can have up to 20 rows in `sketches`.
+The `sketches_enforce_count_limit` trigger runs before an insert.
+
+- If a user who has reached the limit inserts a row, it fails with SQLSTATE `SK001`.
+- An upsert of an existing `id` is not counted, because it does not increase the number of rows.
+- The trigger takes a per-user advisory lock first, so inserts of the same user run one at a time. Concurrent inserts cannot exceed the limit.
+- Tests are in `src/supabase/sketches/sketchCountLimit.test.ts`.
+
 ## Row Level Security
 
 - RLS is enabled on both tables.
