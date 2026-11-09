@@ -124,15 +124,16 @@ OTP(6桁のコード)で認証するため、メールにコードを載せま�
 - Server Action内でサインインすると、Supabase Authの匿名サインインのレート制限が、ユーザーではなくサーバーのIPで集計されます。
   これを防ぐため、Supabaseの[IP address forwarding](https://supabase.com/docs/guides/auth/rate-limits#ip-address-forwarding)を使い、ユーザーのIPを渡します。
   1. `headers()`から`x-forwarded-for`を読みます。
-     Vercelでは、この値がクライアントのIPで上書きされます。
-  2. 複数のIP(`a, b`)がある場合は、前後の空白を除いた先頭を使います(`parseForwardedIp`)。
-     IPの形式は検証しません。
+     Vercelでは、この値は常にクライアントの単一のIPで上書きされます。
+     これは、デプロイしたVercelプロジェクト(Hobbyプラン、Node.jsランタイム)に、複数のIP、空文字、IPではない文字列など25パターンのヘッダーを送って確認しました。
+  2. 前後の空白を除いた値が、単一の有効なIP(IPv4またはIPv6)の場合だけ使います(`parseForwardedIp`、`forwardedIpSchema`)。
+     複数のIP(`a, b`)、ポート付きのIP、IPではない文字列は、ヘッダーがない場合と同じ扱いにします。
   3. サインイン専用クライアント(`createSupabaseSecretActionClient`、`secretActionClient.ts`)を作ります。
      このクライアントは、secret key(`SUPABASE_SECRET_KEY`)を使い、`sb-forwarded-for`ヘッダーにIPを載せます。
      secret keyがないと、Supabaseはこのヘッダーを受け付けません。
   4. そのクライアントで`signInAnonymously`を呼びます。
-- `x-forwarded-for`がない場合の動作は、環境で異なります。
-  - 本番(`NODE_ENV`が`production`): Vercelでは必ず付くため、ない場合は異常です。
+- `x-forwarded-for`がない場合、または単一の有効なIPではない場合の動作は、環境で異なります。
+  - 本番(`NODE_ENV`が`production`): Vercelでは必ず単一の有効なIPが付くため、それ以外は異常です。
     サーバーのIPで集計される状態に黙って戻らないように、`ok: false`を返し、サインインしません。
   - 本番以外(ローカル開発、テスト): `sb-forwarded-for`を付けずにサインインします。
 - `SUPABASE_SECRET_KEY`が未設定の場合は、zodの検証が例外を投げます。

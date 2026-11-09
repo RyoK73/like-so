@@ -1,9 +1,15 @@
-// Takes the first IP of an `x-forwarded-for` value (e.g. "a, b" -> "a").
-// Returns undefined when there is no usable first IP. The format of the IP is not validated.
-const parseForwardedIp = (value: string | null): string | undefined => {
-  const firstIp = value?.split(",")[0]?.trim();
+import { forwardedIpSchema } from "@/supabase/auth/anonymousSignIn/forwardedIp.types";
 
-  return firstIp ? firstIp : undefined;
+// Takes the IP of an `x-forwarded-for` value, ignoring surrounding spaces.
+// On Vercel the value is always overwritten with the single IP of the client.
+// So anything that is not a single valid IP (multiple IPs, a port, a string that is not an IP) is abnormal.
+// It returns undefined for such a value, the same as for a missing one.
+const parseForwardedIp = (
+  forwardedForHeader: string | null,
+): string | undefined => {
+  const result = forwardedIpSchema.safeParse(forwardedForHeader?.trim());
+
+  return result.success ? result.data : undefined;
 };
 
 export { parseForwardedIp };

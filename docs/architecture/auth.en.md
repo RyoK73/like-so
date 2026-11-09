@@ -124,15 +124,16 @@ See [Routing](./routing.en.md).
 - If a Server Action signs in as is, the rate limit of anonymous sign-ins in Supabase Auth is counted by the IP of the server, not of the user.
   To prevent this, it passes the IP of the user with the [IP address forwarding](https://supabase.com/docs/guides/auth/rate-limits#ip-address-forwarding) of Supabase.
   1. It reads `x-forwarded-for` from `headers()`.
-     On Vercel, this value is overwritten with the IP of the client.
-  2. When there are multiple IPs (`a, b`), it uses the first one without surrounding spaces (`parseForwardedIp`).
-     It does not validate the format of the IP.
+     On Vercel, this value is always overwritten with the single IP of the client.
+     This was checked by sending 25 patterns of the header (multiple IPs, an empty string, a string that is not an IP and so on) to a deployed Vercel project (Hobby plan, Node.js runtime).
+  2. It uses the value only when it is a single valid IP (IPv4 or IPv6), ignoring surrounding spaces (`parseForwardedIp`, `forwardedIpSchema`).
+     Multiple IPs (`a, b`), an IP with a port, and a string that is not an IP are treated the same as a missing header.
   3. It creates the client only for sign-in (`createSupabaseSecretActionClient`, `secretActionClient.ts`).
      This client uses the secret key (`SUPABASE_SECRET_KEY`) and puts the IP on the `sb-forwarded-for` header.
      Without the secret key, Supabase does not accept this header.
   4. It calls `signInAnonymously` with that client.
-- When `x-forwarded-for` is missing, the behavior depends on the environment.
-  - Production (`NODE_ENV` is `production`): On Vercel the header is always set, so a missing header is abnormal.
+- When `x-forwarded-for` is missing or is not a single valid IP, the behavior depends on the environment.
+  - Production (`NODE_ENV` is `production`): On Vercel the header is always a single valid IP, so anything else is abnormal.
     To not silently go back to counting by the IP of the server, it returns `ok: false` and does not sign in.
   - Outside production (local development and tests): It signs in without `sb-forwarded-for`.
 - When `SUPABASE_SECRET_KEY` is not set, the zod validation throws.

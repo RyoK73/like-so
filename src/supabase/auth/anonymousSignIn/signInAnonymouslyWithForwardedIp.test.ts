@@ -47,8 +47,8 @@ describe("signInAnonymouslyWithForwardedIp", () => {
     vi.unstubAllEnvs();
   });
 
-  test("should put the first IP of x-forwarded-for on the sb-forwarded-for header", async () => {
-    setRequestHeaders({ "x-forwarded-for": "203.0.113.1, 198.51.100.2" });
+  test("should put the IP of x-forwarded-for on the sb-forwarded-for header", async () => {
+    setRequestHeaders({ "x-forwarded-for": "203.0.113.1" });
 
     await signInAnonymouslyWithForwardedIp();
 
@@ -60,6 +60,14 @@ describe("signInAnonymouslyWithForwardedIp", () => {
   test.each([
     ["has no x-forwarded-for", {}],
     ["has only spaces in x-forwarded-for", { "x-forwarded-for": "   " }],
+    [
+      "has multiple IPs in x-forwarded-for",
+      { "x-forwarded-for": "203.0.113.1, 198.51.100.2" },
+    ],
+    [
+      "has an invalid IP in x-forwarded-for",
+      { "x-forwarded-for": "not-an-ip" },
+    ],
   ])(
     "should sign in without the sb-forwarded-for header when the request %s outside production",
     async (_name, requestHeaders) => {
@@ -78,6 +86,14 @@ describe("signInAnonymouslyWithForwardedIp", () => {
   test.each([
     ["has no x-forwarded-for", {}],
     ["has only spaces in x-forwarded-for", { "x-forwarded-for": "   " }],
+    [
+      "has multiple IPs in x-forwarded-for",
+      { "x-forwarded-for": "203.0.113.1, 198.51.100.2" },
+    ],
+    [
+      "has an invalid IP in x-forwarded-for",
+      { "x-forwarded-for": "not-an-ip" },
+    ],
   ])(
     "should return an error and not sign in when the request %s in production",
     async (_name, requestHeaders) => {

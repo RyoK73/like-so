@@ -10,13 +10,13 @@ const signInAnonymouslyWithForwardedIp = async (): Promise<Result<void>> => {
   const requestHeaders = await headers();
   const forwardedIp = parseForwardedIp(requestHeaders.get("x-forwarded-for"));
 
-  // On Vercel the header is always set, so a missing header in production is abnormal.
+  // On Vercel the header is always a single valid IP, so anything else in production is abnormal.
   // Do not fall back to the IP of the server silently, because that brings back the shared rate limit.
-  // Outside production (local development and tests), the header may be missing, so sign in without it.
+  // Outside production (local development and tests), the header may be missing or not valid, so sign in without it.
   if (!forwardedIp && process.env.NODE_ENV === "production") {
     return {
       ok: false,
-      error: new Error("The x-forwarded-for header is missing."),
+      error: new Error("The x-forwarded-for header is not a single valid IP."),
     };
   }
 
