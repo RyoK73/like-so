@@ -98,6 +98,21 @@ describe("startNewSketch", () => {
     expect(redirect).not.toHaveBeenCalled();
   });
 
+  test("should return the limit message and not redirect when the sketch limit is reached", async () => {
+    vi.mocked(getAuthState).mockResolvedValue("guest");
+    vi.mocked(upsertSketch).mockResolvedValue({
+      ok: false,
+      error: Object.assign(new Error("sketch count limit reached"), {
+        code: "SK001",
+      }),
+    });
+
+    const state = await startNewSketch(null);
+
+    expect(state).toEqual({ error: "スケッチの作成上限に達しました。" });
+    expect(redirect).not.toHaveBeenCalled();
+  });
+
   test("should return an error and not redirect when creating fails", async () => {
     vi.mocked(getAuthState).mockResolvedValue("guest");
     vi.mocked(upsertSketch).mockResolvedValue({
