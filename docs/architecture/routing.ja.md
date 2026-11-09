@@ -79,8 +79,12 @@
      `title`、`canvas_json`、`width`、`height`などは、DBのデフォルトとトリガが埋めます。
      詳細は[データベース](./database.ja.md)を参照してください。
   4. 成功したら、`/sketches/{id}`へリダイレクトします。
-- 匿名サインインに失敗した場合、またはスケッチの作成に失敗した場合は、エラーの文言を返します。
-  `NewSketchButton`は、その文言をtoast(`src/design-system/toast.tsx`)で表示します。
+- 次の場合は、エラーの文言を返します。
+  - 匿名サインインに失敗した場合は、「サインインに失敗しました。」を返します。
+  - `upsertSketch`が`SK001`(スケッチの件数上限)で失敗した場合は、「スケッチの作成上限に達しました。」を返します。
+    上限については[データベース](./database.ja.md)を参照してください。
+  - それ以外の理由でスケッチの作成に失敗した場合は、「スケッチの作成に失敗しました。」を返します。
+- `NewSketchButton`は、返ってきた文言をtoast(`src/design-system/toast.tsx`)で表示します。
 - `<Toaster>`は`src/app/layout.tsx`に配置しています。
 
 ## スケッチ個別(`/sketches/[id]`)
