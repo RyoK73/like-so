@@ -63,6 +63,16 @@ Supabase上のPostgresです。
 - フレームと一致しなければ、`frame_id`を`NULL`にします。
 - insert時に`width`と`height`の片方だけを指定すると、エラーになります。
 
+## スケッチ数の上限
+
+1ユーザーが持てる`sketches`は20件までです。
+`sketches_enforce_count_limit`トリガが、insertの前に実行されます。
+
+- 上限に達しているユーザーがinsertすると、SQLSTATE `SK001`のエラーになります。
+- 既存の`id`へのupsertは、件数が増えないため対象外です。
+- ユーザーごとのadvisory lockを先に取り、同じユーザーのinsertを直列に処理します。同時にinsertしても、上限を超えません。
+- テストは`src/supabase/sketches/sketchCountLimit.test.ts`にあります。
+
 ## Row Level Security
 
 - 両方のテーブルでRLSが有効です。

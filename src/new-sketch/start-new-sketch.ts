@@ -6,6 +6,7 @@ import { getAuthState } from "@/supabase/auth/getAuthState";
 import { signInAnonymouslyWithForwardedIp } from "@/supabase/auth/anonymousSignIn/signInAnonymouslyWithForwardedIp";
 import { upsertSketch } from "@/supabase/sketch-crud/handleDb";
 import type { InsertSketch } from "@/supabase/sketch-crud/handleDb.types";
+import { isSketchLimitError } from "@/supabase/sketch-crud/sketchLimit";
 
 type NewSketchState = { error: string } | null;
 
@@ -35,6 +36,9 @@ const startNewSketch = async (
     fabric_version: version,
   } as InsertSketch);
   if (!upsertResult.ok) {
+    if (isSketchLimitError(upsertResult.error)) {
+      return { error: "スケッチの作成上限に達しました。" };
+    }
     // TODO(#71): Log `upsertResult.error` on the server.
     return { error: "スケッチの作成に失敗しました。" };
   }

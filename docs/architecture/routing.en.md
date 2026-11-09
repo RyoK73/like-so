@@ -79,8 +79,12 @@ The new-sketch button is rendered by `NewSketchIconButton` in `NavigationMenu`, 
      `title`, `canvas_json`, `width`, `height` and so on are filled in by the DB defaults and the trigger.
      See [Database](./database.en.md).
   4. On success, it redirects to `/sketches/{id}`.
-- When the anonymous sign-in or the creation fails, it returns an error message.
-  `NewSketchButton` shows the message as a toast (`src/design-system/toast.tsx`).
+- It returns an error message in the following cases.
+  - When the anonymous sign-in fails, it returns "サインインに失敗しました。".
+  - When `upsertSketch` fails with `SK001` (the sketch count limit), it returns "スケッチの作成上限に達しました。".
+    See [Database](./database.en.md) for the limit.
+  - When the creation fails for any other reason, it returns "スケッチの作成に失敗しました。".
+- `NewSketchButton` shows the returned message as a toast (`src/design-system/toast.tsx`).
 - `<Toaster>` is placed in `src/app/layout.tsx`.
 
 ## Sketch page (`/sketches/[id]`)
