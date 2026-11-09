@@ -91,20 +91,6 @@ describe("signInAnonymouslyWithForwardedIp", () => {
     },
   );
 
-  test.each([["with", { "x-forwarded-for": "203.0.113.1" }]])(
-    "should create the client with the secret key, not the anon key, %s x-forwarded-for",
-    async (_name, requestHeaders) => {
-      setRequestHeaders(requestHeaders);
-
-      await signInAnonymouslyWithForwardedIp();
-
-      const [url, key] = vi.mocked(createServerClient).mock.calls[0];
-      expect(url).toBe("http://localhost:54321");
-      expect(key).toBe(SECRET_KEY);
-      expect(key).not.toBe(ANON_KEY);
-    },
-  );
-
   test("should create the client with the secret key, not the anon key, with x-forwarded-for", async () => {
     setRequestHeaders({ "x-forwarded-for": "203.0.113.1" });
 
