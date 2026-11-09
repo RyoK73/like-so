@@ -1,12 +1,12 @@
 "use server";
 import { signOut } from "@/supabase/auth/signOut";
-import { createSupabaseActionClient } from "@/supabase/utils/actionClient";
+import { createSupabaseAnonActionClient } from "@/supabase/utils/anonActionClient";
 import { redirect } from "next/navigation";
 
 type SignOutState = { error: string } | undefined;
 
 const signOutAction = async (): Promise<SignOutState> => {
-  const supabaseClient = await createSupabaseActionClient();
+  const supabaseClient = await createSupabaseAnonActionClient();
   const result = await signOut(supabaseClient);
   if (!result.ok) {
     // TODO(#71): Log `result.error` on the server.

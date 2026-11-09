@@ -5,7 +5,9 @@ import { DatabaseModified } from "@/supabase/utils/modifiedDatabase.types";
 
 // For Server Actions only. Unlike `createSupabaseServerClient`, this client can write cookies,
 // so that a session created in the action (e.g. anonymous sign-in) is sent back in the response.
-const createSupabaseActionClient = async () => {
+// It uses the anon key, so RLS is enabled. Use it for DB operations.
+// For anonymous sign-in, use `createSupabaseSecretActionClient`.
+const createSupabaseAnonActionClient = async () => {
   const cookieStore = await cookies();
 
   const publicEnv = parsePublicEnv();
@@ -28,4 +30,4 @@ const createSupabaseActionClient = async () => {
   );
 };
 
-export { createSupabaseActionClient };
+export { createSupabaseAnonActionClient };

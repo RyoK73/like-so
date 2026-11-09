@@ -49,7 +49,6 @@
 | ------------------------------------- | ---------------------------------------------------------------- |
 | `signInWithOTP`                       | メールアドレスにワンタイムパスワードを送信します。               |
 | `verifyOTP`                           | ワンタイムパスワードを検証します。`type`を指定できます。         |
-| `signInAnonymously`                   | 匿名ユーザーとしてサインインします。                             |
 | `convertAnonymousUserToPermanentUser` | 匿名ユーザーにメールアドレスを追加し、永続ユーザーにします。     |
 | `signOut`                             | サインアウトします。`signOutAction`(Server Action)から呼びます。 |
 
@@ -120,8 +119,31 @@ OTP(6桁のコード)で認証するため、メールにコードを載せま�
 新規作成の`startNewSketch`は、`signedOut`の場合に、Server Actionの中で匿名サインインします。
 詳細は[ルーティング](./routing.ja.md)を参照してください。
 
-- 新しいセッションのCookieをレスポンスに載せるため、`createSupabaseActionClient`(`src/supabase/utils/actionClient.ts`)を使います。
+- 匿名サインインは、`signInAnonymouslyWithForwardedIp`(`src/supabase/auth/anonymousSignIn/`)だけで行います。
+  サーバー専用で、`Result<void>`を返します。
+- Server Action内でサインインすると、Supabase Authの匿名サインインのレート制限が、ユーザーではなくサーバーのIPで集計されます。
+  これを防ぐため、Supabaseの[IP address forwarding](https://supabase.com/docs/guides/auth/rate-limits#ip-address-forwarding)を使い、ユーザーのIPを渡します。
+  1. `headers()`から`x-forwarded-for`を読みます。
+     Vercelでは、この値は常にクライアントの単一のIPで上書きされます。
+     これは、デプロイしたVercelプロジェクト(Hobbyプラン、Node.jsランタイム)に、複数のIP、空文字、IPではない文字列など25パターンのヘッダーを送って確認しました。
+  2. 前後の空白を除いた値が、単一の有効なIP(IPv4またはIPv6)の場合だけ使います(`parseForwardedIp`、`forwardedIpSchema`)。
+     複数のIP(`a, b`)、ポート付きのIP、IPではない文字列は、ヘッダーがない場合と同じ扱いにします。
+  3. サインイン専用クライアント(`createSupabaseSecretActionClient`、`secretActionClient.ts`)を作ります。
+     このクライアントは、secret key(`SUPABASE_SECRET_KEY`)を使い、`sb-forwarded-for`ヘッダーにIPを載せます。
+     secret keyがないと、Supabaseはこのヘッダーを受け付けません。
+  4. そのクライアントで`signInAnonymously`を呼びます。
+- `x-forwarded-for`がない場合、または単一の有効なIPではない場合の動作は、環境で異なります。
+  - 本番(`NODE_ENV`が`production`): Vercelでは必ず単一の有効なIPが付くため、それ以外は異常です。
+    サーバーのIPで集計される状態に黙って戻らないように、`ok: false`を返し、サインインしません。
+  - 本番以外(ローカル開発、テスト): `sb-forwarded-for`を付けずにサインインします。
+- `SUPABASE_SECRET_KEY`が未設定の場合は、zodの検証が例外を投げます。
+- secret keyを使うのは、このサインイン専用クライアントだけです。
+  secret keyはRLSをバイパスするため、サインイン後のDB操作には使いません。
+- サインイン後のDB操作には、`createSupabaseAnonActionClient`(`src/supabase/utils/anonActionClient.ts`)を使います。
+  anonキーを使うため、RLSが有効です。
   このクライアントは、Cookieを読み書きできます。
+  サインインは別のクライアントで行うため、サインインの前に作ったクライアントは新しいセッションを知りません。
+  そのため、サインインした場合は、サインイン後に`createSupabaseAnonActionClient`を作り直します。
 - `createSupabaseServerClient`(`src/supabase/utils/serverClient.ts`)は、Cookieの読み取り専用です。
   Server Componentで使用します。
   トークンの更新は`proxy.ts`が担当します。

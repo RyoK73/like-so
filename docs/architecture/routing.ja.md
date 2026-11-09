@@ -70,8 +70,10 @@
 - `NewSketchButton`はClient Componentです。
   `useActionState`でServer Action `startNewSketch`を呼びます。
 - `startNewSketch`の流れは次の通りです。
-  1. Server Action用のクライアント(`createSupabaseActionClient`)を作成します。
-  2. `getAuthState`が`signedOut`の場合だけ、`signInAnonymously`で匿名サインインします。
+  1. Server Action用のクライアント(`createSupabaseAnonActionClient`)を作成します。
+  2. `getAuthState`が`signedOut`の場合だけ、`signInAnonymouslyWithForwardedIp`で匿名サインインします。
+     サインインしたあとは、`createSupabaseAnonActionClient`を作り直します。
+     詳細は[認証](./auth.ja.md)を参照してください。
   3. `upsertSketch`で、`fabric_version`だけを指定して空のスケッチを作成します。
      `id`は渡しません。
      `title`、`canvas_json`、`width`、`height`などは、DBのデフォルトとトリガが埋めます。

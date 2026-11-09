@@ -1,9 +1,9 @@
 "use server";
 import { redirect } from "next/navigation";
 import { version } from "fabric";
-import { createSupabaseActionClient } from "@/supabase/utils/actionClient";
+import { createSupabaseAnonActionClient } from "@/supabase/utils/anonActionClient";
 import { getAuthState } from "@/supabase/auth/getAuthState";
-import { signInAnonymously } from "@/supabase/auth/signIn";
+import { signInAnonymouslyWithForwardedIp } from "@/supabase/auth/anonymousSignIn/signInAnonymouslyWithForwardedIp";
 import { upsertSketch } from "@/supabase/sketch-crud/handleDb";
 import type { InsertSketch } from "@/supabase/sketch-crud/handleDb.types";
 
@@ -15,14 +15,17 @@ const startNewSketch = async (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _prevState: NewSketchState,
 ): Promise<NewSketchState> => {
-  const supabaseClient = await createSupabaseActionClient();
+  let supabaseClient = await createSupabaseAnonActionClient();
 
   if ((await getAuthState(supabaseClient)) === "signedOut") {
-    const signInResult = await signInAnonymously(supabaseClient);
+    // The sign-in uses its own client, so this client does not know the new session.
+    const signInResult = await signInAnonymouslyWithForwardedIp();
     if (!signInResult.ok) {
       // TODO(#71): Log `signInResult.error` on the server.
       return { error: "サインインに失敗しました。" };
     }
+    // Create the client again, so that it reads the session cookies written by the sign-in.
+    supabaseClient = await createSupabaseAnonActionClient();
   }
 
   // Do not pass `id`, so that this always inserts a new row.
