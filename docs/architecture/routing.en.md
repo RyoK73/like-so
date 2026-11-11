@@ -24,8 +24,8 @@ It is always shown, whether the user is signed out or signed in.
 
 | Auth state   | Buttons                                                                                      |
 | ------------ | -------------------------------------------------------------------------------------------- |
-| `signedOut`  | "ゲストとして続ける", "サインアップ" (`/signup`), "サインイン" (`/signin`)                   |
-| `guest`      | "スケッチ一覧へ" (`/sketches`), "アカウント登録（他の端末でも使えるようにする）" (`/signup`) |
+| `signedOut`  | "ゲストとして続ける", "アカウント登録" (`/signup`), "サインイン" (`/signin`)                   |
+| `guest`      | "スケッチ一覧へ" (`/sketches`), "アカウント登録（他の端末でも使えます）" (`/signup`) |
 | `registered` | "スケッチ一覧へ" (`/sketches`)                                                               |
 
 ## Sketch list (`/sketches`)

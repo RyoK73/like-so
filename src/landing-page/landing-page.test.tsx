@@ -9,7 +9,7 @@ vi.mock("@/supabase/utils/serverClient", () => ({
 vi.mock("@/supabase/auth/getAuthState", () => ({ getAuthState: vi.fn() }));
 vi.mock("@/new-sketch/start-new-sketch", () => ({ startNewSketch: vi.fn() }));
 
-const guestRegisterName = "アカウント登録（他の端末でも使えるようにする）";
+const guestRegisterName = "アカウント登録（他の端末でも使えます）";
 const ARIA_LABEL = "ゲストとして続ける";
 
 const renderLandingPage = async (authState: AuthState) => {
@@ -33,7 +33,7 @@ describe("LandingPage", () => {
       expect(
         screen.getByRole("heading", {
           level: 1,
-          name: "ひらめきを、描いて、渡す",
+          name: "Ultra-Simple-Wireframer",
         }),
       ).toBeInTheDocument();
     },
@@ -45,10 +45,9 @@ describe("LandingPage", () => {
     expect(
       screen.getByRole("button", { name: ARIA_LABEL }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "サインアップ" })).toHaveAttribute(
-      "href",
-      "/signup",
-    );
+    expect(
+      screen.getByRole("link", { name: "アカウント登録" }),
+    ).toHaveAttribute("href", "/signup");
     expect(screen.getByRole("link", { name: "サインイン" })).toHaveAttribute(
       "href",
       "/signin",
