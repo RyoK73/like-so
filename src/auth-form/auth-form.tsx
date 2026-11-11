@@ -87,16 +87,14 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
   return (
     <div className="mx-auto my-auto flex w-full max-w-sm flex-col gap-4 rounded-2xl border bg-card p-6 shadow-float">
       <h1 className="text-2xl font-semibold tracking-tight">
-        {mode === "signin"
-          ? "サインイン"
-          : isGuest
-            ? "他の端末でも使えるようにする"
-            : "新規登録"}
+        {mode === "signin" ? "サインイン" : "アカウント登録"}
       </h1>
 
       {mode === "signin" && isGuest && (
         <p>
-          現在はゲストとして利用中です。サインインすると、このゲストのスケッチは表示されなくなります。
+          現在はゲストとして利用中です。
+          <br />
+          サインインすると、現在のゲストのスケッチは表示されなくなります。
         </p>
       )}
       {mode === "signup" && isGuest && (
@@ -106,7 +104,9 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
       )}
       {!isGuest && (
         <p>
-          メールアドレスにコードを送ります。アカウントがない場合は、新しく作成されます。
+          メールアドレスにコードを送ります。
+          <br />
+          アカウントがない場合は、新しく作成されます。
         </p>
       )}
 
@@ -126,7 +126,7 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
 
         {state.step === "code" && (
           <div className="flex flex-col gap-2">
-            <Label htmlFor="auth-code">確認コード(6桁)</Label>
+            <Label htmlFor="auth-code">確認コード（6桁）</Label>
             <Input
               id="auth-code"
               type="text"

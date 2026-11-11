@@ -36,7 +36,7 @@ const fail = (code: string) =>
 // jsdom ignores `formnovalidate` of a submit button, unlike browsers.
 // So fill the required code field before resending or changing the email.
 const typeCode = async (code = "123456") => {
-  await userEvent.type(await screen.findByLabelText("確認コード(6桁)"), code);
+  await userEvent.type(await screen.findByLabelText("確認コード（6桁）"), code);
 };
 
 const sendCode = async (email = "a@example.com") => {
@@ -56,7 +56,7 @@ describe("AuthForm", () => {
     render(<AuthForm mode="signin" isGuest={false} />);
 
     expect(screen.getByLabelText("メールアドレス")).toBeInTheDocument();
-    expect(screen.queryByLabelText("確認コード(6桁)")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("確認コード（6桁）")).not.toBeInTheDocument();
   });
 
   test.each(["signin", "signup"] as const)(
@@ -76,7 +76,7 @@ describe("AuthForm", () => {
 
     await sendCode();
 
-    expect(await screen.findByLabelText("確認コード(6桁)")).toHaveAttribute(
+    expect(await screen.findByLabelText("確認コード（6桁）")).toHaveAttribute(
       "autocomplete",
       "one-time-code",
     );
@@ -91,7 +91,7 @@ describe("AuthForm", () => {
     await sendCode();
 
     await userEvent.type(
-      await screen.findByLabelText("確認コード(6桁)"),
+      await screen.findByLabelText("確認コード（6桁）"),
       "123456",
     );
     await userEvent.click(screen.getByRole("button", { name: "認証する" }));
@@ -111,7 +111,7 @@ describe("AuthForm", () => {
 
     await sendCode();
     await userEvent.type(
-      await screen.findByLabelText("確認コード(6桁)"),
+      await screen.findByLabelText("確認コード（6桁）"),
       "123456",
     );
     await userEvent.click(screen.getByRole("button", { name: "認証する" }));
@@ -153,7 +153,7 @@ describe("AuthForm", () => {
     expect(
       screen.getByRole("link", { name: "サインインする" }),
     ).toHaveAttribute("href", "/signin");
-    expect(screen.queryByLabelText("確認コード(6桁)")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("確認コード（6桁）")).not.toBeInTheDocument();
   });
 
   test("should keep the typed email when sending the code fails", async () => {
@@ -174,7 +174,7 @@ describe("AuthForm", () => {
     await sendCode();
 
     await userEvent.type(
-      await screen.findByLabelText("確認コード(6桁)"),
+      await screen.findByLabelText("確認コード（6桁）"),
       "000000",
     );
     await userEvent.click(screen.getByRole("button", { name: "認証する" }));
@@ -185,7 +185,7 @@ describe("AuthForm", () => {
     expect(screen.getByLabelText("メールアドレス")).toHaveValue(
       "a@example.com",
     );
-    expect(screen.getByLabelText("確認コード(6桁)")).toHaveValue("");
+    expect(screen.getByLabelText("確認コード（6桁）")).toHaveValue("");
     expect(push).not.toHaveBeenCalled();
   });
 
@@ -226,7 +226,7 @@ describe("AuthForm", () => {
       screen.getByRole("button", { name: "メールアドレスを変更" }),
     );
 
-    expect(screen.queryByLabelText("確認コード(6桁)")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("確認コード（6桁）")).not.toBeInTheDocument();
     expect(screen.getByLabelText("メールアドレス")).not.toHaveAttribute(
       "readonly",
     );
@@ -248,6 +248,6 @@ describe("AuthForm", () => {
     expect(screen.getByRole("button", { name: "コードを送信" })).toBeDisabled();
 
     resolveSend(ok);
-    expect(await screen.findByLabelText("確認コード(6桁)")).toBeInTheDocument();
+    expect(await screen.findByLabelText("確認コード（6桁）")).toBeInTheDocument();
   });
 });
