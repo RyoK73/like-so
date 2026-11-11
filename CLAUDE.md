@@ -1,4 +1,4 @@
-# draw-for-llm
+# Ultra-Simple-Wireframer
 
 A tool for quickly sketching application UI mockups and sharing them with LLMs and other people.
 

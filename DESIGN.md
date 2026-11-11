@@ -1,6 +1,6 @@
 ---
 version: alpha
-name: Like-so
+name: Ultra-Simple-Wireframer
 description: アイデアをその場でスケッチしてLLMに渡すためのツール。方眼紙の上に、墨の線と絵の具の跡で描いたような、シンプルで手描きのデザイン。ライトを主体とし、ダークも暗くしすぎない。
 colors:
   primary: "#1E1A16"
@@ -135,7 +135,7 @@ components:
 
 ## Overview
 
-Like-so は、思いついたアイデアをその場でスケッチして、そのままLLMに渡すためのキャンバスです。
+Ultra-Simple-Wireframer は、思いついたアイデアをその場でスケッチして、そのままLLMに渡すためのキャンバスです。
 デザインの核は、README に書かれた「シンプルで速い」ことです。
 機能が増えても UI を重くせず、アイデアが浮かんだ瞬間に描き始められる軽さを保ちます。
 
