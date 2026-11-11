@@ -78,7 +78,7 @@ The items are defined in `menuItems`, and an item is shown only when the auth st
 | Sketch list  | `SketchListLink`      | Shown   | Shown        | Implemented |
 | New sketch   | `NewSketchIconButton` | Shown   | Shown        | Implemented |
 | Theme toggle | `ThemeToggleButton`   | Shown   | Shown        | Implemented |
-| Sign up      | `SignUpLink`          | Shown   | Hidden       | Implemented |
+| Register account | `SignUpLink`          | Shown   | Hidden       | Implemented |
 | Sign in      | `SignInLink`          | Shown   | Hidden       | Implemented |
 | Sign out     | `SignOutButton`       | Hidden  | Shown        | Implemented |
 
@@ -206,7 +206,7 @@ In the following cases, it neither makes the PNG nor saves it, and tells the err
 
 | Condition                                           | Toast message                                                    |
 | --------------------------------------------------- | ---------------------------------------------------------------- |
-| A title that is empty after trimming                | タイトルが空のためダウンロードできません                         |
-| A title of unusable characters only (such as `///`) | タイトルにファイル名に使える文字がないためダウンロードできません |
+| A title that is empty after trimming                | タイトルが空のため、ダウンロードできません。                     |
+| A title of unusable characters only (such as `///`) | タイトルにファイル名として使える文字がないため、ダウンロードできません。 |
 
 On success, it tells it with a toast (`success`, "ダウンロードしました") and releases the object URL it made.
