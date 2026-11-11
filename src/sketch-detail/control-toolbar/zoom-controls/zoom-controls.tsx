@@ -35,15 +35,15 @@ const showIssue = (issue: NumberInputIssue) => {
     toast.add({
       type: "info",
       title: isMin
-        ? `倍率は ${MIN_PERCENT}% 以上にできます。${MIN_PERCENT}% に設定されました。`
-        : `倍率は ${MAX_PERCENT}% 以下にできます。${MAX_PERCENT}% に設定されました。`,
+        ? `倍率は${MIN_PERCENT}%以上にしてください。${MIN_PERCENT}%に設定しました。`
+        : `倍率は${MAX_PERCENT}%以下にしてください。${MAX_PERCENT}%に設定しました。`,
       id: ISSUE_TOAST_ID,
     });
     return;
   }
   toast.add({
     type: "warning",
-    title: "数値を入力してください。",
+    title: "数値を入力してください",
     id: ISSUE_TOAST_ID,
   });
 };

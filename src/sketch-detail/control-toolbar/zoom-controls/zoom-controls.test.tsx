@@ -121,7 +121,7 @@ describe("with an initial zoom of 0.6", () => {
     expect(toast.add).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
         type: "info",
-        title: "倍率は 400% 以下にできます。400% に設定されました。",
+        title: "倍率は400%以下にしてください。400%に設定しました。",
         id: TOAST_ID,
       }),
     );
@@ -187,7 +187,7 @@ describe("toast", () => {
       expect(toast.add).toHaveBeenCalledExactlyOnceWith(
         expect.objectContaining({
           type: "warning",
-          title: "数値を入力してください。",
+          title: "数値を入力してください",
           id: TOAST_ID,
         }),
       );
@@ -203,7 +203,7 @@ describe("toast", () => {
     expect(toast.add).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
         type: "info",
-        title: "倍率は 10% 以上にできます。10% に設定されました。",
+        title: "倍率は10%以上にしてください。10%に設定しました。",
         id: TOAST_ID,
       }),
     );
@@ -218,7 +218,7 @@ describe("toast", () => {
     expect(toast.add).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({
         type: "info",
-        title: "倍率は 400% 以下にできます。400% に設定されました。",
+        title: "倍率は400%以下にしてください。400%に設定しました。",
         id: TOAST_ID,
       }),
     );
