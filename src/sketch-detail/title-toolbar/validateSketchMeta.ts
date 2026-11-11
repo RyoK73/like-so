@@ -17,13 +17,13 @@ const validateSketchMeta = (input: SketchMeta): ValidateSketchMetaResult => {
   const errors: SketchMetaErrors = {};
 
   if (title === "") {
-    errors.title = "タイトルを入力してください。";
+    errors.title = "タイトルを入力してください";
   } else if (countCodePoints(title) > TITLE_MAX_LENGTH) {
-    errors.title = `タイトルは${TITLE_MAX_LENGTH}文字以内で入力してください。`;
+    errors.title = `タイトルは${TITLE_MAX_LENGTH}文字以内で入力してください`;
   }
 
   if (countCodePoints(input.description) > DESCRIPTION_MAX_LENGTH) {
-    errors.description = `説明は${DESCRIPTION_MAX_LENGTH}文字以内で入力してください。`;
+    errors.description = `説明は${DESCRIPTION_MAX_LENGTH}文字以内で入力してください`;
   }
 
   if (errors.title !== undefined || errors.description !== undefined) {

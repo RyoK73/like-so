@@ -122,7 +122,7 @@ it("should show an error toast with a fixed id when saving fails", async () => {
     expect(toast.add).toHaveBeenCalledWith(
       expect.objectContaining({
         type: "error",
-        title: "保存に失敗しました。",
+        title: "保存に失敗しました",
         id: "save-sketch-error",
       }),
     ),

@@ -291,7 +291,7 @@ describe("useCanvasHistory", () => {
       expect(add).toHaveBeenCalledWith(
         expect.objectContaining({
           type: "error",
-          title: "履歴の復元に失敗しました。",
+          title: "履歴の復元に失敗しました",
         }),
       );
       expect(result.current.canUndo).toBe(true);

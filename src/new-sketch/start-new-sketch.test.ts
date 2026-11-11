@@ -109,7 +109,7 @@ describe("startNewSketch", () => {
 
     const state = await startNewSketch(null);
 
-    expect(state).toEqual({ error: "スケッチの作成上限に達しました。" });
+    expect(state).toEqual({ error: "スケッチの作成上限に達しました" });
     expect(redirect).not.toHaveBeenCalled();
   });
 

@@ -12,7 +12,7 @@ const SketchDetail = async ({ id }: { id: string }) => {
   const result = await getSketch(supabaseClient, id);
 
   if (!result.ok) {
-    return <SketchError message="スケッチの取得に失敗しました。" />;
+    return <SketchError message="スケッチの取得に失敗しました" />;
   }
 
   const sketch = result.value;

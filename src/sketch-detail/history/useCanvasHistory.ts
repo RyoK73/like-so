@@ -89,7 +89,7 @@ const useCanvasHistory = (
         // TODO(#70): Log the error according to the policy decided in #70.
         toast.add({
           type: "error",
-          title: "履歴の復元に失敗しました。",
+          title: "履歴の復元に失敗しました",
           id: RESTORE_ERROR_TOAST_ID,
         });
         // The canvas was not changed. Move the history back with the opposite operation.
