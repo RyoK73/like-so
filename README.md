@@ -1,6 +1,6 @@
 English | [日本語](./README.ja.md)
 
-# Like-so - Sketch what words can't say.
+# Ultra-Simple-Wireframer
 
 A canvas for sketching an idea the moment it strikes and handing it straight to an LLM.
 
@@ -15,12 +15,12 @@ can be faster and more accurate.
 
 This project aims to cut that lag down to the minimum.
 
-_Like-so_ is a tool for bringing pre-verbal ideas directly into a conversation with an LLM.
+_Ultra-Simple-Wireframer_ is a tool for bringing pre-verbal ideas directly into a conversation with an LLM.
 
 ## What I value: simplicity and speed
 
 Figma, Canva, and Excalidraw are all excellent tools.
-_Like-so_ doesn't compete with them on feature count. Instead, it focuses on the simplicity and speed that tend to fade as tools grow more feature-rich.
+_Ultra-Simple-Wireframer_ doesn't compete with them on feature count. Instead, it focuses on the simplicity and speed that tend to fade as tools grow more feature-rich.
 
 ## Intended use cases
 
@@ -62,3 +62,4 @@ Setup, architecture and coding rules are in [`docs/`](./docs).
   - [Directory structure](./docs/rules/directory-structure.en.md)
   - [Naming](./docs/rules/naming.en.md)
   - [TypeScript](./docs/rules/typescript.en.md)
+  - [UI text notation](./docs/rules/ui-text.en.md)

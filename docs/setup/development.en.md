@@ -36,3 +36,4 @@ pnpm dev
 - [Directory structure](../rules/directory-structure.en.md)
 - [Naming](../rules/naming.en.md)
 - [TypeScript](../rules/typescript.en.md)
+- [UI text notation](../rules/ui-text.en.md)

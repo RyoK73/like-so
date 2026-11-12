@@ -81,7 +81,7 @@ const SketchCanvas = ({ sketch }: { sketch: GetSketch }) => {
       // TODO(#70): Log `err` according to the policy decided in #70.
       toast.add({
         type: "error",
-        title: "保存に失敗しました。",
+        title: "保存に失敗しました",
         id: SAVE_ERROR_TOAST_ID,
       });
     }

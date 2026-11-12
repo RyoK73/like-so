@@ -112,7 +112,7 @@ describe("SketchDetail", () => {
     render(await SketchDetail({ id: validId }));
 
     expect(screen.getByRole("alert")).toHaveTextContent(
-      "スケッチの取得に失敗しました。",
+      "スケッチの取得に失敗しました",
     );
     const link = screen.getByRole("link", { name: "スケッチ一覧へ戻る" });
     expect(link).toHaveAttribute("href", "/sketches");

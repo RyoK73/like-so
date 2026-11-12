@@ -104,7 +104,7 @@ describe("SketchList", () => {
 
     await renderSketchList();
 
-    expect(screen.getByText("スケッチがまだありません。")).toBeInTheDocument();
+    expect(screen.getByText("スケッチがまだありません")).toBeInTheDocument();
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });
 
@@ -117,7 +117,7 @@ describe("SketchList", () => {
     await renderSketchList();
 
     expect(screen.getByRole("alert")).toHaveTextContent(
-      "スケッチ一覧の取得に失敗しました。",
+      "スケッチ一覧の取得に失敗しました",
     );
   });
 });

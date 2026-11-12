@@ -14,10 +14,10 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         <Dab className="-top-3 -left-3 bg-paint-blue" />
         <Dab className="-right-2 -bottom-3 size-7 bg-paint-yellow" />
         <h1 className="text-4xl font-bold tracking-tight">
-          ひらめきを、描いて、渡す
+          Ultra-Simple-Wireframer
         </h1>
         <div className="text-lg text-muted-foreground leading-relaxed">
-          <p>思いついたアイデアを、その場でスケッチして渡す</p>
+          <p>思いついたアイデアを、その場でスケッチ。そのままLLMへ。</p>
         </div>
       </div>
 
@@ -25,14 +25,14 @@ const Introduction = ({ children }: { children: ReactNode }) => {
         <Dab className="-top-2 -right-3 bg-paint-green" />
         <Dab className="-bottom-3 -left-2 size-8 bg-paint-red" />
         <h2 className="text-3xl font-semibold tracking-tight">
-          シンプルで、速い。
+          Simple and Quick
         </h2>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Like-soは、軽やかさと速さを最優先
+          軽さと速さを最優先。
           <br />
-          ひらめいた瞬間に開いて、描いて、渡す。
+          ひらめいたらすぐ開いて、描いて、渡す。
           <br />
-          その流れだけを、いつでも気持ちよく使えることを目指す
+          その流れだけを、いつでも気持ちよく。
         </p>
       </div>
 

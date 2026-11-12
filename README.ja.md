@@ -1,6 +1,6 @@
 [English](./README.md) | 日本語
 
-# Like-so - 言葉にできないものを、スケッチで。
+# Ultra-Simple-Wireframer
 
 ひらめいたアイデアをその場でスケッチし、そのままLLMに渡すためのキャンバスです。
 
@@ -14,12 +14,12 @@
 
 このプロジェクトは、そのラグを極限まで減らすことを目指します。
 
-_Like-so_ は、言葉になる前のアイデアを、そのままLLMとの会話に持ち込むためのツールです。
+_Ultra-Simple-Wireframer_ は、言葉になる前のアイデアを、そのままLLMとの会話に持ち込むためのツールです。
 
 ## 大切にしていること: シンプルさと速さ
 
 Figma、Canva、Excalidrawは、どれも優れたツールです。
-_Like-so_ は、機能の数で競いません。
+_Ultra-Simple-Wireframer_ は、機能の数で競いません。
 その代わり、ツールが多機能になるほど失われがちな、シンプルさと速さに集中します。
 
 ## 想定するユースケース
@@ -61,3 +61,4 @@ _Like-so_ は、機能の数で競いません。
   - [ディレクトリ構成](./docs/rules/directory-structure.ja.md)
   - [命名](./docs/rules/naming.ja.md)
   - [TypeScript](./docs/rules/typescript.ja.md)
+  - [UI文言の表記](./docs/rules/ui-text.ja.md)

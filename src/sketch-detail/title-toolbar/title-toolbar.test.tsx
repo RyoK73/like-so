@@ -86,7 +86,7 @@ it("should show the error and mark the title input as invalid when the title is 
   await userEvent.clear(titleInput);
 
   expect(screen.getByRole("alert")).toHaveTextContent(
-    "タイトルを入力してください。",
+    "タイトルを入力してください",
   );
   expect(titleInput).toHaveAttribute("aria-invalid", "true");
 });

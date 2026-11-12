@@ -55,7 +55,7 @@ it("should neither make the PNG nor save it when the title is empty", async () =
   expect(toast.add).toHaveBeenCalledWith(
     expect.objectContaining({
       type: "error",
-      title: "タイトルが空のためダウンロードできません",
+      title: "タイトルが空のため、ダウンロードできません",
     }),
   );
 });
@@ -73,7 +73,8 @@ it("should neither make the PNG nor save it when the title has only forbidden ch
   expect(toast.add).toHaveBeenCalledWith(
     expect.objectContaining({
       type: "error",
-      title: "タイトルにファイル名に使える文字がないためダウンロードできません",
+      title:
+        "タイトルにファイル名として使える文字がないため、ダウンロードできません",
     }),
   );
 });

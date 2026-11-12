@@ -8,11 +8,11 @@ const SketchList = async () => {
   const result = await getSketchList(supabaseClient);
 
   if (!result.ok) {
-    return <p role="alert">スケッチ一覧の取得に失敗しました。</p>;
+    return <p role="alert">スケッチ一覧の取得に失敗しました</p>;
   }
 
   if (result.value.length === 0) {
-    return <p>スケッチがまだありません。</p>;
+    return <p>スケッチがまだありません</p>;
   }
 
   return (

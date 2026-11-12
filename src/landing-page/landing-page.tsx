@@ -21,7 +21,7 @@ const LandingPage = async () => {
               href="/signup"
               className={buttonVariants({ variant: "outline" })}
             >
-              サインアップ
+              アカウント登録
             </Link>
             <Link
               href="/signin"
@@ -40,7 +40,7 @@ const LandingPage = async () => {
               href="/signup"
               className={buttonVariants({ variant: "outline" })}
             >
-              アカウント登録（他の端末でも使えるようにする）
+              アカウント登録（他の端末でも使えます）
             </Link>
           </>
         )}

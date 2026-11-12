@@ -1,4 +1,4 @@
-# draw-for-llm
+# Ultra-Simple-Wireframer
 
 A tool for quickly sketching application UI mockups and sharing them with LLMs and other people.
 
@@ -27,6 +27,7 @@ When you implement UI, read `DESIGN.md` and follow its colors, typography, spaci
 | Rules        | `docs/rules/directory-structure.*.md` | Directory structure (Vertical Codebase)                     |
 |              | `docs/rules/naming.*.md`              | Naming                                                      |
 |              | `docs/rules/typescript.*.md`          | TypeScript                                                  |
+|              | `docs/rules/ui-text.*.md`             | UI text notation                                            |
 
 ## Documentation update rules
 

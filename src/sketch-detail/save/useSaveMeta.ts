@@ -47,7 +47,7 @@ const useSaveMeta = ({ sketchId, initial, onSaved }: UseSaveMetaParams) => {
         // TODO(#70): Log `result.error` according to the policy decided in #70.
         toast.add({
           type: "error",
-          title: "タイトルと説明の保存に失敗しました。",
+          title: "タイトルと説明の保存に失敗しました",
           id: SAVE_META_ERROR_TOAST_ID,
         });
         return { ok: false };

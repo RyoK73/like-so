@@ -27,13 +27,13 @@ const toAuthErrorInfo = (error: Error): AuthErrorInfo => {
     // Supabase returns this for both a wrong code and an expired code.
     case "otp_expired":
       return {
-        message: "コードが正しくないか、有効期限が切れています。",
+        message: "コードが正しくないか、有効期限が切れています",
         suggestSignIn: false,
       };
     case "validation_failed":
     case "email_address_invalid":
       return {
-        message: "メールアドレスの形式を確認してください。",
+        message: "メールアドレスの形式を確認してください",
         suggestSignIn: false,
       };
     default:

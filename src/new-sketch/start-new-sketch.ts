@@ -23,7 +23,7 @@ const startNewSketch = async (
     const signInResult = await signInAnonymouslyWithForwardedIp();
     if (!signInResult.ok) {
       // TODO(#71): Log `signInResult.error` on the server.
-      return { error: "サインインに失敗しました。" };
+      return { error: "サインインに失敗しました" };
     }
     // Create the client again, so that it reads the session cookies written by the sign-in.
     supabaseClient = await createSupabaseAnonActionClient();
@@ -37,10 +37,10 @@ const startNewSketch = async (
   } as InsertSketch);
   if (!upsertResult.ok) {
     if (isSketchLimitError(upsertResult.error)) {
-      return { error: "スケッチの作成上限に達しました。" };
+      return { error: "スケッチの作成上限に達しました" };
     }
     // TODO(#71): Log `upsertResult.error` on the server.
-    return { error: "スケッチの作成に失敗しました。" };
+    return { error: "スケッチの作成に失敗しました" };
   }
 
   // `redirect` throws, so keep it out of try/catch.

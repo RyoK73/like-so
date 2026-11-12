@@ -17,7 +17,7 @@ const UniversalErrorPage = ({
   return (
     <ErrorPageLayout
       title="問題が発生しました"
-      description="時間をおいて、もう一度お試しください。"
+      description="時間をおいて、もう一度お試しください"
       illustration={
         <TriangleAlert aria-hidden className="size-10 text-destructive" />
       }

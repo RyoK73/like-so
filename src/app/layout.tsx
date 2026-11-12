@@ -12,9 +12,9 @@ const zenKurenaido = Zen_Kurenaido({
 });
 
 export const metadata: Metadata = {
-  title: "Like-so - Sketch what words can't say",
+  title: "Ultra-Simple-Wireframer",
   description:
-    "Like-soは、思いついたアイデアをその場でスケッチして、そのままLLMに渡せるキャンバスです。",
+    "思いついたアイデアをその場でスケッチして、そのままLLMに渡せるキャンバスです",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
