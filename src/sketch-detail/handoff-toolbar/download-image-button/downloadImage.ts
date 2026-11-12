@@ -5,9 +5,9 @@ import {
 } from "@/sketch-detail/handoff-toolbar/buildPngFileName";
 
 const FILE_NAME_ERROR_MESSAGES: Record<PngFileNameError, string> = {
-  empty: "タイトルが空のため、ダウンロードできません。",
+  empty: "タイトルが空のため、ダウンロードできません",
   "no-valid-chars":
-    "タイトルにファイル名として使える文字がないため、ダウンロードできません。",
+    "タイトルにファイル名として使える文字がないため、ダウンロードできません",
 };
 
 type DownloadImageParams = {
