@@ -46,12 +46,12 @@ typography:
     letterSpacing: -0.025em
   body-md:
     fontFamily: Zen Kurenaido
-    fontSize: 16px
+    fontSize: 18px
     fontWeight: 400
     lineHeight: 1.6
   label-md:
     fontFamily: Zen Kurenaido
-    fontSize: 16px
+    fontSize: 18px
     fontWeight: 700
     lineHeight: 1.2
 rounded:
@@ -205,7 +205,22 @@ Ultra-Simple-Wireframer は、思いついたアイデアをその場でスケ�
 - **headline-lg**: ランディングページの主見出し。
 - **headline-md**: セクション見出し。
 - **body-md**: 本文。
-- **label-md**: ボタンとツールチップのラベル。太字で、小さく使っても読みやすくします。
+  `body` に適用しているので、クラスを指定しない文字にも継承されます。
+- **label-md**: ボタン、ツールチップ、トーストのタイトル、入力欄のラベル。
+  太字で、小さく使っても読みやすくします。
+
+各トークンは、`globals.css` のユーティリティ(`text-headline-lg`、`text-headline-md`、`text-body-md`、`text-label-md`)として定義しています。
+コンポーネントでは、`text-sm` や `text-base` などのサイズのクラスを直接書かずに、このユーティリティを使います。
+
+Zen Kurenaido は、Regular(400)だけを読み込んでいます。
+そのため、body-md と label-md の太さは、`font-weight` ではなく、`-webkit-text-stroke`(文字色の縁取り)で補います。
+縁取りの太さは、`em` 単位の CSS 変数で持ち、文字サイズに比例します。
+
+- `--stroke-body`: body-md の縁取りです(0.017em、18px で約 0.3px)。
+- `--stroke-label`: label-md の縁取りです(0.033em、18px で約 0.6px)。
+
+縁取りの色は `currentColor` なので、ダークモードでも文字色に追従します。
+headline は、サイズと `font-weight` で表し、縁取りは付けません。
 
 ## Layout
 
@@ -257,6 +272,7 @@ Ultra-Simple-Wireframer は、思いついたアイデアをその場でスケ�
   大きさは、呼び出し側のクラス(ナビゲーションメニューでは 40px)で決めます。
 - **tooltip**: アイコンだけの操作の名前を、hover で見せる吹き出しです。
   `foreground` の塗りに `background` の文字を重ね、小さな矢印を付けます。
+  文字は `label-md`(18px)です。
 - **toast**: 操作の結果を知らせる通知です。
   `card` の塗りと `brush-a` の枠で、傾きは消し、`shadow-float` の影を付けます。
   エラーのときだけ、アイコンを `destructive` にします。
