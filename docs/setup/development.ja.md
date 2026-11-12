@@ -39,3 +39,4 @@ pnpm dev
 - [ディレクトリ構成](../rules/directory-structure.ja.md)
 - [命名](../rules/naming.ja.md)
 - [TypeScript](../rules/typescript.ja.md)
+- [UI文言の表記](../rules/ui-text.ja.md)

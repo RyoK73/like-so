@@ -61,3 +61,4 @@ _Ultra-Simple-Wireframer_ は、機能の数で競いません。
   - [ディレクトリ構成](./docs/rules/directory-structure.ja.md)
   - [命名](./docs/rules/naming.ja.md)
   - [TypeScript](./docs/rules/typescript.ja.md)
+  - [UI文言の表記](./docs/rules/ui-text.ja.md)

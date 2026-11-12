@@ -62,3 +62,4 @@ Setup, architecture and coding rules are in [`docs/`](./docs).
   - [Directory structure](./docs/rules/directory-structure.en.md)
   - [Naming](./docs/rules/naming.en.md)
   - [TypeScript](./docs/rules/typescript.en.md)
+  - [UI text notation](./docs/rules/ui-text.en.md)
