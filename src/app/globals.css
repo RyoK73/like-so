@@ -78,6 +78,9 @@
   --paint-red: oklch(0.62 0.2 28);
   --grid-size: 64px;
   --grid-line: oklch(0.9 0.008 85);
+  /* Zen Kurenaido has only the 400 weight, so thickness comes from a text stroke. Tune these two by eye. */
+  --stroke-body: 0.017em;
+  --stroke-label: 0.033em;
 }
 
 /* Soft dark: a lifted charcoal, not black. The canvas stays light. */
@@ -116,6 +119,30 @@
   rotate: 1deg;
 }
 
+/* Typography tokens of DESIGN.md. The stroke is `currentColor`, so it follows the text color in both themes. */
+@utility text-body-md {
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-text-stroke: var(--stroke-body) currentColor;
+}
+@utility text-label-md {
+  font-size: 18px;
+  line-height: 1.2;
+  -webkit-text-stroke: var(--stroke-label) currentColor;
+}
+@utility text-headline-lg {
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+@utility text-headline-md {
+  font-size: 30px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
 /* Drafting-paper background. One line sits on the horizontal center so centered content snaps to the grid. */
 @utility bg-grid-paper {
   background-image:
@@ -130,7 +157,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background bg-grid-paper text-foreground;
+    @apply bg-background bg-grid-paper text-body-md text-foreground;
   }
   html {
     @apply font-zen-kurenaido;
