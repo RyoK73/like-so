@@ -14,7 +14,7 @@ const zenKurenaido = Zen_Kurenaido({
 export const metadata: Metadata = {
   title: "Ultra-Simple-Wireframer",
   description:
-    "思いついたアイデアをその場でスケッチして、そのままLLMに渡せるキャンバスです。",
+    "思いついたアイデアをその場でスケッチして、そのままLLMに渡せるキャンバスです",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
