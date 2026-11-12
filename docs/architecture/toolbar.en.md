@@ -204,9 +204,9 @@ There is no fallback for the environments where the Clipboard API is not availab
 It trims the spaces around the title and replaces the characters that cannot be used in a file name (`/ \ : * ? " < > |`) with `_`.
 In the following cases, it neither makes the PNG nor saves it, and tells the error with a toast (`error`).
 
-| Condition                                           | Toast message                                                            |
-| --------------------------------------------------- | ------------------------------------------------------------------------ |
-| A title that is empty after trimming                | タイトルが空のため、ダウンロードできません。                             |
-| A title of unusable characters only (such as `///`) | タイトルにファイル名として使える文字がないため、ダウンロードできません。 |
+| Condition                                           | Toast message                                                          |
+| --------------------------------------------------- | ---------------------------------------------------------------------- |
+| A title that is empty after trimming                | タイトルが空のため、ダウンロードできません                             |
+| A title of unusable characters only (such as `///`) | タイトルにファイル名として使える文字がないため、ダウンロードできません |
 
 On success, it tells it with a toast (`success`, "ダウンロードしました") and releases the object URL it made.
