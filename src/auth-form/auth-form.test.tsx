@@ -56,7 +56,9 @@ describe("AuthForm", () => {
     render(<AuthForm mode="signin" isGuest={false} />);
 
     expect(screen.getByLabelText("メールアドレス")).toBeInTheDocument();
-    expect(screen.queryByLabelText("確認コード（6桁）")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("確認コード（6桁）"),
+    ).not.toBeInTheDocument();
   });
 
   test.each(["signin", "signup"] as const)(
@@ -153,7 +155,9 @@ describe("AuthForm", () => {
     expect(
       screen.getByRole("link", { name: "サインインする" }),
     ).toHaveAttribute("href", "/signin");
-    expect(screen.queryByLabelText("確認コード（6桁）")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("確認コード（6桁）"),
+    ).not.toBeInTheDocument();
   });
 
   test("should keep the typed email when sending the code fails", async () => {
@@ -226,7 +230,9 @@ describe("AuthForm", () => {
       screen.getByRole("button", { name: "メールアドレスを変更" }),
     );
 
-    expect(screen.queryByLabelText("確認コード（6桁）")).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("確認コード（6桁）"),
+    ).not.toBeInTheDocument();
     expect(screen.getByLabelText("メールアドレス")).not.toHaveAttribute(
       "readonly",
     );
@@ -248,6 +254,8 @@ describe("AuthForm", () => {
     expect(screen.getByRole("button", { name: "コードを送信" })).toBeDisabled();
 
     resolveSend(ok);
-    expect(await screen.findByLabelText("確認コード（6桁）")).toBeInTheDocument();
+    expect(
+      await screen.findByLabelText("確認コード（6桁）"),
+    ).toBeInTheDocument();
   });
 });

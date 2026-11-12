@@ -19,9 +19,7 @@ const ErrorPageLayout = ({
         {illustration && <div>{illustration}</div>}
         <h1 className="text-headline-lg">{title}</h1>
         {description && (
-          <p className="text-body-md text-muted-foreground">
-            {description}
-          </p>
+          <p className="text-body-md text-muted-foreground">{description}</p>
         )}
       </section>
       <div className="flex flex-col gap-3 sm:flex-row self-center">
