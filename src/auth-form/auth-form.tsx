@@ -99,7 +99,7 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
       )}
       {mode === "signup" && isGuest && (
         <p>
-          メールアドレスを登録すると、今のスケッチを引き継いだまま、他の端末でも使えます。
+          メールアドレスを登録すると、今のスケッチを引き継いだまま、他の端末でも使えます
         </p>
       )}
       {!isGuest && (
