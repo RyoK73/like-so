@@ -4,7 +4,7 @@ const NotFound = () => {
   return (
     <ErrorPageLayout
       title="ページが見つかりません"
-      description="URLが間違っているか、ページが移動した可能性があります。"
+      description="URLが間違っているか、ページが移動した可能性があります"
       actions={<ErrorLinkButton href="/">トップへ戻る</ErrorLinkButton>}
     />
   );
