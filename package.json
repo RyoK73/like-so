@@ -21,7 +21,9 @@
     "db:pull": "supabase db pull",
     "db:new": "supabase migration new",
     "type:gen": ". ./.env.local && supabase gen types typescript --project-id $PROJECTID --schema public > ./src/supabase/utils/database.types.ts",
-    "type:gen-local": "supabase gen types typescript --local > ./src/supabase/utils/database.types.ts"
+    "type:gen-local": "supabase gen types typescript --local > ./src/supabase/utils/database.types.ts",
+    "prtc": "prettier -c",
+    "prtw": "prettier -w"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -60,6 +62,7 @@
     "jsdom": "^30.0.1",
     "open": "^11.0.4",
     "pg": "^8.23.1",
+    "prettier": "^3.9.10",
     "supabase": "^2.117.0",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.23.13",
