@@ -56,7 +56,7 @@ const TitleToolbar = ({
         className={cn(fieldClassName, "truncate text-xl font-semibold")}
       />
       {errors.title && (
-        <p role="alert" className="text-sm text-destructive">
+        <p role="alert" className="text-body-md text-destructive">
           {errors.title}
         </p>
       )}
@@ -73,11 +73,11 @@ const TitleToolbar = ({
         )}
       />
       {errors.description && (
-        <p role="alert" className="text-sm text-destructive">
+        <p role="alert" className="text-body-md text-destructive">
           {errors.description}
         </p>
       )}
-      <p className="text-sm text-muted-foreground">
+      <p className="text-body-md text-muted-foreground">
         {width} × {height}
       </p>
       <LocalTime updatedAt={updatedAt} />

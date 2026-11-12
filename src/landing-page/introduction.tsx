@@ -13,10 +13,10 @@ const Introduction = ({ children }: { children: ReactNode }) => {
       <div className="relative flex flex-col justify-center gap-4 brush-a bg-background p-5 text-left md:col-span-10 md:col-start-1 md:row-span-3 md:row-start-3">
         <Dab className="-top-3 -left-3 bg-paint-blue" />
         <Dab className="-right-2 -bottom-3 size-7 bg-paint-yellow" />
-        <h1 className="text-4xl font-bold tracking-tight">
+        <h1 className="text-headline-lg">
           Ultra-Simple-Wireframer
         </h1>
-        <div className="text-lg text-muted-foreground leading-relaxed">
+        <div className="text-body-md text-muted-foreground">
           <p>思いついたアイデアを、その場でスケッチ。そのままLLMへ。</p>
         </div>
       </div>
@@ -24,10 +24,10 @@ const Introduction = ({ children }: { children: ReactNode }) => {
       <div className="relative flex flex-col justify-center gap-4 brush-b bg-background p-5 text-left md:col-span-10 md:col-end-16 md:row-span-3 md:row-start-8">
         <Dab className="-top-2 -right-3 bg-paint-green" />
         <Dab className="-bottom-3 -left-2 size-8 bg-paint-red" />
-        <h2 className="text-3xl font-semibold tracking-tight">
+        <h2 className="text-headline-md">
           Simple and Quick
         </h2>
-        <p className="text-lg text-muted-foreground leading-relaxed">
+        <p className="text-body-md text-muted-foreground">
           軽さと速さを最優先。
           <br />
           ひらめいたらすぐ開いて、描いて、渡す。

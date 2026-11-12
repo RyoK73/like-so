@@ -86,7 +86,7 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
 
   return (
     <div className="mx-auto my-auto flex w-full max-w-sm flex-col gap-4 rounded-2xl border bg-card p-6 shadow-float">
-      <h1 className="text-2xl font-semibold tracking-tight">
+      <h1 className="text-headline-md">
         {mode === "signin" ? "サインイン" : "アカウント登録"}
       </h1>
 
@@ -141,7 +141,7 @@ const AuthForm = ({ mode, isGuest }: AuthFormProps) => {
         )}
 
         {state.error && (
-          <p role="alert" className="text-sm text-destructive">
+          <p role="alert" className="text-body-md text-destructive">
             {state.error.message}
             {state.error.suggestSignIn && (
               <>
