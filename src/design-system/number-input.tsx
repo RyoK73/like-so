@@ -86,7 +86,7 @@ const NumberInput = ({
       onBlur={commit}
       onKeyDown={onKeyDown}
       className={cn(
-        "brush-a h-10 w-16 min-w-0 rotate-0 bg-card px-2 text-center text-base transition-colors outline-none focus-visible:border-4 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+        "brush-a h-10 w-16 min-w-0 rotate-0 bg-card px-2 text-center text-body-md transition-colors outline-none focus-visible:border-4 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
     />
