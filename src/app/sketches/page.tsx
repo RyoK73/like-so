@@ -10,7 +10,7 @@ const page = () => {
         "mx-auto flex w-full max-w-3xl flex-col gap-6 py-12 pr-6",
       )}
     >
-      <h1 className="text-2xl font-semibold tracking-tight">スケッチ</h1>
+      <h1 className="text-headline-md">スケッチ</h1>
       <SketchList />
     </div>
   );
