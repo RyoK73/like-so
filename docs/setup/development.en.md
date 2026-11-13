@@ -12,15 +12,17 @@ pnpm dev
 
 ## Scripts
 
-| Command            | What it does                                                |
-| ------------------ | ----------------------------------------------------------- |
-| `pnpm build`       | Builds the app with `next build`                            |
-| `pnpm start`       | Starts the built app                                        |
-| `pnpm lint`        | Runs ESLint                                                 |
-| `pnpm check`       | Runs ESLint and `tsc --noEmit`                              |
-| `pnpm test`        | Runs vitest in watch mode (excludes `*.remote.test.ts`)     |
-| `pnpm test:here`   | Runs vitest once for the directory you ran the command from |
-| `pnpm test:remote` | Runs only `*.remote.test.ts` against the remote project     |
+| Command            | What it does                                                    |
+| ------------------ | --------------------------------------------------------------- |
+| `pnpm build`       | Builds the app with `next build`                                |
+| `pnpm start`       | Starts the built app                                            |
+| `pnpm lint`        | Runs ESLint                                                     |
+| `pnpm check`       | Runs ESLint and `tsc --noEmit`                                  |
+| `pnpm test`        | Runs vitest in watch mode (excludes `*.remote.test.ts`)         |
+| `pnpm test:here`   | Runs vitest once for the directory you ran the command from     |
+| `pnpm test:remote` | Runs only `*.remote.test.ts` against the remote project         |
+| `pnpm prtc <path>` | Checks that the path is formatted with Prettier (`prettier -c`) |
+| `pnpm prtw <path>` | Formats the path with Prettier and writes it (`prettier -w`)    |
 
 ## Tests
 

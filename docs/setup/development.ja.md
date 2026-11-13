@@ -21,6 +21,8 @@ pnpm dev
 | `pnpm test`        | vitestをwatchモードで実行します(`*.remote.test.ts`は除外)。      |
 | `pnpm test:here`   | コマンドを実行したディレクトリのテストを、1回だけ実行します。    |
 | `pnpm test:remote` | リモートプロジェクトに対する`*.remote.test.ts`のみを実行します。 |
+| `pnpm prtc <path>` | 指定したパスがPrettierで整形済みかを確認します(`prettier -c`)。  |
+| `pnpm prtw <path>` | 指定したパスをPrettierで整形して書き込みます(`prettier -w`)。    |
 
 ## テスト
 
