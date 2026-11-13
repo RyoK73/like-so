@@ -23,7 +23,7 @@ const SketchList = async () => {
             href={`/sketches/${sketch.id}`}
             className="brush-a rotate-0 flex flex-col gap-1 border bg-background p-4 transition-colors hover:bg-accent"
           >
-            <span className="font-semibold">{sketch.title}</span>
+            <span className="text-label-md">{sketch.title}</span>
             {sketch.description && (
               <span className="text-muted-foreground">
                 {sketch.description}
