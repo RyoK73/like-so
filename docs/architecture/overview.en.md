@@ -13,6 +13,7 @@
 | Icons              | react-icons                 |
 | UI parts (tooltip) | @base-ui/react              |
 | Theme switching    | next-themes                 |
+| Web Analytics      | @vercel/analytics           |
 
 Exact versions are in `package.json`.
 Only fabric.js is pinned to an exact version, without `^`.
