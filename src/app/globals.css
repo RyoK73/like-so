@@ -135,12 +135,14 @@
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.025em;
+  -webkit-text-stroke: 0;
 }
 @utility text-headline-md {
   font-size: 30px;
   font-weight: 600;
   line-height: 1.25;
   letter-spacing: -0.025em;
+  -webkit-text-stroke: 0;
 }
 
 /* Drafting-paper background. One line sits on the horizontal center so centered content snaps to the grid. */
