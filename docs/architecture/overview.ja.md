@@ -13,6 +13,7 @@
 | アイコン        | react-icons                |
 | UI部品(tooltip) | @base-ui/react             |
 | テーマ切り替え  | next-themes                |
+| Web分析         | @vercel/analytics          |
 
 正確なバージョンは`package.json`を参照してください。
 fabric.jsだけは、`^`を付けずにバージョンを固定しています。
