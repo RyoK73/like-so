@@ -53,7 +53,7 @@ const TitleToolbar = ({
         aria-invalid={errors.title !== undefined}
         value={titleInput}
         onChange={(e) => setTitle(e.target.value)}
-        className={cn(fieldClassName, "truncate text-xl font-semibold")}
+        className={cn(fieldClassName, "truncate text-label-md")}
       />
       {errors.title && (
         <p role="alert" className="text-body-md text-destructive">
