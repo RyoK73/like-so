@@ -24,6 +24,11 @@ pnpm dev
 | `pnpm prtc <path>` | Checks that the path is formatted with Prettier (`prettier -c`) |
 | `pnpm prtw <path>` | Formats the path with Prettier and writes it (`prettier -w`)    |
 
+- `pnpm start` runs with `NODE_ENV=production`.
+  Because of this, Vercel BotID does not use its development behavior.
+  Without an OIDC token, anonymous sign-in throws an error and the error page is shown.
+  Use `pnpm dev` to check anonymous sign-in.
+
 ## Tests
 
 - Run `pnpm db:start` first. Many tests connect to the local Supabase.
