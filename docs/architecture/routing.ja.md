@@ -131,9 +131,10 @@
 `src/app/layout.tsx`は、`src/analytics/`の`WebAnalytics`を`body`の末尾に置きます。
 `WebAnalytics`は、`@vercel/analytics/next`の`Analytics`を使うClient Componentです。
 
-- `WebAnalytics`の`beforeSend`は、`event.url`に`/sketches`を含むイベントを破棄します(`null`を返します)。
+- `WebAnalytics`の`beforeSend`は、`event.url`の`pathname`が`/sketches`で始まるイベントを破棄します(`null`を返します)。
   それ以外のイベントは、そのまま送ります。
-- 判定は前方一致ではなく、部分一致(`includes`)です。
+- 判定は`pathname`の前方一致(`startsWith`)です。
+  クエリ文字列は判定に使いません。
 - `/sketches`と`/sketches/[id]`は計測しません。
   `/`、`/signin`、`/signup`は計測します。
 - 除外する理由は次の通りです。

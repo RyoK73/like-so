@@ -131,9 +131,10 @@ See [Overview](./overview.en.md) for details.
 `src/app/layout.tsx` places `WebAnalytics` from `src/analytics/` at the end of `body`.
 `WebAnalytics` is a Client Component that uses `Analytics` from `@vercel/analytics/next`.
 
-- The `beforeSend` of `WebAnalytics` drops the events whose `event.url` includes `/sketches` (it returns `null`).
+- The `beforeSend` of `WebAnalytics` drops the events whose `event.url` pathname starts with `/sketches` (it returns `null`).
   It sends all other events as they are.
-- The check is a substring match (`includes`), not a prefix match.
+- The check is a prefix match (`startsWith`) on the pathname.
+  The query string is not used.
 - `/sketches` and `/sketches/[id]` are not measured.
   `/`, `/signin` and `/signup` are measured.
 - Reasons for excluding them:
