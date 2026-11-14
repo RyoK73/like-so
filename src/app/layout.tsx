@@ -4,7 +4,7 @@ import { Toaster } from "@/design-system/toast";
 import { MyToolTipProvider } from "@/design-system/tool-tip-provider";
 import { ThemeProvider } from "@/design-system/theme-provider";
 import { Zen_Kurenaido } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next";
+import { WebAnalytics } from "@/analytics";
 
 const zenKurenaido = Zen_Kurenaido({
   variable: "--font-zen-kurenaido",
@@ -35,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <MyToolTipProvider>{children}</MyToolTipProvider>
           </Toaster>
         </ThemeProvider>
-        <Analytics />
+        <WebAnalytics />
       </body>
     </html>
   );

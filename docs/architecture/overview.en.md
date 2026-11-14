@@ -28,6 +28,7 @@ See [Directory structure](../rules/directory-structure.en.md) for the rule.
 | ---------------------- | --------------------------------------------------------- |
 | `src/app/`             | Routing only                                              |
 | `src/proxy.ts`         | Next.js proxy. Refreshes the auth session on each request |
+| `src/analytics/`       | Web Analytics (with a rule to exclude some pages)         |
 | `src/auth-form/`       | The form for sign-in and guest registration               |
 | `src/landing-page/`    | Showing the landing page (buttons by auth state)          |
 | `src/navigation-menu/` | The navigation menu (items by auth state)                 |

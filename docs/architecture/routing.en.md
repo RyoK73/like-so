@@ -125,3 +125,20 @@ See [Overview](./overview.en.md) for details.
   So `NavigationMenu` stays on an error.
 - There is no `global-error.tsx`.
   An error in the root `layout.tsx` shows the default Next.js screen.
+
+## Web Analytics
+
+`src/app/layout.tsx` places `WebAnalytics` from `src/analytics/` at the end of `body`.
+`WebAnalytics` is a Client Component that uses `Analytics` from `@vercel/analytics/next`.
+
+- The `beforeSend` of `WebAnalytics` drops the events whose `event.url` includes `/sketches` (it returns `null`).
+  It sends all other events as they are.
+- The check is a substring match (`includes`), not a prefix match.
+- `/sketches` and `/sketches/[id]` are not measured.
+  `/`, `/signin` and `/signup` are measured.
+- Reasons for excluding them:
+  - `proxy.ts` redirects `signedOut` from under `/sketches` to `/`.
+    Only signed-in users (`guest` and `registered`) can open these pages.
+    See [Authentication](./auth.en.md).
+  - The URLs contain user-specific data such as the sketch ID.
+    It is not sent to the analytics service.

@@ -125,3 +125,20 @@
   そのため、エラー時も`NavigationMenu`が残ります。
 - `global-error.tsx`はありません。
   ルート`layout.tsx`のエラーは、Next.js既定の画面が表示されます。
+
+## Web Analytics
+
+`src/app/layout.tsx`は、`src/analytics/`の`WebAnalytics`を`body`の末尾に置きます。
+`WebAnalytics`は、`@vercel/analytics/next`の`Analytics`を使うClient Componentです。
+
+- `WebAnalytics`の`beforeSend`は、`event.url`に`/sketches`を含むイベントを破棄します(`null`を返します)。
+  それ以外のイベントは、そのまま送ります。
+- 判定は前方一致ではなく、部分一致(`includes`)です。
+- `/sketches`と`/sketches/[id]`は計測しません。
+  `/`、`/signin`、`/signup`は計測します。
+- 除外する理由は次の通りです。
+  - `proxy.ts`が、`signedOut`を`/sketches`配下から`/`にリダイレクトします。
+    サインイン済み(`guest`と`registered`)だけが、これらのページを開けます。
+    詳細は[認証](./auth.ja.md)を参照してください。
+  - URLにスケッチIDなどのユーザー固有のデータが含まれます。
+    これを分析サービスに送らないためです。
