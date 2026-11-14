@@ -121,6 +121,18 @@ OTP(6桁のコード)で認証するため、メールにコードを載せま�
 
 - 匿名サインインは、`signInAnonymouslyWithForwardedIp`(`src/supabase/auth/anonymousSignIn/`)だけで行います。
   サーバー専用で、`Result<void>`を返します。
+- サインインの前に、Vercel BotIDでBotかどうかを判定します。
+  匿名ユーザーを作り直して、ユーザー単位の件数上限を回避されることを防ぐためです。
+  - サーバー側: `signInAnonymouslyWithForwardedIp`の先頭で、`checkBotId()`(`botid/server`)を引数なしで呼びます。
+    `isBot`が`true`の場合は、`ok: false`を返し、サインインしません。
+    `checkBotId()`が例外を投げた場合は、捕まえずにそのまま伝えます。
+  - クライアント側: `src/instrumentation-client.ts`で、`initBotId`に`/`への`POST`を登録します。
+    BotIDは、登録したパスへのリクエストにだけ、判定用のヘッダーを付けます。
+    Server Actionは、呼び出したページのパスへの`POST`として送られます。
+    匿名サインインに入れるのは、未ログインのユーザーが見られるランディングページ(`/`)のボタンだけです。
+    `/sketches`配下は、未ログインのユーザーを`proxy.ts`がリダイレクトします。
+  - 検知レベル(`checkLevel`)は指定しません。
+  - `signInWithOTP`は、ブラウザからSupabaseを直接呼び、Server Actionを通らないため、BotIDの対象外です。
 - Server Action内でサインインすると、Supabase Authの匿名サインインのレート制限が、ユーザーではなくサーバーのIPで集計されます。
   これを防ぐため、Supabaseの[IP address forwarding](https://supabase.com/docs/guides/auth/rate-limits#ip-address-forwarding)を使い、ユーザーのIPを渡します。
   1. `headers()`から`x-forwarded-for`を読みます。

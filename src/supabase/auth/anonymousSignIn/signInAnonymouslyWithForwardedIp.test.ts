@@ -1,9 +1,13 @@
 import { createServerClient } from "@supabase/ssr";
 import { headers, cookies } from "next/headers";
+import { checkBotId } from "botid/server";
 import { signInAnonymouslyWithForwardedIp } from "@/supabase/auth/anonymousSignIn/signInAnonymouslyWithForwardedIp";
 
 vi.mock("next/headers", () => ({ headers: vi.fn(), cookies: vi.fn() }));
 vi.mock("@supabase/ssr", () => ({ createServerClient: vi.fn() }));
+vi.mock("botid/server", () => ({ checkBotId: vi.fn() }));
+
+type BotIdResult = Awaited<ReturnType<typeof checkBotId>>;
 
 const SECRET_KEY = "test-secret-key";
 const ANON_KEY = "test-anon-key";
@@ -37,6 +41,9 @@ describe("signInAnonymouslyWithForwardedIp", () => {
     vi.stubEnv("SUPABASE_SECRET_KEY", SECRET_KEY);
     vi.stubEnv("NODE_ENV", "test");
     vi.mocked(cookies).mockResolvedValue(cookieStoreMock as never);
+    vi.mocked(checkBotId).mockResolvedValue({
+      isBot: false,
+    } as BotIdResult);
     signInAnonymouslyMock.mockResolvedValue({ error: null });
     vi.mocked(createServerClient).mockReturnValue({
       auth: { signInAnonymously: signInAnonymouslyMock },
@@ -134,5 +141,49 @@ describe("signInAnonymouslyWithForwardedIp", () => {
     const result = await signInAnonymouslyWithForwardedIp();
 
     expect(result).toEqual({ ok: false, error: supabaseError });
+  });
+
+  describe("bot check", () => {
+    test("should sign in when the request is not a bot", async () => {
+      setRequestHeaders({ "x-forwarded-for": "203.0.113.1" });
+      vi.mocked(checkBotId).mockResolvedValue({
+        isBot: false,
+      } as BotIdResult);
+
+      const result = await signInAnonymouslyWithForwardedIp();
+
+      expect(result).toEqual({ ok: true, value: undefined });
+      expect(signInAnonymouslyMock).toHaveBeenCalledTimes(1);
+    });
+
+    test("should return an error and not sign in when the request is a bot", async () => {
+      setRequestHeaders({ "x-forwarded-for": "203.0.113.1" });
+      vi.mocked(checkBotId).mockResolvedValue({
+        isBot: true,
+      } as BotIdResult);
+
+      const result = await signInAnonymouslyWithForwardedIp();
+
+      expect(result.ok).toBe(false);
+      expect(signInAnonymouslyMock).not.toHaveBeenCalled();
+      expect(createServerClient).not.toHaveBeenCalled();
+    });
+
+    test("should call checkBotId without arguments", async () => {
+      setRequestHeaders({ "x-forwarded-for": "203.0.113.1" });
+
+      await signInAnonymouslyWithForwardedIp();
+
+      expect(checkBotId).toHaveBeenCalledWith();
+    });
+
+    test("should reject with the same error and not sign in when checkBotId throws", async () => {
+      setRequestHeaders({ "x-forwarded-for": "203.0.113.1" });
+      const botIdError = new Error("checkBotId failed");
+      vi.mocked(checkBotId).mockRejectedValue(botIdError);
+
+      await expect(signInAnonymouslyWithForwardedIp()).rejects.toBe(botIdError);
+      expect(signInAnonymouslyMock).not.toHaveBeenCalled();
+    });
   });
 });
