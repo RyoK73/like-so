@@ -1,5 +1,6 @@
 import "server-only";
 import { headers } from "next/headers";
+import { checkBotId } from "botid/server";
 import { Result } from "@/utils/utility.types";
 import { parseForwardedIp } from "@/supabase/auth/anonymousSignIn/parseForwardedIp";
 import { createSupabaseSecretActionClient } from "@/supabase/auth/anonymousSignIn/secretActionClient";
@@ -7,6 +8,16 @@ import { createSupabaseSecretActionClient } from "@/supabase/auth/anonymousSignI
 // Sign in anonymously with the IP of the user, so that the rate limit is counted per user, not per server.
 // This is the only entry point of anonymous sign-in. It must run on the server.
 const signInAnonymouslyWithForwardedIp = async (): Promise<Result<void>> => {
+  // Check for a bot first, so that a bot never reaches the IP parsing or the Supabase client.
+  // Do not catch an error of `checkBotId`. A broken check must not look like a retryable failure, so let it reach the error page.
+  const verification = await checkBotId();
+  if (verification.isBot) {
+    return {
+      ok: false,
+      error: new Error("The request was detected as a bot."),
+    };
+  }
+
   const requestHeaders = await headers();
   const forwardedIp = parseForwardedIp(requestHeaders.get("x-forwarded-for"));
 

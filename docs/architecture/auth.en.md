@@ -121,6 +121,18 @@ See [Routing](./routing.en.md).
 
 - Anonymous sign-in is done only by `signInAnonymouslyWithForwardedIp` (`src/supabase/auth/anonymousSignIn/`).
   It is server only and returns `Result<void>`.
+- Before signing in, it checks with Vercel BotID whether the request is a bot.
+  This prevents re-creating anonymous users to get around the per-user count limit.
+  - Server side: `signInAnonymouslyWithForwardedIp` calls `checkBotId()` (`botid/server`) without arguments at the start.
+    When `isBot` is `true`, it returns `ok: false` and does not sign in.
+    When `checkBotId()` throws, it does not catch the error and lets it propagate.
+  - Client side: `src/instrumentation-client.ts` registers a `POST` to `/` with `initBotId`.
+    BotID attaches the headers for the check only to requests to a registered path.
+    A Server Action is sent as a `POST` to the path of the page that calls it.
+    The only way into anonymous sign-in is the button on the landing page (`/`), which signed-out users can see.
+    `proxy.ts` redirects signed-out users away from `/sketches`.
+  - It does not specify the check level (`checkLevel`).
+  - `signInWithOTP` calls Supabase directly from the browser and does not go through a Server Action, so BotID does not cover it.
 - If a Server Action signs in as is, the rate limit of anonymous sign-ins in Supabase Auth is counted by the IP of the server, not of the user.
   To prevent this, it passes the IP of the user with the [IP address forwarding](https://supabase.com/docs/guides/auth/rate-limits#ip-address-forwarding) of Supabase.
   1. It reads `x-forwarded-for` from `headers()`.

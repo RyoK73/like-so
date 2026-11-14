@@ -23,6 +23,11 @@ vi.mock("next/headers", () => ({
   }),
 }));
 
+// `checkBotId` needs the Vercel runtime, so replace it with a human result.
+vi.mock("botid/server", () => ({
+  checkBotId: async () => ({ isBot: false }),
+}));
+
 const helper = supabaseTestHelper();
 
 // Launch the supabase DB before running this tests.
