@@ -24,6 +24,11 @@ pnpm dev
 | `pnpm prtc <path>` | 指定したパスがPrettierで整形済みかを確認します(`prettier -c`)。  |
 | `pnpm prtw <path>` | 指定したパスをPrettierで整形して書き込みます(`prettier -w`)。    |
 
+- `pnpm start`は、`NODE_ENV=production`で動きます。
+  そのため、Vercel BotIDの判定が開発用の動作になりません。
+  OIDCトークンが無いと、匿名サインインは例外になり、エラーページが表示されます。
+  匿名サインインを確認するときは、`pnpm dev`を使ってください。
+
 ## テスト
 
 - 先に`pnpm db:start`を実行してください。
