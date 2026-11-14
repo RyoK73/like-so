@@ -4,7 +4,7 @@ const WebAnalytics = () => {
   return (
     <Analytics
       beforeSend={(event: BeforeSendEvent) => {
-        if (event.url.includes("/sketches")) {
+        if (new URL(event.url).pathname.startsWith("/sketches")) {
           return null;
         }
         return event;
